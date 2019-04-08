@@ -1,8 +1,7 @@
-package bg.softuni.marketplace.web.controllers.common;
+package bg.softuni.marketplace.web.controllers;
 
 import bg.softuni.marketplace.config.WebConfig;
 import bg.softuni.marketplace.web.annotations.Layout;
-import bg.softuni.marketplace.web.controllers.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
