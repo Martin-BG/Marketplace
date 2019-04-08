@@ -10,8 +10,12 @@ import java.util.Optional;
 
 public interface RoleService {
 
-    <V extends Viewable<Role>> Optional<V>
-    findByAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass);
+    <V extends Viewable<Role>>
+    Optional<V> findByAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass);
 
-    List<Role> getRolesForAuthority(@NotNull Authority authority);
+    <V extends Viewable<Role>>
+    List<V> getRolesForAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass);
+
+    <V extends Viewable<Role>>
+    List<V> findAll(@NotNull Class<V> viewModelClass);
 }

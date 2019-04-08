@@ -59,8 +59,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = ROLES, key = "#authority")
-    public <V extends Viewable<Role>> Optional<V>
-    findByAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass) {
+    public <V extends Viewable<Role>>
+    Optional<V> findByAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass) {
         return repository
                 .findRoleByAuthority(authority)
                 .map(role -> mapper.map(role, viewModelClass));
@@ -69,7 +69,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = ROLES_FOR_AUTHORITY, key = "#authority")
-    public List<Role> getRolesForAuthority(@NotNull Authority authority) {
+    public <V extends Viewable<Role>>
+    List<V> getRolesForAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass) {
         List<Role> roles = repository.findAll();
 
         roles.removeIf(role -> role.getAuthority().equals(Authority.ROOT.asRole()));
@@ -85,6 +86,19 @@ public class RoleServiceImpl implements RoleService {
             break;
         }
 
-        return roles;
+        return roles
+                .stream()
+                .map(role -> mapper.map(role, viewModelClass))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public <V extends Viewable<Role>> List<V> findAll(@NotNull Class<V> viewModelClass) {
+        List<Role> roles = repository.findAll();
+
+        return roles
+                .stream()
+                .map(role -> mapper.map(role, viewModelClass))
+                .collect(Collectors.toList());
     }
 }
