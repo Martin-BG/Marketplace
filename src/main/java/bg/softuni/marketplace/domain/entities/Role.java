@@ -2,6 +2,7 @@ package bg.softuni.marketplace.domain.entities;
 
 import bg.softuni.marketplace.domain.converters.AuthorityConverter;
 import bg.softuni.marketplace.domain.enums.Authority;
+import bg.softuni.marketplace.domain.validation.annotations.composite.role.ValidAuthority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.role.ValidRoleAuthority;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class Role extends BaseLongEntity implements GrantedAuthority {
 
     private static final long serialVersionUID = 1L;
 
-    @ValidRoleAuthority
+    @ValidAuthority
     @Convert(converter = AuthorityConverter.class)
     @Column(unique = true, nullable = false, length = ValidRoleAuthority.MAX_LENGTH)
     private Authority authority;
