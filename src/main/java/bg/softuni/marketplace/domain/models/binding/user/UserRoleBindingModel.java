@@ -2,7 +2,8 @@ package bg.softuni.marketplace.domain.models.binding.user;
 
 import bg.softuni.marketplace.domain.api.Bindable;
 import bg.softuni.marketplace.domain.entities.User;
-import bg.softuni.marketplace.domain.validation.annotations.composite.role.ValidRoleAuthority;
+import bg.softuni.marketplace.domain.enums.Authority;
+import bg.softuni.marketplace.domain.validation.annotations.composite.role.ValidAuthority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,6 +23,6 @@ public class UserRoleBindingModel implements Bindable<User>, Serializable {
     @ValidUserUsername
     private String username;
 
-    @ValidRoleAuthority
-    private String role;
+    @ValidAuthority
+    private Authority authority;
 }
