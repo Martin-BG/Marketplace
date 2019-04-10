@@ -1,0 +1,50 @@
+.app-color {
+    background-color: #1e3b90;
+    color: white;
+}
+
+.app-color-error {
+    color: #900C45;
+}
+
+.app-border-error {
+    border-color: #900C45;
+}
+
+div.form-group label {
+    margin-top: 0.7rem;
+}
+
+.no-resize {
+    resize: none;
+}
+
+.disabled {
+    color: gray;
+}
+
+.radio label {
+    margin-bottom: 0;
+}
+
+.table-button {
+    width: 4rem;
+}
+
+.table-button-large {
+    width: 6rem;
+}
+
+.display-none {
+    display: none;
+}
+
+.logout-button {
+    background: transparent;
+    border: none;
+    padding: 8px 0;
+}
+
+.logout-button:focus {
+    outline: none;
+}
