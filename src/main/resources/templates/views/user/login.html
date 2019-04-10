@@ -1,0 +1,39 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
+    <form class="mt-5 center-block w-75 mx-auto"
+          th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_LOGIN}__}"
+          th:method="post">
+
+        <h2 class="header mt-4 mb-4" th:text="#{user.login-form.title}"/>
+
+        <div class="form-group">
+            <label for="username" th:text="#{user.login-form.username}"></label>
+            <input class="form-control" id="username" name="username" type="text"/>
+        </div>
+
+        <div class="form-group">
+            <label for="password" th:text="#{user.login-form.password}"></label>
+            <input class="form-control" id="password" name="password" type="password"/>
+        </div>
+
+        <div class="form-group">
+            <input id="remember_me" name="remember-me" type="checkbox"/>
+            <label class="inline" for="remember_me" th:text="#{user.login-form.remember-me}"/>
+        </div>
+
+        <th:block th:if="${param.error}">
+            <div class="re-error" th:text="#{user.login-form.invalid-credentials}"/>
+        </th:block>
+
+        <th:block th:if="${param.expired}">
+            <div class="re-error" th:text="#{user.login-form.session-expired}"/>
+        </th:block>
+
+        <th:block th:if="${param.logout}">
+            <div class="re-error" th:text="#{user.login-form.logout}"/>
+        </th:block>
+
+        <div class="form-actions mx-auto text-center mt-4">
+            <button class="btn re-color my-button" th:text="#{user.login-form.button}" type="submit"/>
+        </div>
+    </form>
+</th:block>
