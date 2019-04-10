@@ -1,0 +1,25 @@
+<th:block xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+          xmlns:th="http://www.thymeleaf.org">
+    <div class="jumbotron mt-3 re-color">
+        <h1 class="mt-4" th:text="#{user.home.title(${#authentication.getName()})}"/>
+        <hr class="my-4"/>
+        <h5 class="mb-4" th:text="#{user.home.text}"/>
+
+        <div sec:authorize="isAuthenticated()">
+            This content is only shown to authenticated users.
+        </div>
+        <div sec:authorize="hasRole(T(bg.softuni.marketplace.domain.enums.Authority).ROOT)">
+            This content is only shown to Root.
+        </div>
+        <div sec:authorize="hasRole(T(bg.softuni.marketplace.domain.enums.Authority).ADMIN)">
+            This content is only shown to administrators.
+        </div>
+        <div sec:authorize="hasRole(T(bg.softuni.marketplace.domain.enums.Authority).TRADER)">
+            This content is only shown to traders.
+        </div>
+        <div sec:authorize="hasRole(T(bg.softuni.marketplace.domain.enums.Authority).USER)">
+            This content is only shown to users.
+        </div>
+
+    </div>
+</th:block>
