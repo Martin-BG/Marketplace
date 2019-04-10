@@ -6,13 +6,13 @@
         <h2 class="header mt-4 mb-4" th:text="#{user.login-form.title}"/>
 
         <div class="form-group">
-            <label for="username" th:text="#{user.login-form.username}"></label>
+            <label for="username" th:text="#{user.login-form.username}"/>
             <input class="form-control" id="username" name="username" th:classappend="${param.error}? app-border-error"
                    type="text"/>
         </div>
 
         <div class="form-group">
-            <label for="password" th:text="#{user.login-form.password}"></label>
+            <label for="password" th:text="#{user.login-form.password}"/>
             <input class="form-control" id="password" name="password" th:classappend="${param.error}? app-border-error"
                    type="password"/>
         </div>
