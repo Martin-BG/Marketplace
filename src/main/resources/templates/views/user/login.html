@@ -7,12 +7,14 @@
 
         <div class="form-group">
             <label for="username" th:text="#{user.login-form.username}"></label>
-            <input class="form-control" id="username" name="username" type="text"/>
+            <input class="form-control" id="username" name="username" th:classappend="${param.error}? app-border-error"
+                   type="text"/>
         </div>
 
         <div class="form-group">
             <label for="password" th:text="#{user.login-form.password}"></label>
-            <input class="form-control" id="password" name="password" type="password"/>
+            <input class="form-control" id="password" name="password" th:classappend="${param.error}? app-border-error"
+                   type="password"/>
         </div>
 
         <div class="form-group">
