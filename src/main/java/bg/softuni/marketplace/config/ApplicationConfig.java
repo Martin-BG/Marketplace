@@ -5,6 +5,7 @@ import bg.softuni.marketplace.web.interceptors.ThymeleafLayoutInterceptor;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,16 +23,17 @@ import java.util.TimeZone;
 
 @Configuration
 @EnableCaching
-public class ApplicationBeanConfig {
+public class ApplicationConfig {
 
-    private static final String SYSTEM_TIME_ZONE = "UTC";
+    @Value("${app.server.timezone}")
+    private String systemTimeZone;
 
     /**
-     * Set system {@link TimeZone} to {@value #SYSTEM_TIME_ZONE} to match setting used for database connection
+     * Set system {@link TimeZone} to match setting used for database connection
      */
     @PostConstruct
-    void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone(SYSTEM_TIME_ZONE));
+    void systemConfig() {
+        TimeZone.setDefault(TimeZone.getTimeZone(systemTimeZone));
     }
 
     /**
@@ -41,7 +43,7 @@ public class ApplicationBeanConfig {
      * @return ModelMapper bean
      */
     @Bean
-    ModelMapper createModelMapper() {
+    public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
         modelMapper.getConfiguration()
@@ -75,14 +77,12 @@ public class ApplicationBeanConfig {
      * Configure Validator to use validation messages from custom file
      */
     @Bean
-    public Validator validator() {
-        final String VALIDATION_MESSAGES_PROPERTIES = "languages/validation";
-
+    public Validator validator(@Value("${app.messages.validation}") final String messagesBundle) {
         return Validation.byDefaultProvider()
                 .configure()
                 .messageInterpolator(
                         new ResourceBundleMessageInterpolator(
-                                new PlatformResourceBundleLocator(VALIDATION_MESSAGES_PROPERTIES)
+                                new PlatformResourceBundleLocator(messagesBundle)
                         )
                 )
                 .buildValidatorFactory()
