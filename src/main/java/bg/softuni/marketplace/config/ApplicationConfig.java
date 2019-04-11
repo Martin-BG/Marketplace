@@ -1,11 +1,13 @@
 package bg.softuni.marketplace.config;
 
 import bg.softuni.marketplace.web.interceptors.ThymeleafLayoutInterceptor;
+import bg.softuni.marketplace.web.interceptors.TitleInterceptor;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -100,13 +102,22 @@ public class ApplicationConfig {
         return repository;
     }
 
-    @Bean("thymeleafLayoutInterceptor")
+    @Bean
     public HandlerInterceptor thymeleafLayoutInterceptor() {
         return ThymeleafLayoutInterceptor
                 .builder()
                 .withDefaultLayout("/layouts/default")
                 .withViewAttribute("view")
                 .withViewPrefix("/views/")
+                .build();
+    }
+
+    @Bean
+    public HandlerInterceptor titleInterceptor(MessageSource messageSource) {
+        return TitleInterceptor
+                .builder(messageSource)
+                .withTitleCode("application.title")
+                .withTitleAttribute("title")
                 .build();
     }
 }
