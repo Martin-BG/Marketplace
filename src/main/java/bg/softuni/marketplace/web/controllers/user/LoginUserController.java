@@ -2,6 +2,7 @@ package bg.softuni.marketplace.web.controllers.user;
 
 import bg.softuni.marketplace.config.WebConfig;
 import bg.softuni.marketplace.web.annotations.Layout;
+import bg.softuni.marketplace.web.annotations.Title;
 import bg.softuni.marketplace.web.controllers.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping(WebConfig.URL_USER_LOGIN)
 public class LoginUserController extends BaseController {
 
-    private static final String VIEW_REGISTER = "user/login";
+    private static final String USER_LOGIN = "user/login";
 
     @Override
     protected List<String> getUnmodifiedTextFieldsList() {
@@ -22,7 +23,8 @@ public class LoginUserController extends BaseController {
     }
 
     @GetMapping
+    @Title("nav.login")
     public String get() {
-        return VIEW_REGISTER;
+        return USER_LOGIN;
     }
 }

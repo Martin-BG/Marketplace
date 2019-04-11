@@ -2,6 +2,7 @@ package bg.softuni.marketplace.web.controllers.error;
 
 import bg.softuni.marketplace.config.WebConfig;
 import bg.softuni.marketplace.web.annotations.Layout;
+import bg.softuni.marketplace.web.annotations.Title;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ public class UnauthorizedController {
 
     @GetMapping(WebConfig.URL_ERROR_UNAUTHORIZED)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @Title(title = "error.unauthorized.title", append = false)
     public String get() {
         return VIEW_ERROR_UNAUTHORIZED;
     }

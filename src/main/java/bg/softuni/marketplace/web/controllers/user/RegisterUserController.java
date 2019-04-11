@@ -4,6 +4,7 @@ import bg.softuni.marketplace.config.WebConfig;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.service.UserService;
 import bg.softuni.marketplace.web.annotations.Layout;
+import bg.softuni.marketplace.web.annotations.Title;
 import bg.softuni.marketplace.web.controllers.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +38,7 @@ public class RegisterUserController extends BaseController {
     }
 
     @GetMapping
+    @Title("nav.register")
     public String get(Model model) {
         model.addAttribute(USER, new UserRegisterBindingModel());
 

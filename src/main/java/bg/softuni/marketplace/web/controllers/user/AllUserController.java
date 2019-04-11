@@ -5,6 +5,7 @@ import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.service.UserService;
 import bg.softuni.marketplace.web.annotations.Layout;
+import bg.softuni.marketplace.web.annotations.Title;
 import bg.softuni.marketplace.web.controllers.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,7 @@ public class AllUserController extends BaseController {
     }
 
     @GetMapping
+    @Title("nav.users")
     public String get(Model model) {
         List<UserViewModel> users = service.allUsers();
 
