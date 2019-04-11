@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CsrfTokenRepository csrfTokenRepository;
 
     @Autowired
-    public WebSecurityConfig(@Qualifier("UserServiceImpl") UserDetailsService userService,
+    public WebSecurityConfig(@Qualifier("userServiceImpl") UserDetailsService userService,
                              AccessDeniedHandler accessDeniedHandler,
                              CsrfTokenRepository csrfTokenRepository) {
         this.userService = userService;
