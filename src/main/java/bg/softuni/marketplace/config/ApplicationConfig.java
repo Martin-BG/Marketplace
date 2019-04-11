@@ -2,8 +2,6 @@ package bg.softuni.marketplace.config;
 
 import bg.softuni.marketplace.web.interceptors.ThymeleafLayoutInterceptor;
 import bg.softuni.marketplace.web.interceptors.TitleInterceptor;
-import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
-import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
@@ -14,12 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.TimeZone;
 
 @Configuration
@@ -74,20 +71,11 @@ public class ApplicationConfig {
         return new MethodValidationPostProcessor();
     }
 
-    /**
-     * Configure Validator to use validation messages from custom file
-     */
     @Bean
-    public Validator validator(@Value("${app.messages.validation}") final String messagesBundle) {
-        return Validation.byDefaultProvider()
-                .configure()
-                .messageInterpolator(
-                        new ResourceBundleMessageInterpolator(
-                                new PlatformResourceBundleLocator(messagesBundle)
-                        )
-                )
-                .buildValidatorFactory()
-                .getValidator();
+    public LocalValidatorFactoryBean validator(MessageSource messageSource) {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource);
+        return bean;
     }
 
     @Bean
