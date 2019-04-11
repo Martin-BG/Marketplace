@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping(WebConfig.URL_USER_ALL)
 public class AllUserController extends BaseController {
 
-    public static final String USERS = "users";
+    public static final String USERS_ATTRIBUTE_NAME = "users";
 
     private static final String VIEW_ALL = "user/all";
 
@@ -37,7 +37,7 @@ public class AllUserController extends BaseController {
     public String get(Model model) {
         List<UserViewModel> users = service.allUsers();
 
-        model.addAttribute(USERS, users);
+        model.addAttribute(USERS_ATTRIBUTE_NAME, users);
 
         return VIEW_ALL;
     }

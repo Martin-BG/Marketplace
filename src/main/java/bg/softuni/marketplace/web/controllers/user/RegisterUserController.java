@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping(WebConfig.URL_USER_REGISTER)
 public class RegisterUserController extends BaseController {
 
-    public static final String USER = "user";
+    public static final String USER_ATTRIBUTE_NAME = "user";
 
     private static final String VIEW_REGISTER = "user/register";
 
@@ -40,13 +40,13 @@ public class RegisterUserController extends BaseController {
     @GetMapping
     @Title("nav.register")
     public String get(Model model) {
-        model.addAttribute(USER, new UserRegisterBindingModel());
+        model.addAttribute(USER_ATTRIBUTE_NAME, new UserRegisterBindingModel());
 
         return VIEW_REGISTER;
     }
 
     @PostMapping
-    public String post(@Valid @ModelAttribute(USER) UserRegisterBindingModel user,
+    public String post(@Valid @ModelAttribute(USER_ATTRIBUTE_NAME) UserRegisterBindingModel user,
                        Errors errors) {
         if (errors.hasErrors()) {
             return VIEW_REGISTER;

@@ -2,7 +2,7 @@
     <form class="mt-5 center-block w-75 mx-auto"
           th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_REGISTER}__}"
           th:method="post"
-          th:object="${__${T(bg.softuni.marketplace.web.controllers.user.RegisterUserController).USER}__}">
+          th:object="${__${T(bg.softuni.marketplace.web.controllers.user.RegisterUserController).USER_ATTRIBUTE_NAME}__}">
 
         <h2 class="header mt-4 mb-4" th:text="#{user.register-form.title}"/>
 

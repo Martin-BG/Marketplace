@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         <th:block
-                th:each="user, iStat : ${__${T(bg.softuni.marketplace.web.controllers.user.AllUserController).USERS}__}"
+                th:each="user, iStat : ${__${T(bg.softuni.marketplace.web.controllers.user.AllUserController).USERS_ATTRIBUTE_NAME}__}"
                 th:object="${user}"
                 th:with="canChangeRoles=*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).ROOT} and ${#authentication.getName()} != *{username}">
             <tr>
