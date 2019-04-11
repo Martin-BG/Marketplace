@@ -23,14 +23,18 @@ public class WebConfig implements WebMvcConfigurer {
     private static final String API_BASE_URL = "/api";
 
     private final HandlerInterceptor thymeleafLayoutInterceptor;
+    private final HandlerInterceptor titleInterceptor;
 
     @Autowired
-    public WebConfig(@Qualifier("ThymeleafLayoutInterceptor") HandlerInterceptor thymeleafLayoutInterceptor) {
+    public WebConfig(@Qualifier("thymeleafLayoutInterceptor") HandlerInterceptor thymeleafLayoutInterceptor,
+                     @Qualifier("titleInterceptor") HandlerInterceptor titleInterceptor) {
         this.thymeleafLayoutInterceptor = thymeleafLayoutInterceptor;
+        this.titleInterceptor = titleInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(thymeleafLayoutInterceptor);
+        registry.addInterceptor(titleInterceptor);
     }
 }
