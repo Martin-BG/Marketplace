@@ -1,10 +1,10 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
-    <form class="mt-5 center-block w-75 mx-auto"
+    <form class="app-form"
           th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_REGISTER}__}"
           th:method="post"
           th:object="${__${T(bg.softuni.marketplace.web.controllers.user.RegisterUserController).USER_ATTRIBUTE_NAME}__}">
 
-        <h2 class="header mt-4 mb-4" th:text="#{user.register-form.title}"/>
+        <h1 class="app-form-header" th:text="#{user.register-form.title}"/>
 
         <div class="form-group">
             <label th:for="${#ids.next('username')}" th:text="#{user.register-form.username}"/>
@@ -43,7 +43,7 @@
             <small class="app-color-error" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
         </th:block>
 
-        <div class="form-actions mx-auto text-center mt-4">
+        <div class="app-form-actions">
             <button class="btn app-color app-button" th:text="#{user.register-form.button}" type="submit"/>
         </div>
     </form>

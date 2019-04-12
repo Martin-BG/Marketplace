@@ -1,9 +1,9 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
-    <form class="mt-5 center-block w-75 mx-auto"
+    <form class="app-form"
           th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_LOGIN}__}"
           th:method="post">
 
-        <h2 class="header mt-4 mb-4" th:text="#{user.login-form.title}"/>
+        <h1 class="app-form-header" th:text="#{user.login-form.title}"/>
 
         <div class="form-group">
             <label for="username" th:text="#{user.login-form.username}"/>
@@ -38,7 +38,7 @@
             <div class="app-color-good" th:text="#{user.login-form.register}"/>
         </th:block>
 
-        <div class="form-actions mx-auto text-center mt-4">
+        <div class="app-form-actions">
             <button class="btn app-color app-button" th:text="#{user.login-form.button}" type="submit"/>
         </div>
     </form>
