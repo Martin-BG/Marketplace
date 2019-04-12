@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -21,6 +22,7 @@ import java.util.TimeZone;
 
 @Configuration
 @EnableCaching
+@EnableAspectJAutoProxy
 public class ApplicationConfig {
 
     @Value("${app.server.timezone}")
