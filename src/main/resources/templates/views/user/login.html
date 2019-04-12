@@ -27,11 +27,15 @@
         </th:block>
 
         <th:block th:if="${param.expired}">
-            <div class="app-color-error" th:text="#{user.login-form.session-expired}"/>
+            <div class="app-color-info" th:text="#{user.login-form.session-expired}"/>
         </th:block>
 
         <th:block th:if="${param.logout}">
-            <div class="app-color-error" th:text="#{user.login-form.logout}"/>
+            <div class="app-color-good" th:text="#{user.login-form.logout}"/>
+        </th:block>
+
+        <th:block th:if="${param.register}">
+            <div class="app-color-good" th:text="#{user.login-form.register}"/>
         </th:block>
 
         <div class="form-actions mx-auto text-center mt-4">
