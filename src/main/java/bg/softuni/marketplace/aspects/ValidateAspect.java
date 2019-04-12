@@ -49,10 +49,14 @@ import java.util.stream.IntStream;
  * }}</pre>
  * <hr>
  *
+ * @see <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop">
+ * Aspect Oriented Programming with Spring</a>
  * @see <a href="https://stackoverflow.com/questions/50532039/methodvalidationinterceptor-and-validated-modelattribute">
  * Solution on similar problem @StackOverflow</a>
  * @see <a href="https://www.baeldung.com/spring-aop-annotation">
  * Implementing a Custom Spring AOP Annotation</a>
+ * @see <a href="https://medium.com/@wkrzywiec/moving-into-next-level-in-user-log-events-with-spring-aop-3b4435892f16">
+ * Moving into next level in user log events with Spring AOP</a>
  */
 
 @Log
