@@ -3,6 +3,14 @@
     color: white;
 }
 
+.app-color-info {
+    color: #1e3b90;
+}
+
+.app-color-good {
+    color: #0e902e;
+}
+
 .app-color-error {
     color: #900C45;
 }
