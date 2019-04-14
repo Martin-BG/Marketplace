@@ -125,7 +125,7 @@ public class ValidateMethodArgumentsAspect {
             return pjp.proceed();
         } catch (Throwable throwable) {
             if (annotation.catchException() && annotation.exceptionType().isAssignableFrom(throwable.getClass())) {
-                log.log(Level.WARNING, "ValidateAspect cough an Exception", throwable);
+                log.log(Level.WARNING, "@Validate Aspect cough an Exception", throwable);
 
                 errors.reject(annotation.message());
 
