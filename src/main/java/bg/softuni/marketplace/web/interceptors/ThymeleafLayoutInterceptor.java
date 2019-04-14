@@ -1,6 +1,7 @@
 package bg.softuni.marketplace.web.interceptors;
 
 import bg.softuni.marketplace.web.annotations.Layout;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -80,9 +81,9 @@ public final class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter 
     private static Layout getMethodOrTypeAnnotation(Object handler) {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Layout layout = handlerMethod.getMethodAnnotation(Layout.class);
+            Layout layout = AnnotationUtils.getAnnotation(handlerMethod.getMethod(), Layout.class);
             if (layout == null) {
-                layout = handlerMethod.getBeanType().getAnnotation(Layout.class);
+                layout = AnnotationUtils.getAnnotation(handlerMethod.getBeanType(), Layout.class);
             }
             return layout;
         }
