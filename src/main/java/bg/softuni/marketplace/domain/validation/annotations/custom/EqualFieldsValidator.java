@@ -42,10 +42,10 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
         if (fieldsToValidate.size() <= 1) {
             String message = MessageFormat
-                    .format("[{0}] [@EqualFields validation] At least two fields for validation must be specified: {1}",
+                    .format("[{0}] At least two fields for validation must be specified: {1}",
                             obj.getClass().getName(),
                             String.join(", ", fieldsToValidate));
-            throw new IllegalArgumentException(message);
+            throw new EqualFieldsValidatorException(message);
         }
 
         List<String> fieldsNotFound = new ArrayList<>(fieldsToValidate);
@@ -62,10 +62,10 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
         // Not all required for validation fields found in class
         if (!fieldsNotFound.isEmpty()) {
             String message = MessageFormat
-                    .format("[{0}] [@EqualFields validation] Field(s) to validate not found: {1}",
+                    .format("[{0}] Field(s) to validate not found: {1}",
                             obj.getClass().getName(),
                             String.join(", ", fieldsNotFound));
-            throw new IllegalArgumentException(message);
+            throw new EqualFieldsValidatorException(message);
         }
 
         // Mix of null (filtered-out) and non-null values for fields -> not equal by contract
@@ -91,10 +91,10 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
             return Optional.ofNullable(field.get(obj));
         } catch (IllegalAccessException e) {
             String message = MessageFormat
-                    .format("[{0}] [@EqualFields validation] Failed to get value of: {1}",
+                    .format("[{0}] Failed to get value of: {1}",
                             obj.getClass().getName(),
                             field.getName());
-            throw new IllegalArgumentException(message, e);
+            throw new EqualFieldsValidatorException(message, e);
         }
     }
 }
