@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 import java.util.Optional;
 
 /**
- * See {@link ValidateAspect} for details.
+ * See {@link ValidateMethodArgumentsAspect} for details.
  */
 
 @Target(ElementType.METHOD)
@@ -21,7 +21,7 @@ public @interface Validate {
     /**
      * Prevent method invocation in arguments errors
      *
-     * @see ValidateAspect
+     * @see ValidateMethodArgumentsAspect
      */
     @AliasFor("value")
     boolean returnOnError() default false;
@@ -29,20 +29,20 @@ public @interface Validate {
     /**
      * Catch {@link #exceptionType} or its sub-class exceptions on method invocation,
      * add {@link #message} to {@link Errors} argument and return {@link Optional#empty()} or null.
-     * @see ValidateAspect
+     * @see ValidateMethodArgumentsAspect
      */
     boolean catchException() default false;
 
     /**
      * Exception type and its sub-classes to catch on method invocation.
-     * @see ValidateAspect
+     * @see ValidateMethodArgumentsAspect
      * @see #catchException()
      */
     Class<?> exceptionType() default Throwable.class;
 
     /**
      * Message to add as error to {@link Errors} argument when exception is cough on method invocation.
-     * @see ValidateAspect
+     * @see ValidateMethodArgumentsAspect
      * @see #catchException()
      */
     String message() default "validate.exception.default-message";

@@ -1,4 +1,4 @@
-package bg.softuni.marketplace.aspects;
+package bg.softuni.marketplace.aspects.validate;
 
 import lombok.extern.java.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -6,12 +6,14 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -22,9 +24,11 @@ import java.util.stream.IntStream;
  * on methods annotated with {@link Validate}.<br>
  * Optionally can catch specified exception type (and its sub-types) thrown by
  * method invocation and add message to provided {@link Error} object.<br>
- * In case of exception it returns {@link Optional#empty} if this is the
+ * Optionally can skip method invocation if validation fails.<br>
+ * In case of exception or validation errors it returns {@link Optional#empty} if this is the
  * return type of the method or null in all other cases.<br><br>
  * Throws {@link IllegalArgumentException} if annotated method has no argument followed by {@link Error}<br>
+ * Throws {@link NullPointerException} if either the {@link Error} or validated arguments are null<br>
  * <ul>Example 1:
  * <li>Just validate bindingModel</li>
  * </ul>
@@ -47,6 +51,16 @@ import java.util.stream.IntStream;
  *         // bindingModel is valid
  *     }
  * }}</pre>
+ *
+ * <ul>Example 3:
+ * <li>Validate bindingModel</li>
+ * <li>In case of any errors prevent method from invocation
+ * and return {@link Optional#empty} instead</li></ul>
+ * <pre>{@code
+ * @Validate(true)
+ * public Optional<Boolean> registerUser(UserRegisterBindingModel bindingModel, Errors errors) {
+ *  // never gets here for incorrect bindingModel
+ * }}</pre>
  * <hr>
  *
  * @see <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop">
@@ -63,11 +77,11 @@ import java.util.stream.IntStream;
 @Aspect
 @Order //defaults to Ordered.LOWEST_PRECEDENCE
 @Component
-public class ValidateAspect {
+public class ValidateMethodArgumentsAspect {
 
     private final Validator validator;
 
-    public ValidateAspect(Validator validator) {
+    public ValidateMethodArgumentsAspect(Validator validator) {
         this.validator = validator;
     }
 
@@ -89,32 +103,33 @@ public class ValidateAspect {
             }
 
             isValidated = true;
-            Object target = pjp.getArgs()[methodParameters.indexOf(parameter)];
-            errors = (Errors) pjp.getArgs()[methodParameters.indexOf(nextParameter)];
+            Object target = Objects.requireNonNull(
+                    pjp.getArgs()[methodParameters.indexOf(parameter)]);
+            errors = Objects.requireNonNull(
+                    (Errors) pjp.getArgs()[methodParameters.indexOf(nextParameter)]);
             validator.validate(target, errors);
         }
 
         if (!isValidated) {
-            throw new IllegalArgumentException(pjp.getSignature() + " is not applicable for validation");
+            throw new ValidateMethodArgumentsException(pjp.getSignature() + " is not applicable for validation");
+        }
+
+        Validate annotation = Objects.requireNonNull( // cannot be null, added to please static code analysis
+                AnnotationUtils.getAnnotation(methodSignature.getMethod(), Validate.class));
+
+        if (annotation.returnOnError() && errors.hasErrors()) {
+            return getDefaultReturnObject(methodSignature);
         }
 
         try {
             return pjp.proceed();
         } catch (Throwable throwable) {
-            Validate annotation = methodSignature.getMethod().getAnnotation(Validate.class);
-
-            if (annotation.catchException() && errors != null
-                    && annotation.exceptionType().isAssignableFrom(throwable.getClass())) {
+            if (annotation.catchException() && annotation.exceptionType().isAssignableFrom(throwable.getClass())) {
+                log.log(Level.WARNING, "ValidateAspect cough an Exception", throwable);
 
                 errors.reject(annotation.message());
 
-                log.log(Level.WARNING, "ValidateAspect cough an Exception", throwable);
-
-                if (methodSignature.getReturnType().equals(Optional.class)) {
-                    return Optional.empty();
-                }
-
-                return null;
+                return getDefaultReturnObject(methodSignature);
             }
 
             throw throwable;
@@ -126,5 +141,13 @@ public class ValidateAspect {
                 .range(0, methodSignature.getParameterNames().length)
                 .mapToObj(i -> new MethodParameter(methodSignature.getMethod(), i))
                 .collect(Collectors.toList());
+    }
+
+    private static Object getDefaultReturnObject(MethodSignature methodSignature) {
+        if (methodSignature.getReturnType().equals(Optional.class)) {
+            return Optional.empty();
+        }
+
+        return null;
     }
 }
