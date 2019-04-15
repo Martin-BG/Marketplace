@@ -49,7 +49,7 @@ public @interface Unique {
      */
     String method();
 
-    String message() default "{unique.field.default}";
+    String message() default "{unique.default.not-unique}";
 
     Class<?>[] groups() default {};
 
