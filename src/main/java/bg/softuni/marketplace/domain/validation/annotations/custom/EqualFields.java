@@ -20,17 +20,17 @@ import java.lang.annotation.*;
 @Documented
 public @interface EqualFields {
 
-    @AliasFor("fields")
-    String[] value() default {};
-
-    @AliasFor("value")
-    String[] fields() default {};
-
     String message() default "{equal-fields.default.mot-match}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    @AliasFor("fields")
+    String[] value() default {};
+
+    @AliasFor("value")
+    String[] fields() default {};
 
     /**
      * Defines several {@link EqualFields} annotations on the same element.

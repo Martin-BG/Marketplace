@@ -23,6 +23,12 @@ import static java.lang.annotation.ElementType.*;
 @Documented
 public @interface Unique {
 
+    String message() default "{unique.default.not-unique}";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+
     /**
      * Name of the bean in Spring context:<br>
      * Ex: "userRepository" for
@@ -48,10 +54,4 @@ public @interface Unique {
      * @see UniqueValidator
      */
     String method();
-
-    String message() default "{unique.default.not-unique}";
-
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
 }
