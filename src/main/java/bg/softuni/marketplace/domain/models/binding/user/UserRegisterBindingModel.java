@@ -6,6 +6,10 @@ import bg.softuni.marketplace.domain.validation.annotations.composite.user.Valid
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserPassword;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import bg.softuni.marketplace.domain.validation.annotations.custom.EqualFields;
+import bg.softuni.marketplace.domain.validation.annotations.custom.Unique;
+import bg.softuni.marketplace.domain.validation.groups.GroupOne;
+import bg.softuni.marketplace.domain.validation.groups.GroupTwo;
+import bg.softuni.marketplace.repository.UserRepository;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +21,14 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode(of = {"username"})
 @NoArgsConstructor
-@EqualFields(message = "{user.password.not-match}", fields = {"password", "confirmPassword"})
+@EqualFields(message = "{user.passwords.not-match}", groups = {GroupOne.class},
+        fields = {"password", "confirmPassword"})
 public class UserRegisterBindingModel implements Bindable<User>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Unique(message = "{user.username.used}", groups = {GroupTwo.class},
+            bean = UserRepository.class, method = "countByUsername")
     @ValidUserUsername
     private String username;
 
@@ -31,6 +38,8 @@ public class UserRegisterBindingModel implements Bindable<User>, Serializable {
     @ValidUserPassword
     private String confirmPassword;
 
+    @Unique(message = "{user.email.used}", groups = {GroupTwo.class},
+            bean = UserRepository.class, method = "countByEmail")
     @ValidUserEmail
     private String email;
 }
