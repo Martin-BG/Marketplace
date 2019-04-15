@@ -30,17 +30,18 @@ public @interface Unique {
     Class<? extends Payload>[] payload() default {};
 
     /**
-     * Name of the bean in Spring context:<br>
-     * Ex: "userRepository" for
+     * Class of the bean to load from Spring context:
+     * <p>
+     * Ex: "UserRepository.class" for
      * <pre>
      * {@code @}Repository
-     * public interface UserRepository extends GenericRepository<{@code User, UUID>}{
-     *     long countByUsername(String username);
-     *     long countByEmail(String email);
-     * }
+     *  public interface UserRepository extends GenericRepository<{@code User, UUID>}{
+     *      long countByUsername(String username);
+     *      long countByEmail(String email);
+     *  }
      * </pre>
      */
-    String bean();
+    Class<?> bean();
 
     /**
      * {@link #bean}'s method name that is invoked.<br>
