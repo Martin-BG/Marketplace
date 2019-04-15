@@ -25,7 +25,8 @@
         <div class="form-group">
             <label th:for="${#ids.next('password')}" th:text="#{user.register-form.password}"/>
             <input class="form-control" th:classappend="${#fields.hasErrors('password')}? app-border-error"
-                   th:field="*{password}"
+                   name="password"
+                   th:value="*{password}"
                    type="password"/>
             <small class="app-color-error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"/>
         </div>
@@ -33,7 +34,8 @@
         <div class="form-group">
             <label th:for="${#ids.next('confirmPassword')}" th:text="#{user.register-form.confirmPassword}"/>
             <input class="form-control" th:classappend="${#fields.hasErrors('confirmPassword')}? app-border-error"
-                   th:field="*{confirmPassword}"
+                   name="confirmPassword"
+                   th:value="*{confirmPassword}"
                    type="password"/>
             <small class="app-color-error" th:errors="*{confirmPassword}"
                    th:if="${#fields.hasErrors('confirmPassword')}"/>
