@@ -5,12 +5,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+import org.springframework.validation.SmartValidator;
 
 import java.util.List;
 import java.util.Objects;
@@ -63,6 +64,7 @@ import java.util.stream.IntStream;
  * }}</pre>
  * <hr>
  *
+ * @see Validate#groups()
  * @see <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop">
  * Aspect Oriented Programming with Spring</a>
  * @see <a href="https://stackoverflow.com/questions/50532039/methodvalidationinterceptor-and-validated-modelattribute">
@@ -79,9 +81,10 @@ import java.util.stream.IntStream;
 @Component
 public class ValidateMethodArgumentsAspect {
 
-    private final Validator validator;
+    private final SmartValidator validator;
 
-    public ValidateMethodArgumentsAspect(Validator validator) {
+    @Autowired
+    public ValidateMethodArgumentsAspect(SmartValidator validator) {
         this.validator = validator;
     }
 
@@ -89,6 +92,11 @@ public class ValidateMethodArgumentsAspect {
     public Object validate(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
         List<MethodParameter> methodParameters = getMethodParameters(methodSignature);
+
+        Validate annotation = Objects.requireNonNull( // cannot be null, added to please static code analysis
+                AnnotationUtils.getAnnotation(methodSignature.getMethod(), Validate.class));
+
+        Object[] validationGroups = annotation.groups();
 
         Errors errors = null;
         boolean isValidated = false;
@@ -107,15 +115,12 @@ public class ValidateMethodArgumentsAspect {
                     pjp.getArgs()[methodParameters.indexOf(parameter)]);
             errors = Objects.requireNonNull(
                     (Errors) pjp.getArgs()[methodParameters.indexOf(nextParameter)]);
-            validator.validate(target, errors);
+            validator.validate(target, errors, validationGroups);
         }
 
         if (!isValidated) {
             throw new ValidateMethodArgumentsException(pjp.getSignature() + " is not applicable for validation");
         }
-
-        Validate annotation = Objects.requireNonNull( // cannot be null, added to please static code analysis
-                AnnotationUtils.getAnnotation(methodSignature.getMethod(), Validate.class));
 
         if (annotation.returnOnError() && errors.hasErrors()) {
             return getDefaultReturnObject(methodSignature);
