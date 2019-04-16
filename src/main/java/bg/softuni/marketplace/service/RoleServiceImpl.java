@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class RoleServiceImpl implements RoleService {
 
-    private static final String ROLES = "rolesCache";
-    private static final String ROLES_FOR_AUTHORITY = "rolesForAuthorityCache";
+    private static final String ROLES_CACHE = "rolesCache";
+    private static final String ROLES_FOR_AUTHORITY_CACHE = "rolesForAuthorityCache";
 
     private final RoleRepository repository;
     private final ModelMapper mapper;
@@ -43,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
 
     @PostConstruct
     @Transactional
-    @CacheEvict(cacheNames = {ROLES, ROLES_FOR_AUTHORITY}, allEntries = true)
+    @CacheEvict(cacheNames = {ROLES_CACHE, ROLES_FOR_AUTHORITY_CACHE}, allEntries = true)
     public void initRoles() {
         if (repository.count() == 0L) {
             Set<Role> roles = Arrays.stream(Authority.values())
@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = ROLES, key = "#authority")
+    @Cacheable(cacheNames = ROLES_CACHE, key = "#authority")
     public <V extends Viewable<Role>>
     Optional<V> findByAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass) {
         return repository
@@ -68,7 +68,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = ROLES_FOR_AUTHORITY, key = "#authority")
+    @Cacheable(cacheNames = ROLES_FOR_AUTHORITY_CACHE, key = "#authority")
     public <V extends Viewable<Role>>
     List<V> getRolesForAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass) {
         List<Role> roles = repository.findAll();
