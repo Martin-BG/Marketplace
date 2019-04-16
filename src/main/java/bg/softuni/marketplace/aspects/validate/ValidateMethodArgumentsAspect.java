@@ -1,6 +1,7 @@
 package bg.softuni.marketplace.aspects.validate;
 
 import lombok.extern.java.Log;
+import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,10 +13,17 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
+import org.springframework.validation.beanvalidation.MethodValidationInterceptor;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+import javax.validation.executable.ExecutableValidator;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -23,11 +31,13 @@ import java.util.stream.IntStream;
 /**
  * Execute validation on arguments followed by {@link Error}
  * on methods annotated with {@link Validate}.<br>
+ * Optionally can validate method parameters and throw {@link ConstraintViolationException} on errors.<br>
  * Optionally can catch specified exception type (and its sub-types) thrown by
  * method invocation and add message to provided {@link Error} object.<br>
  * Optionally can skip method invocation if validation fails.<br>
  * In case of exception or validation errors it returns {@link Optional#empty} if this is the
  * return type of the method or null in all other cases.<br><br>
+ * Throws {@link ConstraintViolationException} if {@link Validate#validateParameters} is enabled and errors are found.<br>
  * Throws {@link IllegalArgumentException} if annotated method has no argument followed by {@link Error}<br>
  * Throws {@link NullPointerException} if either the {@link Error} or validated arguments are null<br>
  * <ul>Example 1:
@@ -65,6 +75,7 @@ import java.util.stream.IntStream;
  * <hr>
  *
  * @see Validate#groups()
+ * @see MethodValidationInterceptor#invoke(MethodInvocation)
  * @see <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop">
  * Aspect Oriented Programming with Spring</a>
  * @see <a href="https://stackoverflow.com/questions/50532039/methodvalidationinterceptor-and-validated-modelattribute">
@@ -82,20 +93,26 @@ import java.util.stream.IntStream;
 public class ValidateMethodArgumentsAspect {
 
     private final SmartValidator validator;
+    private final ExecutableValidator executableValidator;
 
     @Autowired
-    public ValidateMethodArgumentsAspect(SmartValidator validator) {
+    public ValidateMethodArgumentsAspect(SmartValidator validator, Validator javaxValidator) {
         this.validator = validator;
+        executableValidator = javaxValidator.forExecutables();
     }
 
     @Around("@annotation(Validate)")
     public Object validate(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
-        List<MethodParameter> methodParameters = getMethodParameters(methodSignature);
 
         Validate annotation = Objects.requireNonNull( // cannot be null, added to please static code analysis
                 AnnotationUtils.getAnnotation(methodSignature.getMethod(), Validate.class));
 
+        if (annotation.validateParameters()) {
+            validateParameters(pjp, methodSignature, annotation);
+        }
+
+        List<MethodParameter> methodParameters = getMethodParameters(methodSignature);
         Object[] validationGroups = annotation.groups();
 
         Errors errors = null;
@@ -139,6 +156,31 @@ public class ValidateMethodArgumentsAspect {
 
             throw throwable;
         }
+    }
+
+    private void validateParameters(ProceedingJoinPoint pjp, MethodSignature methodSignature, Validate annotation) {
+        Object object = pjp.getThis();
+        Method method = methodSignature.getMethod();
+        Object[] parameterValues = pjp.getArgs();
+        Class<?>[] groups = annotation.groups();
+
+        Set<ConstraintViolation<Object>> constraintViolations = executableValidator.validateParameters(
+                object, method, parameterValues, groups);
+
+        if (!constraintViolations.isEmpty()) {
+            String message = String.format(
+                    "%d constraint violation(s) detected on [%s] method parameter(s) validation:%n\t* %s",
+                    constraintViolations.size(),
+                    pjp.getSignature(),
+                    constraintViolationsToString(constraintViolations));
+            throw new ConstraintViolationException(message, constraintViolations);
+        }
+    }
+
+    private static String constraintViolationsToString(Set<? extends ConstraintViolation<?>> constraintViolations) {
+        return constraintViolations.stream()
+                .map(cv -> (cv == null) ? "null" : (cv.getPropertyPath() + ": " + cv.getMessage()))
+                .collect(Collectors.joining("\n\t* "));
     }
 
     private static List<MethodParameter> getMethodParameters(MethodSignature methodSignature) {

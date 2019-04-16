@@ -8,7 +8,13 @@ import java.lang.annotation.*;
 import java.util.Optional;
 
 /**
- * See {@link ValidateMethodArgumentsAspect} for details.
+ * See {@link ValidateMethodArgumentsAspect} for usage.
+ * @see #validateParameters()
+ * @see #returnOnError()
+ * @see #catchException()
+ * @see #exceptionType()
+ * @see #message()
+ * @see #groups()
  */
 
 @Target(ElementType.METHOD)
@@ -20,7 +26,22 @@ public @interface Validate {
     boolean value() default false;
 
     /**
-     * Prevent method invocation in arguments errors
+     * Validate method parameters first and throw {@link javax.validation.ConstraintViolationException} on errors.
+     * <hr>
+     * Exception will be thrown on null value for either user or errors in the following example:
+     * <pre>
+     *    {@code @}Validate(validateParameters = true)
+     *     public void registerUser(@NotNull User user, @NotNull Errors errors) {
+     *         ...
+     *     }
+     * </pre>
+     *
+     * @see ValidateMethodArgumentsAspect
+     */
+    boolean validateParameters() default true;
+
+    /**
+     * Prevent method invocation in case of arguments errors
      *
      * @see ValidateMethodArgumentsAspect
      */
