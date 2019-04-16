@@ -1,10 +1,7 @@
 package bg.softuni.marketplace.domain.validation.annotations.custom;
 
-import lombok.extern.java.Log;
-import org.springframework.beans.BeansException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -28,11 +25,10 @@ import java.lang.reflect.Method;
  * @see Unique
  */
 
-@Log
-@Component
-public class UniqueValidator implements ConstraintValidator<Unique, String>, ApplicationContextAware {
+@RequiredArgsConstructor
+public class UniqueValidator implements ConstraintValidator<Unique, String> {
 
-    private static ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     private Method method;
     private Object object;
@@ -45,7 +41,6 @@ public class UniqueValidator implements ConstraintValidator<Unique, String>, App
         } catch (NoSuchMethodException e) {
             throw new UniqueValidatorException("Failed to get method: " + constraintAnnotation.method(), e);
         }
-        log.info("UniqueValidator initialized");
     }
 
     @Override
@@ -60,11 +55,5 @@ public class UniqueValidator implements ConstraintValidator<Unique, String>, App
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new UniqueValidatorException("Method invocation failed", e);
         }
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        UniqueValidator.applicationContext = applicationContext;
-        log.info("ApplicationContext set");
     }
 }
