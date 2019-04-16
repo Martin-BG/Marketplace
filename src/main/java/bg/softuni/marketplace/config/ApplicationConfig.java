@@ -4,6 +4,7 @@ import bg.softuni.marketplace.web.interceptors.ThymeleafLayoutInterceptor;
 import bg.softuni.marketplace.web.interceptors.TitleInterceptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.MessageSource;
@@ -16,9 +17,11 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
+import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.PostConstruct;
+import javax.validation.ConstraintValidator;
 import java.util.TimeZone;
 
 @Configuration
@@ -80,14 +83,30 @@ public class ApplicationConfig {
     /**
      * Override default Spring validator configuration.
      *
-     * @param messageSource required for reading messages from *.properties
+     * @param messageSource              required for reading messages from *.properties
+     * @param constraintValidatorFactory required for proper creation (with CDI) of custom {@link ConstraintValidator}
      * @see ValidationAutoConfiguration#defaultValidator defaultValidator
      */
     @Bean
-    public LocalValidatorFactoryBean defaultValidator(MessageSource messageSource) {
+    public LocalValidatorFactoryBean defaultValidator(MessageSource messageSource,
+                                                      SpringConstraintValidatorFactory constraintValidatorFactory) {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource);
+        bean.setConstraintValidatorFactory(constraintValidatorFactory);
         return bean;
+    }
+
+    /**
+     * Required by {@link LocalValidatorFactoryBean} for creating of custom {@link ConstraintValidator}
+     * (autowire all dependencies)
+     *
+     * @param defaultListableBeanFactory {@link DefaultListableBeanFactory}
+     * @return {@link SpringConstraintValidatorFactory}
+     */
+    @Bean
+    public SpringConstraintValidatorFactory springConstraintValidatorFactory(
+            DefaultListableBeanFactory defaultListableBeanFactory) {
+        return new SpringConstraintValidatorFactory(defaultListableBeanFactory);
     }
 
     @Bean
