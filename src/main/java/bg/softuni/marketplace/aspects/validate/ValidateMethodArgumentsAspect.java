@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -88,7 +89,7 @@ import java.util.stream.IntStream;
 
 @Log
 @Aspect
-@Order //defaults to Ordered.LOWEST_PRECEDENCE
+@Order(Ordered.HIGHEST_PRECEDENCE) // HIGHEST_PRECEDENCE to ensure exception handling on method invocation
 @Component
 public class ValidateMethodArgumentsAspect {
 
