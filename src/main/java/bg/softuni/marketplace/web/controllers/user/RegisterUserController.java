@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Layout
@@ -46,14 +45,13 @@ public class RegisterUserController extends BaseController {
     }
 
     @PostMapping
-    public String post(@Valid @ModelAttribute(USER_ATTRIBUTE_NAME) UserRegisterBindingModel user,
-                       Errors errors) {
+    public String post(@ModelAttribute(USER_ATTRIBUTE_NAME) UserRegisterBindingModel user, Errors errors) {
+        userService.registerUser(user, errors);
+
         if (errors.hasErrors()) {
             return VIEW_REGISTER;
         }
 
-        userService.registerUser(user);
-
-        return redirect(WebConfig.URL_USER_HOME);
+        return redirect(WebConfig.URL_USER_LOGIN + "?register");
     }
 }
