@@ -1,17 +1,15 @@
 package bg.softuni.marketplace.domain.validation.annotations.custom;
 
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Objects;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Validation logic for {@link Unique} annotation.
@@ -24,35 +22,30 @@ import java.util.Objects;
  *     long countByEmail(String email);
  * }</pre>
  * <p>
- * Returns {@code true} if tested value is {@code null} or if
- * {@link Unique#method} invocation returns {@code 0}.
+ * Returns {@code true} when tested value is {@code null} or
+ * {@link Unique#method} invocation result is {@code 0}.
  *
  * @see Unique
  */
 
 @Log
-public class UniqueValidator implements ConstraintValidator<Unique, String> {
+@Component
+public class UniqueValidator implements ConstraintValidator<Unique, String>, ApplicationContextAware {
 
-    private static final String PARAM_NAME = "param";
-    private static final String EXPRESSION_FORMAT = "%s(#" + PARAM_NAME + ") == 0L";
+    private static ApplicationContext applicationContext;
 
-    private final ApplicationContext applicationContext;
-    private Expression expression;
-    private EvaluationContext evaluationContext;
-
-    @Autowired
-    public UniqueValidator(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+    private Method method;
+    private Object object;
 
     @Override
     public void initialize(Unique constraintAnnotation) {
-        Object bean = applicationContext.getBean(constraintAnnotation.bean());
-        evaluationContext = new StandardEvaluationContext(bean);
-
-        ExpressionParser parser = new SpelExpressionParser();
-        String expressionString = String.format(EXPRESSION_FORMAT, constraintAnnotation.method());
-        expression = parser.parseExpression(expressionString);
+        object = applicationContext.getBean(constraintAnnotation.bean());
+        try {
+            method = object.getClass().getMethod(constraintAnnotation.method(), String.class);
+        } catch (NoSuchMethodException e) {
+            throw new UniqueValidatorException("Failed to get method: " + constraintAnnotation.method(), e);
+        }
+        log.info("UniqueValidator initialized");
     }
 
     @Override
@@ -61,7 +54,17 @@ public class UniqueValidator implements ConstraintValidator<Unique, String> {
             return true;
         }
 
-        evaluationContext.setVariable(PARAM_NAME, value);
-        return Objects.requireNonNullElse(expression.getValue(evaluationContext, boolean.class), false);
+        try {
+            long result = (long) method.invoke(object, value);
+            return result == 0L;
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new UniqueValidatorException("Method invocation failed", e);
+        }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        UniqueValidator.applicationContext = applicationContext;
+        log.info("ApplicationContext set");
     }
 }
