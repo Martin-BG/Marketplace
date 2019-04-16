@@ -38,8 +38,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserServiceImpl extends BaseService<User, UUID, UserRepository> implements UserService {
 
-    private static final String USERS = "usersCache";
-    private static final String ALL_USERS = "allUsersCache";
+    private static final String USERS_CACHE = "usersCache";
+    private static final String ALL_USERS_CACHE = "allUsersCache";
 
     private static final Supplier<UsernameNotFoundException> USERNAME_NOT_FOUND_EXCEPTION =
             () -> new UsernameNotFoundException("Username not found");
@@ -63,7 +63,7 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = USERS, key = "#username")
+    @Cacheable(cacheNames = USERS_CACHE, key = "#username")
     public UserDetails loadUserByUsername(String username) {
         return repository
                 .findUserEager(username)
@@ -82,7 +82,7 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = ALL_USERS, sync = true)
+    @Cacheable(cacheNames = ALL_USERS_CACHE, sync = true)
     public List<UserViewModel> allUsers() {
         return repository
                 .findAll()
@@ -93,8 +93,8 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
 
     @Override
     @Caching(evict = {
-            @CacheEvict(cacheNames = ALL_USERS, allEntries = true),
-            @CacheEvict(cacheNames = USERS, key = "#userRoleBindingModel.username")})
+            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#userRoleBindingModel.username")})
     public void updateRole(@NotNull @Valid UserRoleBindingModel userRoleBindingModel, @NotNull String principalName) {
         if (principalName.equals(userRoleBindingModel.getUsername())) {
             throw new IllegalArgumentException("Change of own role is not allowed.");
