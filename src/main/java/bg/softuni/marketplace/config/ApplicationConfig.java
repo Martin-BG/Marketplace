@@ -4,6 +4,7 @@ import bg.softuni.marketplace.web.interceptors.ThymeleafLayoutInterceptor;
 import bg.softuni.marketplace.web.interceptors.TitleInterceptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -61,20 +62,29 @@ public class ApplicationConfig {
      * (ex. empty or not properly username in findUserByUsername)
      * <p><a href="https://www.baeldung.com/javax-validation-method-constraints">More information</a></p>
      * <hr>
-     * <pre>{@code @Validated
-     * @Repository
-     * public interface UserRepository extends JpaRepository<User, UUID> {
+     * <pre>
+     * {@code @}Validated
+     * {@code @}Repository
+     *  public interface UserRepository extends JpaRepository< User, UUID> {
      *
-     *     Optional<User> findUserByUsername(@ValidUserUsername String username);
-     * }</pre>
+     *      Optional< User> findUserByUsername(@ValidUserUsername String username);
+     *  }</pre>
+     *
+     * @see ValidationAutoConfiguration#methodValidationPostProcessor methodValidationPostProcessor
      */
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {
         return new MethodValidationPostProcessor();
     }
 
+    /**
+     * Override default Spring validator configuration.
+     *
+     * @param messageSource required for reading messages from *.properties
+     * @see ValidationAutoConfiguration#defaultValidator defaultValidator
+     */
     @Bean
-    public LocalValidatorFactoryBean validator(MessageSource messageSource) {
+    public LocalValidatorFactoryBean defaultValidator(MessageSource messageSource) {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource);
         return bean;
