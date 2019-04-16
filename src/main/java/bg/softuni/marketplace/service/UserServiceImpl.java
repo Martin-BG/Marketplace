@@ -1,13 +1,14 @@
 package bg.softuni.marketplace.service;
 
+import bg.softuni.marketplace.aspects.validate.Validate;
 import bg.softuni.marketplace.domain.entities.Role;
 import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.models.binding.role.RoleBindingModel;
-import bg.softuni.marketplace.domain.models.binding.user.UserBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
+import bg.softuni.marketplace.domain.validation.groups.AllGroups;
 import bg.softuni.marketplace.repository.UserRepository;
 import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -26,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -38,8 +41,8 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
     private static final String USERS = "usersCache";
     private static final String ALL_USERS = "allUsersCache";
 
-    private static final UsernameNotFoundException USERNAME_NOT_FOUND_EXCEPTION =
-            new UsernameNotFoundException("Username not found");
+    private static final Supplier<UsernameNotFoundException> USERNAME_NOT_FOUND_EXCEPTION =
+            () -> new UsernameNotFoundException("Username not found");
 
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
@@ -64,28 +67,18 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
     public UserDetails loadUserByUsername(String username) {
         return repository
                 .findUserEager(username)
-                .orElseThrow(() -> USERNAME_NOT_FOUND_EXCEPTION);
+                .orElseThrow(USERNAME_NOT_FOUND_EXCEPTION);
     }
 
     @Override
-    @CacheEvict(cacheNames = ALL_USERS, allEntries = true)
-    public void registerUser(@NotNull @Valid UserRegisterBindingModel bindingModel) {
-        if (repository.countByEmail(bindingModel.getEmail()) > 0) {
-            throw new IllegalArgumentException("Email already used: " + bindingModel.getEmail());
-        }
+    @Validate(returnOnError = true, catchException = true, groups = {AllGroups.class})
+    public void registerUser(@NotNull UserRegisterBindingModel bindingModel, @NotNull Errors errors) {
+        bindingModel.setPassword(passwordEncoder.encode(bindingModel.getPassword()));
+        User user = mapper.map(bindingModel, User.class);
+        getRolesForUser()
+                .forEach(role -> user.getAuthorities().add(mapper.map(role, Role.class)));
 
-        if (repository.countByUsername(bindingModel.getUsername()) > 0) {
-            throw new IllegalArgumentException("Username already used: " + bindingModel.getUsername());
-        }
-
-        UserBindingModel user = new UserBindingModel(
-                bindingModel.getUsername(),
-                bindingModel.getEmail(),
-                passwordEncoder.encode(bindingModel.getPassword()));
-
-        user.getAuthorities().addAll(getRolesForUser());
-
-        create(user);
+        repository.save(user);
     }
 
     @Transactional(readOnly = true)

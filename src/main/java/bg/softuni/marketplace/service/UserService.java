@@ -4,6 +4,7 @@ import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingMode
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.validation.Errors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
-    void registerUser(@NotNull @Valid UserRegisterBindingModel bindingModel);
+    void registerUser(@NotNull UserRegisterBindingModel bindingModel, @NotNull Errors errors);
 
     List<UserViewModel> allUsers();
 
