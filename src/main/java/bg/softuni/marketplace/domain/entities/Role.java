@@ -1,5 +1,6 @@
 package bg.softuni.marketplace.domain.entities;
 
+import bg.softuni.marketplace.domain.api.Viewable;
 import bg.softuni.marketplace.domain.converters.AuthorityConverter;
 import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.role.ValidAuthority;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role extends BaseLongEntity implements GrantedAuthority {
+public class Role extends BaseLongEntity implements GrantedAuthority, Viewable<Role> {
 
     private static final long serialVersionUID = 1L;
 
