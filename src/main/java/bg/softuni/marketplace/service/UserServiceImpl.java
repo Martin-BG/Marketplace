@@ -4,12 +4,12 @@ import bg.softuni.marketplace.aspects.validate.Validate;
 import bg.softuni.marketplace.domain.entities.Role;
 import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
-import bg.softuni.marketplace.domain.models.binding.role.RoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.groups.AllGroups;
 import bg.softuni.marketplace.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
@@ -27,16 +27,15 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Log
 @Service
 @Validated
 @Transactional
-public class UserServiceImpl extends BaseService<User, UUID, UserRepository> implements UserService {
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
 
     private static final String USERS_CACHE = "usersCache";
     private static final String ALL_USERS_CACHE = "allUsersCache";
@@ -44,22 +43,10 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
     private static final Supplier<UsernameNotFoundException> USERNAME_NOT_FOUND_EXCEPTION =
             () -> new UsernameNotFoundException("Username not found");
 
-    private final RoleService roleService;
+    private final UserRepository repository;
+    private final ModelMapper mapper;
     private final PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository repository,
-                           ModelMapper mapper,
-                           RoleService roleService,
-                           PasswordEncoder passwordEncoder) {
-        super(repository, mapper);
-        this.roleService = roleService;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    protected Logger logger() {
-        return log;
-    }
+    private final RoleService roleService;
 
     @Override
     @Transactional(readOnly = true)
@@ -73,10 +60,11 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
     @Override
     @Validate(returnOnError = true, catchException = true, groups = {AllGroups.class})
     public void registerUser(@NotNull UserRegisterBindingModel bindingModel, @NotNull Errors errors) {
-        bindingModel.setPassword(passwordEncoder.encode(bindingModel.getPassword()));
-        User user = mapper.map(bindingModel, User.class);
-        getRolesForUser()
-                .forEach(role -> user.getAuthorities().add(mapper.map(role, Role.class)));
+        User user = new User(
+                bindingModel.getUsername(),
+                passwordEncoder.encode(bindingModel.getPassword()),
+                bindingModel.getEmail(),
+                getRolesForUser());
 
         repository.save(user);
     }
@@ -111,10 +99,7 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
                         "User not found or not allowed for roles edit: " + userRoleBindingModel.getUsername()));
 
         List<Role> rolesForAuthority = roleService
-                .getRolesForAuthority(userRoleBindingModel.getAuthority(), RoleBindingModel.class)
-                .stream()
-                .map(roleBindingModel -> mapper.map(roleBindingModel, Role.class))
-                .collect(Collectors.toList());
+                .getRolesForAuthority(userRoleBindingModel.getAuthority(), Role.class);
 
         user.getAuthorities()
                 .retainAll(rolesForAuthority);
@@ -150,12 +135,12 @@ public class UserServiceImpl extends BaseService<User, UUID, UserRepository> imp
         return viewModel;
     }
 
-    private List<RoleBindingModel> getRolesForUser() {
+    private List<Role> getRolesForUser() {
         if (repository.count() == 0L) {
-            return roleService.findAll(RoleBindingModel.class);
+            return roleService.findAll(Role.class);
         } else {
             return List.of(roleService
-                    .findByAuthority(Authority.USER, RoleBindingModel.class)
+                    .findByAuthority(Authority.USER, Role.class)
                     .orElseThrow());
         }
     }
