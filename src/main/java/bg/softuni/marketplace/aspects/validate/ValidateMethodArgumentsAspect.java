@@ -39,7 +39,7 @@ import java.util.stream.IntStream;
  * In case of exception or validation errors it returns {@link Optional#empty} if this is the
  * return type of the method or null in all other cases.<br><br>
  * Throws {@link ConstraintViolationException} if {@link Validate#validateParameters} is enabled and errors are found.<br>
- * Throws {@link IllegalArgumentException} if annotated method has no argument followed by {@link Error}<br>
+ * Throws {@link ValidateMethodArgumentsException} if annotated method has no argument followed by {@link Error}<br>
  * Throws {@link NullPointerException} if either the {@link Error} or validated arguments are null<br>
  * <ul>Example 1:
  * <li>Just validate bindingModel</li>
