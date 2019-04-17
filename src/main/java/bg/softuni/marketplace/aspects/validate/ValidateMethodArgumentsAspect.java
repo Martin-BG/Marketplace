@@ -150,7 +150,7 @@ public class ValidateMethodArgumentsAspect {
             if (annotation.catchException() && annotation.exceptionType().isAssignableFrom(throwable.getClass())) {
                 log.log(Level.WARNING, "@Validate Aspect cough an Exception", throwable);
 
-                errors.reject(annotation.message());
+                errors.reject(annotation.message(), annotation.message());
 
                 return getDefaultReturnObject(methodSignature);
             }
