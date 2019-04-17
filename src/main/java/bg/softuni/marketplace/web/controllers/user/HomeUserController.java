@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Layout
+@Title("nav.home")
 @Controller
 @RequestMapping(WebConfig.URL_USER_HOME)
 public class HomeUserController {
@@ -15,7 +16,6 @@ public class HomeUserController {
     private static final String VIEW_HOME = "user/home";
 
     @GetMapping
-    @Title("nav.home")
     public String get() {
         return VIEW_HOME;
     }

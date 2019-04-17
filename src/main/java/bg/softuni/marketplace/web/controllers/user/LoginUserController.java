@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Layout
+@Title("nav.login")
 @Controller
 @RequestMapping(WebConfig.URL_USER_LOGIN)
 public class LoginUserController extends BaseController {
 
-    private static final String USER_LOGIN = "user/login";
+    private static final String VIEW_USER_LOGIN = "user/login";
 
     @Override
     protected List<String> getUnmodifiedTextFieldsList() {
@@ -23,8 +24,7 @@ public class LoginUserController extends BaseController {
     }
 
     @GetMapping
-    @Title("nav.login")
     public String get() {
-        return USER_LOGIN;
+        return VIEW_USER_LOGIN;
     }
 }
