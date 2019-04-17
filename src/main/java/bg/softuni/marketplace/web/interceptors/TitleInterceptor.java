@@ -3,7 +3,6 @@ package bg.softuni.marketplace.web.interceptors;
 import bg.softuni.marketplace.web.annotations.Title;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -53,16 +52,14 @@ public final class TitleInterceptor extends HandlerInterceptorAdapter {
                            ModelAndView modelAndView) {
         if (handler instanceof HandlerMethod) {
             String originalViewName = modelAndView.getViewName();
-            if (originalViewName == null || isRedirectOrForward(originalViewName)) {
+            if (originalViewName == null || Helper.isRedirectOrForward(originalViewName)) {
                 return;
             }
 
             Locale locale = LocaleContextHolder.getLocale();
             String title = messageSource.getMessage(titleCode, null, locale);
 
-            Title titleAnnotation = AnnotationUtils.getAnnotation(
-                    ((HandlerMethod) handler).getMethod(),
-                    Title.class);
+            Title titleAnnotation = Helper.getMethodOrTypeAnnotation(handler, Title.class);
 
             if (titleAnnotation != null) {
                 String newTitle = messageSource.getMessage(titleAnnotation.title(), null, locale);
@@ -75,10 +72,6 @@ public final class TitleInterceptor extends HandlerInterceptorAdapter {
 
             modelAndView.addObject(titleAttribute, title);
         }
-    }
-
-    private static boolean isRedirectOrForward(String viewName) {
-        return viewName.startsWith("redirect:") || viewName.startsWith("forward:");
     }
 
     public static final class Builder {

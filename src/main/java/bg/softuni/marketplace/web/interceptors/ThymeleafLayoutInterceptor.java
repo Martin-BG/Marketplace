@@ -1,9 +1,7 @@
 package bg.softuni.marketplace.web.interceptors;
 
 import bg.softuni.marketplace.web.annotations.Layout;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -52,11 +50,11 @@ public final class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter 
         }
 
         String originalViewName = modelAndView.getViewName();
-        if (originalViewName == null || isRedirectOrForward(originalViewName)) {
+        if (originalViewName == null || Helper.isRedirectOrForward(originalViewName)) {
             return;
         }
 
-        Layout layout = getMethodOrTypeAnnotation(handler);
+        Layout layout = Helper.getMethodOrTypeAnnotation(handler, Layout.class);
         if (layout == null) {
             return;
         }
@@ -72,22 +70,6 @@ public final class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter 
 
         modelAndView.setViewName(layoutName);
         modelAndView.addObject(viewAttribute, getView(originalViewName));
-    }
-
-    private static boolean isRedirectOrForward(String viewName) {
-        return viewName.startsWith("redirect:") || viewName.startsWith("forward:");
-    }
-
-    private static Layout getMethodOrTypeAnnotation(Object handler) {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Layout layout = AnnotationUtils.getAnnotation(handlerMethod.getMethod(), Layout.class);
-            if (layout == null) {
-                layout = AnnotationUtils.getAnnotation(handlerMethod.getBeanType(), Layout.class);
-            }
-            return layout;
-        }
-        return null;
     }
 
     private String getLayoutName(Layout layout) {
