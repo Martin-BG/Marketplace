@@ -31,6 +31,7 @@ public final class TitleInterceptor extends HandlerInterceptorAdapter {
 
     private static final String DEFAULT_TITLE_CODE = "application.title";
     private static final String DEFAULT_TITLE_ATTRIBUTE_NAME = "title";
+
     private final MessageSource messageSource;
     private String titleCode;
     private String titleAttribute;
