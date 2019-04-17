@@ -62,7 +62,7 @@ public @interface Validate {
      * @see ValidateMethodArgumentsAspect
      * @see #catchException()
      */
-    Class<?> exceptionType() default Throwable.class;
+    Class<? extends Throwable> exceptionType() default Throwable.class;
 
     /**
      * Message to add as error to {@link Errors} argument when exception is cough on method invocation.
