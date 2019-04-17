@@ -1,20 +1,16 @@
 package bg.softuni.marketplace.config;
 
 import bg.softuni.marketplace.domain.enums.Authority;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
+@RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String CSRF_ATTRIBUTE_NAME = "_csrf";
@@ -33,15 +29,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userService;
     private final AccessDeniedHandler accessDeniedHandler;
     private final CsrfTokenRepository csrfTokenRepository;
-
-    @Autowired
-    public WebSecurityConfig(@Qualifier("userServiceImpl") UserDetailsService userService,
-                             AccessDeniedHandler accessDeniedHandler,
-                             CsrfTokenRepository csrfTokenRepository) {
-        this.userService = userService;
-        this.accessDeniedHandler = accessDeniedHandler;
-        this.csrfTokenRepository = csrfTokenRepository;
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
