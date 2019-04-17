@@ -30,17 +30,17 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Execute validation on arguments followed by {@link Error}
+ * Execute validation on arguments followed by {@link Errors}
  * on methods annotated with {@link Validate}.<br>
  * Optionally can validate method parameters and throw {@link ConstraintViolationException} on errors.<br>
  * Optionally can catch specified exception type (and its sub-types) thrown by
- * method invocation and add message to provided {@link Error} object.<br>
+ * method invocation and add message to provided {@link Errors} object.<br>
  * Optionally can skip method invocation if validation fails.<br>
  * In case of exception or validation errors it returns {@link Optional#empty} if this is the
  * return type of the method or null in all other cases.<br><br>
  * Throws {@link ConstraintViolationException} if {@link Validate#validateParameters} is enabled and errors are found.<br>
- * Throws {@link ValidateMethodArgumentsException} if annotated method has no argument followed by {@link Error}<br>
- * Throws {@link NullPointerException} if either the {@link Error} or validated arguments are null<br>
+ * Throws {@link ValidateMethodArgumentsException} if annotated method has no argument followed by {@link Errors}<br>
+ * Throws {@link NullPointerException} if either the {@link Errors} or validated arguments are null<br>
  * <ul>Example 1:
  * <li>Just validate bindingModel</li>
  * </ul>
