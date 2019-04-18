@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Validation logic for {@link EqualFields} class-type annotation.
  * <p>
  * Returns {@code true} if all specified fields have equal non-null values or are {@code null}.
- * <ul>Throws {@link IllegalArgumentException} in case of:
+ * <ul>Throws {@link EqualFieldsValidatorException} in case of:
  * <li>Less than 2 field names given for validation</li>
  * <li>Invalid field name</li>
  * <li>Inaccessible filed</li>
