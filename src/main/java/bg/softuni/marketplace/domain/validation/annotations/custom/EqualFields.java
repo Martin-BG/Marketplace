@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface EqualFields {
 
-    String message() default "{equal-fields.default.mot-match}";
+    String message() default "{equal-fields.default.not-match}";
 
     Class<?>[] groups() default {};
 
