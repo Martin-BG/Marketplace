@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Object> {
 
     private List<String> fieldsToValidate = List.of();
+    private boolean inverse;
+    private String message;
 
     @Override
     public void initialize(EqualFields constraintAnnotation) {
@@ -36,16 +38,18 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
                         constraintAnnotation.value() :
                         constraintAnnotation.fields())
                 .collect(Collectors.toUnmodifiableList());
+        message = constraintAnnotation.message();
+        inverse = constraintAnnotation.inverse();
     }
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
         if (fieldsToValidate.size() <= 1) {
-            String message = MessageFormat
+            String errorMessage = MessageFormat
                     .format("[{0}] At least two fields for validation must be specified: {1}",
                             obj.getClass().getName(),
                             String.join(", ", fieldsToValidate));
-            throw new EqualFieldsValidatorException(message);
+            throw new EqualFieldsValidatorException(errorMessage);
         }
 
         List<String> fieldsNotFound = new ArrayList<>(fieldsToValidate);
@@ -61,28 +65,43 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
 
         // Not all required for validation fields found in class
         if (!fieldsNotFound.isEmpty()) {
-            String message = MessageFormat
+            String errorMessage = MessageFormat
                     .format("[{0}] Field(s) to validate not found: {1}",
                             obj.getClass().getName(),
                             String.join(", ", fieldsNotFound));
-            throw new EqualFieldsValidatorException(message);
+            throw new EqualFieldsValidatorException(errorMessage);
         }
 
-        // Mix of null (filtered-out) and non-null values for fields -> not equal by contract
-        if (fieldValues.size() != fieldsToValidate.size()) {
-            return false;
-        }
+        boolean result;
 
-        // All fields have null values -> equal by contract
         if (fieldValues.isEmpty()) {
-            return true;
+            // All fields have null values -> equal by contract
+            result = true;
+        } else if (fieldValues.size() != fieldsToValidate.size()) {
+            // Mix of null (filtered-out) and non-null values for fields -> not equal by contract
+            result = false;
+        } else {
+            // Check equality of field values
+            result = fieldValues
+                    .stream()
+                    .distinct()
+                    .count() == 1L;
         }
 
-        // Check equality of field values
-        return fieldValues.stream()
-                .distinct()
-                .limit(2L)
-                .count() <= 1L;
+        if (inverse) {
+            result = !result;
+        }
+
+        if (!result) {
+            context.disableDefaultConstraintViolation();
+            fieldsToValidate.forEach(field -> context
+                    .buildConstraintViolationWithTemplate(message)
+                    .addPropertyNode(field)
+                    .addConstraintViolation()
+            );
+        }
+
+        return result;
     }
 
     private static Optional<Object> getFieldValue(Field field, Object obj) {

@@ -14,7 +14,7 @@ import java.lang.annotation.*;
  */
 
 @Repeatable(EqualFields.List.class)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EqualFieldsValidator.class)
 @Documented
@@ -31,6 +31,11 @@ public @interface EqualFields {
 
     @AliasFor("value")
     String[] fields() default {};
+
+    /**
+     * Inverse validation result, i.e. checks for not equality
+     */
+    boolean inverse() default false;
 
     /**
      * Defines several {@link EqualFields} annotations on the same element.
