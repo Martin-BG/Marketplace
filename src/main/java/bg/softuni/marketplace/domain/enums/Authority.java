@@ -28,4 +28,11 @@ public enum Authority {
     public String asRole() {
         return role;
     }
+
+    public static class Role {
+        public static final String ROOT = ROLE_PREFIX + "ROOT";
+        public static final String ADMIN = ROLE_PREFIX + "ADMIN";
+        public static final String TRADER = ROLE_PREFIX + "TRADER";
+        public static final String USER = ROLE_PREFIX + "USER";
+    }
 }
