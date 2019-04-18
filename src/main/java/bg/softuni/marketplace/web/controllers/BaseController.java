@@ -18,6 +18,10 @@ public class BaseController {
         return "redirect:" + url;
     }
 
+    protected static String forward(String url) {
+        return "forward:" + url;
+    }
+
     /**
      * Define modification rules for input fields<br>
      * Settings are inherited by extending classes
