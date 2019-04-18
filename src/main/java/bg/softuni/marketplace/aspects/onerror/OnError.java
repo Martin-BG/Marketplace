@@ -47,6 +47,15 @@ public @interface OnError {
     Class<? extends Throwable> exceptionType() default Throwable.class;
 
     /**
+     * Exception type and its sub-classes to NOT catch on method invocation.
+     * This setting is with higher precedence than {@link #exceptionType()}
+     *
+     * @see OnErrorViewChangerAspect
+     * @see #catchException()
+     */
+    Class<? extends Throwable> exceptionTypeIgnore() default OnErrorViewChangerException.class;
+
+    /**
      * Message to add as error to {@link Errors} argument when exception is cough on method invocation.
      *
      * @see OnErrorViewChangerAspect

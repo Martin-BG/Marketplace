@@ -77,7 +77,9 @@ public class OnErrorViewChangerAspect {
         try {
             result = (String) pjp.proceed();
         } catch (Throwable throwable) {
-            if (annotation.catchException() && annotation.exceptionType().isAssignableFrom(throwable.getClass())) {
+            if (annotation.catchException()
+                    && annotation.exceptionType().isAssignableFrom(throwable.getClass())
+                    && !annotation.exceptionTypeIgnore().isAssignableFrom(throwable.getClass())) {
                 exceptionCough = true;
 
                 log.log(Level.WARNING, "@OnError Aspect cough an Exception", throwable);
