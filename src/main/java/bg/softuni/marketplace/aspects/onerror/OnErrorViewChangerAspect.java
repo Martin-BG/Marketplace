@@ -77,11 +77,8 @@ public class OnErrorViewChangerAspect {
         try {
             result = (String) pjp.proceed();
         } catch (Throwable throwable) {
-            if (annotation.catchException()
-                    && annotation.exceptionType().isAssignableFrom(throwable.getClass())
-                    && !annotation.exceptionTypeIgnore().isAssignableFrom(throwable.getClass())) {
+            if (shouldCatch(annotation, throwable)) {
                 exceptionCough = true;
-
                 log.log(Level.WARNING, "@OnError Aspect cough an Exception", throwable);
             } else {
                 throw throwable;
@@ -102,10 +99,32 @@ public class OnErrorViewChangerAspect {
         errorsList.removeIf(errors -> !errors.hasErrors());
 
         if (exceptionCough || !errorsList.isEmpty()) {
-            result = annotation.view();
+            result = buildUrl(annotation);
         }
 
         return result;
+    }
+
+    private static boolean shouldCatch(OnError annotation, Throwable throwable) {
+        return annotation.catchException()
+                && annotation.exceptionType().isAssignableFrom(throwable.getClass())
+                && !annotation.exceptionTypeIgnore().isAssignableFrom(throwable.getClass());
+    }
+
+    private static String buildUrl(OnError annotation) {
+        String url;
+        switch (annotation.method()) {
+        case FORWARD:
+            url = "forward:" + annotation.view();
+            break;
+        case REDIRECT:
+            url = "redirect:" + annotation.view();
+            break;
+        default:
+            url = annotation.view();
+            break;
+        }
+        return url;
     }
 
     private static List<Errors> getNonNullErrorsParameters(ProceedingJoinPoint pjp) {

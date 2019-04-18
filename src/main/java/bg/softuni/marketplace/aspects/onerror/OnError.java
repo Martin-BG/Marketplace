@@ -31,6 +31,16 @@ public @interface OnError {
     String view() default "";
 
     /**
+     * Defines {@link Method Method} type:
+     * {@link Method#VIEW VIEW},
+     * {@link Method#REDIRECT REDIRECT} or
+     * {@link Method#FORWARD FORWARD}
+     *
+     * @see Method Method
+     */
+    Method method() default Method.VIEW;
+
+    /**
      * Catch {@link #exceptionType} or its sub-class exceptions on method invocation,
      * add {@link #message} to {@link Errors} argument and change view to {@link #view}.
      *
@@ -62,4 +72,13 @@ public @interface OnError {
      * @see #catchException()
      */
     String message() default "on-error.exception.default-message";
+
+    /**
+     * Defines the view type: {@link #VIEW},
+     * {@link #REDIRECT} or
+     * {@link #FORWARD}
+     *
+     * @see OnError#method()
+     */
+    enum Method {VIEW, REDIRECT, FORWARD}
 }
