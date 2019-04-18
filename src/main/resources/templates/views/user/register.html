@@ -42,7 +42,9 @@
         </div>
 
         <th:block th:if="${#fields.hasErrors('global')}">
-            <small class="app-color-error" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
+            <ul>
+                <li class="app-color-error" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
+            </ul>
         </th:block>
 
         <div class="app-form-actions">
