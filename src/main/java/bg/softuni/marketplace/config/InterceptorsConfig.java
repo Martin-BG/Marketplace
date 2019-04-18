@@ -10,12 +10,15 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Configuration
 public class InterceptorsConfig {
 
+    public static final String VIEW_ATTRIBUTE_NAME = "view";
+    public static final String TITLE_ATTRIBUTE_NAME = "title";
+
     @Bean
     public HandlerInterceptor thymeleafLayoutInterceptor() {
         return ThymeleafLayoutInterceptor
                 .builder()
                 .withDefaultLayout("/layouts/default")
-                .withViewAttribute("view")
+                .withViewAttribute(VIEW_ATTRIBUTE_NAME)
                 .withViewPrefix("/views/")
                 .build();
     }
@@ -25,7 +28,7 @@ public class InterceptorsConfig {
         return TitleInterceptor
                 .builder(messageSource)
                 .withTitleCode("application.title")
-                .withTitleAttribute("title")
+                .withTitleAttribute(TITLE_ATTRIBUTE_NAME)
                 .build();
     }
 }
