@@ -9,22 +9,24 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "roles")
+@Table(
+        name = "roles",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_roles_authority", columnNames = {"authority"})
+        }
+)
 public class Role extends BaseLongEntity implements GrantedAuthority, Viewable<Role> {
 
     private static final long serialVersionUID = 1L;
 
     @ValidAuthority
     @Convert(converter = AuthorityConverter.class)
-    @Column(unique = true, nullable = false, length = ValidRoleAuthority.MAX_LENGTH)
+    @Column(nullable = false, length = ValidRoleAuthority.MAX_LENGTH)
     private Authority authority;
 
     @Override

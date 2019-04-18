@@ -17,7 +17,13 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_users_username", columnNames = {"username"}),
+                @UniqueConstraint(name = "uk_users_email", columnNames = {"email"})
+        }
+)
 @NamedQuery(name = "User.findUserEager",
         query = "SELECT u FROM User u LEFT JOIN FETCH u.authorities AS a WHERE u.username = :username")
 public class User extends BaseUuidEntity implements UserDetails, Viewable<User> {
@@ -25,7 +31,7 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
     private static final long serialVersionUID = 1L;
 
     @ValidUserUsername
-    @Column(unique = true, nullable = false, updatable = false, length = ValidUserUsername.MAX_LENGTH)
+    @Column(nullable = false, updatable = false, length = ValidUserUsername.MAX_LENGTH)
     private String username;
 
     @ValidUserEncryptedPassword
@@ -33,15 +39,15 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
     private String password;
 
     @ValidUserEmail
-    @Column(unique = true, nullable = false, length = ValidUserEmail.MAX_LENGTH)
+    @Column(nullable = false, length = ValidUserEmail.MAX_LENGTH)
     private String email;
 
     @ValidUserAuthorities
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+            joinColumns = {@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_users_roles_users"))},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_users_roles_roles"))})
     private Set<Role> authorities = new HashSet<>();
 
     private boolean isAccountNonLocked = true;
