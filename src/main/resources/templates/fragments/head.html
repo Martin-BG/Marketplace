@@ -5,7 +5,7 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
 
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
-    <title th:text="${title}"/>
+    <title th:text="${__${T(bg.softuni.marketplace.config.InterceptorsConfig).TITLE_ATTRIBUTE_NAME}__}"/>
     <link rel="stylesheet" th:href="@{/css/reset.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
