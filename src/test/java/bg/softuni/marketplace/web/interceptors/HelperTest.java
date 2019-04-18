@@ -19,14 +19,14 @@ class HelperTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class isRedirectOrForwardTests {
 
-        @DisplayName("redirect with valid URLs -> true")
+        @DisplayName("redirect URLs -> true")
         @ParameterizedTest
         @ValueSource(strings = {"redirect:someUrl", "redirect:/", "redirect:"})
         void isRedirectOrForward_withRedirect_isTrue(String url) {
             assertTrue(Helper.isRedirectOrForward(url));
         }
 
-        @DisplayName("forward with valid URLs -> true")
+        @DisplayName("forward URLs -> true")
         @ParameterizedTest
         @ValueSource(strings = {"forward:someUrl", "forward:/", "forward:"})
         void isRedirectOrForward_withForward_isTrue(String url) {
@@ -48,7 +48,7 @@ class HelperTest {
             assertFalse(Helper.isRedirectOrForward(url));
         }
 
-        @DisplayName("with null -> NullPointerException")
+        @DisplayName("null -> NullPointerException")
         @ParameterizedTest
         @NullSource
         void isRedirectOrForward_withNull_throwsNPE(String url) {
