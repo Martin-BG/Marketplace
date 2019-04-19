@@ -80,3 +80,7 @@ div.form-group label {
     margin: 2rem auto 0;
     text-align: center;
 }
+
+.app-main-mt {
+    margin-top: 6rem
+}
