@@ -6,6 +6,7 @@ import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.role.ValidAuthority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import bg.softuni.marketplace.domain.validation.groups.GroupOne;
+import bg.softuni.marketplace.domain.validation.groups.GroupTwo;
 import cz.jirutka.validator.spring.SpELAssert;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,6 +23,8 @@ public class UserRoleBindingModel implements Bindable<User>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @SpELAssert(message = "{user.update.username.not-found}", groups = GroupTwo.class,
+            value = "@userRepository.countByUsername(#this) == 1L")
     @ValidUserUsername
     private String username;
 
