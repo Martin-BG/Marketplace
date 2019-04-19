@@ -3,11 +3,12 @@ package bg.softuni.marketplace.domain.validation.annotations.custom;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Validates annotated value against the return value of a {@link #method}.<br>
@@ -17,10 +18,11 @@ import static java.lang.annotation.ElementType.*;
  * @see UniqueValidator
  */
 
-@Target({FIELD, METHOD, ANNOTATION_TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueValidator.class)
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+@Retention(RUNTIME)
+@Repeatable(Unique.List.class)
 @Documented
+@Constraint(validatedBy = UniqueValidator.class)
 public @interface Unique {
 
     String message() default "{unique.default.not-unique}";
@@ -55,4 +57,17 @@ public @interface Unique {
      * @see UniqueValidator
      */
     String method();
+
+    /**
+     * Defines several {@link Unique} annotations on the same element.
+     *
+     * @see Unique
+     */
+    @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+    @Retention(RUNTIME)
+    @Documented
+    @interface List {
+
+        Unique[] value();
+    }
 }

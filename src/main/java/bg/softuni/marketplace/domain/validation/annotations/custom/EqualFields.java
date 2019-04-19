@@ -4,7 +4,14 @@ import org.springframework.core.annotation.AliasFor;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Repeatable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Values of all listed fields in the annotated class should be equal.
@@ -13,11 +20,11 @@ import java.lang.annotation.*;
  * {@code null} values are also included in validation.
  */
 
+@Target({TYPE, ANNOTATION_TYPE})
+@Retention(RUNTIME)
 @Repeatable(EqualFields.List.class)
-@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EqualFieldsValidator.class)
 @Documented
+@Constraint(validatedBy = EqualFieldsValidator.class)
 public @interface EqualFields {
 
     String message() default "{equal-fields.default.not-match}";
@@ -42,10 +49,11 @@ public @interface EqualFields {
      *
      * @see EqualFields
      */
-    @Target(ElementType.TYPE)
-    @Retention(RetentionPolicy.RUNTIME)
+    @Target({TYPE, ANNOTATION_TYPE})
+    @Retention(RUNTIME)
     @Documented
     @interface List {
+
         EqualFields[] value();
     }
 }

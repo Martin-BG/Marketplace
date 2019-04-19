@@ -5,7 +5,14 @@ import org.springframework.core.annotation.AliasFor;
 import javax.validation.Constraint;
 import javax.validation.OverridesAttribute;
 import javax.validation.Payload;
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Repeatable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Values of all listed fields in the annotated class should not be equal.
@@ -18,11 +25,11 @@ import java.lang.annotation.*;
  */
 
 @EqualFields(inverse = true)
+@Target({TYPE, ANNOTATION_TYPE})
+@Retention(RUNTIME)
 @Repeatable(NotEqualFields.List.class)
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {})
 @Documented
+@Constraint(validatedBy = {})
 public @interface NotEqualFields {
 
     @OverridesAttribute(constraint = EqualFields.class, name = "message")
@@ -45,8 +52,8 @@ public @interface NotEqualFields {
      *
      * @see NotEqualFields
      */
-    @Target(ElementType.TYPE)
-    @Retention(RetentionPolicy.RUNTIME)
+    @Target({TYPE, ANNOTATION_TYPE})
+    @Retention(RUNTIME)
     @Documented
     @interface List {
         NotEqualFields[] value();
