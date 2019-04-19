@@ -5,6 +5,8 @@ import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.role.ValidAuthority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
+import bg.softuni.marketplace.domain.validation.groups.GroupOne;
+import cz.jirutka.validator.spring.SpELAssert;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,8 @@ public class UserRoleBindingModel implements Bindable<User>, Serializable {
     @ValidUserUsername
     private String username;
 
+    @SpELAssert(message = "{user.update.role.root}", groups = GroupOne.class,
+            value = "#this != T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     @ValidAuthority
     private Authority authority;
 }
