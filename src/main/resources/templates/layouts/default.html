@@ -4,7 +4,10 @@
 <body>
 <div class="container-fluid">
     <header th:insert="~{fragments/header :: header}"></header>
-    <main class="my-3" th:insert="${view}"></main>
+    <main class="app-main-mt">
+        <th:block
+                th:replace="${__${T(bg.softuni.marketplace.config.InterceptorsConfig).VIEW_ATTRIBUTE_NAME}__}"></th:block>
+    </main>
     <footer th:insert="~{fragments/footer :: footer}"></footer>
 </div>
 <th:block th:replace="~{fragments/scripts :: scripts}"/>
