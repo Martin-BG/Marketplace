@@ -14,9 +14,8 @@ public interface UserService extends UserDetailsService {
     void registerUser(@NotNull UserRegisterBindingModel bindingModel,
                       @NotNull Errors errors);
 
-    List<UserViewModel> allUsers();
-
     void updateRole(@NotNull UserRoleBindingModel userRoleBindingModel,
-                    @NotNull Errors errors,
-                    @NotNull String principalName);
+                    @NotNull Errors errors);
+
+    List<UserViewModel> allUsers();
 }

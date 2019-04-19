@@ -17,6 +17,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,9 +61,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Validate(returnOnError = true, catchException = true, groups = {AllGroups.class})
+    @PreAuthorize("isAnonymous()")
+    @Validate(returnOnError = true,
+            catchException = true,
+            groups = AllGroups.class)
     @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true)
-    public void registerUser(@NotNull UserRegisterBindingModel bindingModel, @NotNull Errors errors) {
+    public void registerUser(@NotNull UserRegisterBindingModel bindingModel,
+                             @NotNull Errors errors) {
         User user = new User(
                 bindingModel.getUsername(),
                 passwordEncoder.encode(bindingModel.getPassword()),
@@ -72,29 +77,18 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    @Cacheable(cacheNames = ALL_USERS_CACHE, sync = true)
-    public List<UserViewModel> allUsers() {
-        return repository
-                .findAll()
-                .stream()
-                .map(this::mapUserToViewModel)
-                .collect(Collectors.toList());
-    }
-
     @Override
-    @Secured({Authority.Role.ADMIN})
-    @Validate(returnOnError = true, catchException = true, groups = {AllGroups.class})
+    @Secured(Authority.Role.ADMIN)
+    @PreAuthorize("principal.username != #userRoleBindingModel.username " +
+            "and #userRoleBindingModel.authority != T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
+    @Validate(returnOnError = true,
+            catchException = true,
+            groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
             @CacheEvict(cacheNames = USERS_CACHE, key = "#userRoleBindingModel.username")})
     public void updateRole(@NotNull UserRoleBindingModel userRoleBindingModel,
-                           @NotNull Errors errors,
-                           @NotNull String principalName) {
-        if (principalName.equals(userRoleBindingModel.getUsername())) {
-            throw new IllegalArgumentException("Change of own role is not allowed.");
-        }
-
+                           @NotNull Errors errors) {
         User user = repository
                 .findUserEager(userRoleBindingModel.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -108,6 +102,17 @@ public class UserServiceImpl implements UserService {
 
         user.getAuthorities()
                 .addAll(rolesForAuthority);
+    }
+
+    @Secured(Authority.Role.ADMIN)
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = ALL_USERS_CACHE, sync = true)
+    public List<UserViewModel> allUsers() {
+        return repository
+                .findAll()
+                .stream()
+                .map(this::mapUserToViewModel)
+                .collect(Collectors.toList());
     }
 
     private UserViewModel mapUserToViewModel(User user) {
