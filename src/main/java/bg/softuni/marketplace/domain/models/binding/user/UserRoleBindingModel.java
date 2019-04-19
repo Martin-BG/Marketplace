@@ -25,15 +25,15 @@ public class UserRoleBindingModel implements Bindable<User>, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ValidUserUsername
-    @SpELAssert(message = "{user.update.username.not-found}", groups = GroupOne.class,
+    @SpELAssert(message = "{user.update-role.username.not-found}", groups = GroupOne.class,
             value = "@userRepository.countByUsername(#this) == 1L")
-    @SpELAssert(message = "{user.update.username.not-root}", groups = GroupTwo.class,
+    @SpELAssert(message = "{user.update-role.username.is-root", groups = GroupTwo.class,
             value = "#isNotRoot(@userRepository.findUserEager(#this).get())",
             helpers = UserValidationHelper.class)
     private String username;
 
     @ValidAuthority
-    @SpELAssert(message = "{user.update.role.root}", groups = GroupOne.class,
+    @SpELAssert(message = "{user.update-role.authority.is-root}", groups = GroupOne.class,
             value = "#this != T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     private Authority authority;
 }
