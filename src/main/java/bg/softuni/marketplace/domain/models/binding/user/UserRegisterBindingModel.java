@@ -22,7 +22,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = {"username"})
 @NoArgsConstructor
 @EqualFields(message = "{user.passwords.not-match}", groups = {GroupOne.class},
-        fields = {"password", "confirmPassword"})
+        fields = {"password", "confirmPassword"}, forField = "confirmPassword")
 public class UserRegisterBindingModel implements Bindable<User>, Serializable {
 
     private static final long serialVersionUID = 1L;
