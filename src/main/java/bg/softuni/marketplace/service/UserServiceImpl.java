@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
@@ -31,10 +32,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Log
+@RequiredArgsConstructor
 @Service
+@Primary
 @Validated
 @Transactional
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private static final String USERS_CACHE = "usersCache";
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Validate(returnOnError = true, catchException = true, groups = {AllGroups.class})
+    @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true)
     public void registerUser(@NotNull UserRegisterBindingModel bindingModel, @NotNull Errors errors) {
         User user = new User(
                 bindingModel.getUsername(),
@@ -80,10 +83,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Secured({Authority.Role.ADMIN})
+    @Validate(returnOnError = true, catchException = true, groups = {AllGroups.class})
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
             @CacheEvict(cacheNames = USERS_CACHE, key = "#userRoleBindingModel.username")})
-    public void updateRole(@NotNull @Valid UserRoleBindingModel userRoleBindingModel, @NotNull String principalName) {
+    public void updateRole(@NotNull UserRoleBindingModel userRoleBindingModel,
+                           @NotNull Errors errors,
+                           @NotNull String principalName) {
         if (principalName.equals(userRoleBindingModel.getUsername())) {
             throw new IllegalArgumentException("Change of own role is not allowed.");
         }
