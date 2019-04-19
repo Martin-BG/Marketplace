@@ -95,10 +95,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Change of own role is not allowed.");
         }
 
-        if (userRoleBindingModel.getAuthority() == Authority.ROOT) {
-            throw new IllegalArgumentException("ROOT role cannot be added to users.");
-        }
-
         User user = repository
                 .findUserEager(userRoleBindingModel.getUsername())
                 .filter(UserServiceImpl::isNotRoot)
