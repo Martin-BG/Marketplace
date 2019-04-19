@@ -8,6 +8,7 @@ import bg.softuni.marketplace.web.annotations.Layout;
 import bg.softuni.marketplace.web.annotations.Title;
 import bg.softuni.marketplace.web.controllers.BaseController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,10 +47,13 @@ public class RegisterUserController extends BaseController {
     }
 
     @PostMapping
-    @OnError(view = VIEW_REGISTER, catchException = true)
+    @OnError(view = VIEW_REGISTER,
+            catchException = true,
+            exceptionTypeIgnore = AccessDeniedException.class)
     public String post(@ModelAttribute(USER_ATTRIBUTE_NAME) UserRegisterBindingModel user,
                        Errors errors) {
         userService.registerUser(user, errors);
+
         return redirect(WebConfig.URL_USER_LOGIN + "?register");
     }
 }
