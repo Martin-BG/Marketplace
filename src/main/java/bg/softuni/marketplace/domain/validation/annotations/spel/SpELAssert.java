@@ -26,6 +26,7 @@ package bg.softuni.marketplace.domain.validation.annotations.spel;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -37,6 +38,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @author Jakub Jirutka <jakub@jirutka.cz>
  */
+@Repeatable(SpELAssert.List.class) // MartinBG - enable multiple annotations on the same element
 @Documented
 @Retention(RUNTIME)
 @Target({METHOD, FIELD, TYPE})
