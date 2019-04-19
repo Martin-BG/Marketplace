@@ -21,15 +21,15 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode(of = {"username"})
 @NoArgsConstructor
-@EqualFields(message = "{user.passwords.not-match}", groups = {GroupOne.class},
+@EqualFields(message = "{user.passwords.not-match}", groups = GroupOne.class,
         fields = {"password", "confirmPassword"}, forField = "confirmPassword")
 public class UserRegisterBindingModel implements Bindable<User>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Unique(message = "{user.username.used}", groups = {GroupTwo.class},
-            bean = UserRepository.class, method = "countByUsername")
     @ValidUserUsername
+    @Unique(message = "{user.username.used}", groups = GroupTwo.class,
+            bean = UserRepository.class, method = "countByUsername")
     private String username;
 
     @ValidUserPassword
@@ -38,8 +38,8 @@ public class UserRegisterBindingModel implements Bindable<User>, Serializable {
     @ValidUserPassword
     private String confirmPassword;
 
-    @Unique(message = "{user.email.used}", groups = {GroupTwo.class},
-            bean = UserRepository.class, method = "countByEmail")
     @ValidUserEmail
+    @Unique(message = "{user.email.used}", groups = GroupTwo.class,
+            bean = UserRepository.class, method = "countByEmail")
     private String email;
 }
