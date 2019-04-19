@@ -11,6 +11,7 @@ public class SpELConfig {
      * Expose Spring Security as SpEL expressions for creating Spring Data queries
      *
      * @see SecurityEvaluationContextExtension
+     * @see <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#data-configuration">Spring Documantation</a>
      */
     @Bean
     public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
