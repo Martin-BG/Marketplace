@@ -97,9 +97,8 @@ public class UserServiceImpl implements UserService {
 
         User user = repository
                 .findUserEager(userRoleBindingModel.getUsername())
-                .filter(UserServiceImpl::isNotRoot)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "User not found or not allowed for roles edit: " + userRoleBindingModel.getUsername()));
+                        "User not found: " + userRoleBindingModel.getUsername()));
 
         List<Role> rolesForAuthority = roleService
                 .getRolesForAuthority(userRoleBindingModel.getAuthority(), Role.class);
@@ -109,14 +108,6 @@ public class UserServiceImpl implements UserService {
 
         user.getAuthorities()
                 .addAll(rolesForAuthority);
-    }
-
-    private static boolean isNotRoot(User user) {
-        return user
-                .getAuthorities()
-                .stream()
-                .map(Role::getAuthority)
-                .noneMatch(role -> Authority.ROOT.asRole().equals(role));
     }
 
     private UserViewModel mapUserToViewModel(User user) {
