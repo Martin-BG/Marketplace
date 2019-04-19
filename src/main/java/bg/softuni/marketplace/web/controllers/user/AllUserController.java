@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
 import java.util.List;
 
 @Layout
@@ -49,9 +48,8 @@ public class AllUserController extends BaseController {
             catchException = true,
             exceptionTypeIgnore = AccessDeniedException.class)
     public String patch(@ModelAttribute UserRoleBindingModel userRoleBindingModel,
-                        Errors errors,
-                        Principal principal) {
-        userService.updateRole(userRoleBindingModel, errors, principal.getName());
+                        Errors errors) {
+        userService.updateRole(userRoleBindingModel, errors);
 
         return redirect(WebConfig.URL_USER_ALL);
     }
