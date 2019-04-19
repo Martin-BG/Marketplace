@@ -30,6 +30,7 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
     private List<String> fieldsToValidate = List.of();
     private boolean inverse;
     private String message;
+    private String forField;
 
     @Override
     public void initialize(EqualFields constraintAnnotation) {
@@ -40,6 +41,7 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
                 .collect(Collectors.toUnmodifiableList());
         message = constraintAnnotation.message();
         inverse = constraintAnnotation.inverse();
+        forField = constraintAnnotation.forField();
     }
 
     @Override
@@ -48,6 +50,14 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
             String errorMessage = MessageFormat
                     .format("[{0}] At least two fields for validation must be specified: {1}",
                             obj.getClass().getName(),
+                            String.join(", ", fieldsToValidate));
+            throw new EqualFieldsValidatorException(errorMessage);
+        }
+
+        if (!forField.isEmpty() && !fieldsToValidate.contains(forField)) {
+            String errorMessage = MessageFormat
+                    .format("Target error field [{0}] is not present in validated fields list: {1}",
+                            forField,
                             String.join(", ", fieldsToValidate));
             throw new EqualFieldsValidatorException(errorMessage);
         }
@@ -94,11 +104,19 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
 
         if (!result) {
             context.disableDefaultConstraintViolation();
-            fieldsToValidate.forEach(field -> context
-                    .buildConstraintViolationWithTemplate(message)
-                    .addPropertyNode(field)
-                    .addConstraintViolation()
-            );
+            if (!forField.isEmpty()) {
+                // Report error to a specified field
+                context.buildConstraintViolationWithTemplate(message)
+                        .addPropertyNode(forField)
+                        .addConstraintViolation();
+            } else {
+                // Report error to all validated fields
+                fieldsToValidate.forEach(field -> context
+                        .buildConstraintViolationWithTemplate(message)
+                        .addPropertyNode(field)
+                        .addConstraintViolation()
+                );
+            }
         }
 
         return result;

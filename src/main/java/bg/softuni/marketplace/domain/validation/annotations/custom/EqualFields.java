@@ -33,11 +33,22 @@ public @interface EqualFields {
 
     Class<? extends Payload>[] payload() default {};
 
+    /**
+     * @see #fields()
+     */
     @AliasFor("fields")
     String[] value() default {};
 
+    /**
+     * Field names to validate
+     */
     @AliasFor("value")
     String[] fields() default {};
+
+    /**
+     * Report error to specified field, instead to all validated {@link #fields()}
+     */
+    String forField() default "";
 
     /**
      * Inverse validation result, i.e. checks for not equality
