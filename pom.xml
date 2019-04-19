@@ -21,6 +21,7 @@
         <thymeleaf-extras-springsecurity5.version>3.0.4.RELEASE</thymeleaf-extras-springsecurity5.version>
         <junit-jupiter.version>5.4.2</junit-jupiter.version>
         <mockito-jupiter.version>2.27.0</mockito-jupiter.version>
+        <validator-spring.version>1.1.0</validator-spring.version>
     </properties>
 
     <dependencies>
@@ -98,6 +99,13 @@
             <version>${modelmapper.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/cz.jirutka.validator/validator-spring -->
+        <dependency>
+            <groupId>cz.jirutka.validator</groupId>
+            <artifactId>validator-spring</artifactId>
+            <version>${validator-spring.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -129,7 +137,6 @@
         <!--            <version>1.4.2</version>-->
         <!--            <scope>test</scope>-->
         <!--        </dependency>-->
-
     </dependencies>
 
     <build>
