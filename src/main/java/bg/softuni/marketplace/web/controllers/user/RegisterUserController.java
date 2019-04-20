@@ -47,7 +47,7 @@ public class RegisterUserController extends BaseController {
     }
 
     @PostMapping
-    @OnError(view = VIEW_REGISTER,
+    @OnError(path = VIEW_REGISTER,
             catchException = true,
             exceptionTypeIgnore = AccessDeniedException.class)
     public String post(@ModelAttribute(USER_ATTRIBUTE_NAME) UserRegisterBindingModel user,

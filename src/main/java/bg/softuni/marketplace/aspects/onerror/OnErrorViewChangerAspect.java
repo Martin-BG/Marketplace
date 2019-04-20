@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 /**
  * Wrap calls to {@link OnError} annotated Controller
- * methods and change returned view to {@link OnError#view} on errors.
+ * methods and change returned path to {@link OnError#path} on errors.
  * <br>
  * Catch specified by {@link OnError#exceptionType} exception type (and sub-types)
  * thrown on method invocation when {@link OnError#catchException} is set.
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * <li>At lest one non-null parameter of type {@link Errors}</li>
  * </ul>
  * <p>
- * <ul>Returned value is changed to the one set in {@link OnError#view}
+ * <ul>Returned value is changed to the one set in {@link OnError#path}
  * annotation in the following scenarios:
  * <li>Exception of type {@link OnError#exceptionType} if {@link OnError#catchException} is set</li>
  * <li>Errors in any of the non-null {@link Errors} arguments</li>
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * "user" data is preserved and returned back to the view.
  * <pre>
  * {@code @}PostMapping
- * {@code @}OnError(view = "/register", catchException = true)
+ * {@code @}OnError(path = "/register", catchException = true)
  *  public String post(@Valid @ModelAttribute("user") User user,
  *                      Errors errors) {
  *      //... any exception thrown here will be handled automatically
@@ -113,15 +113,15 @@ public class OnErrorViewChangerAspect {
 
     private static String buildUrl(OnError annotation) {
         String url;
-        switch (annotation.method()) {
+        switch (annotation.action()) {
         case FORWARD:
-            url = "forward:" + annotation.view();
+            url = "forward:" + annotation.path();
             break;
         case REDIRECT:
-            url = "redirect:" + annotation.view();
+            url = "redirect:" + annotation.path();
             break;
         default:
-            url = annotation.view();
+            url = annotation.path();
             break;
         }
         return url;

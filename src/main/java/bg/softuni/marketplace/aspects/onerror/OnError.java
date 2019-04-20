@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 /**
  * See {@link OnErrorViewChangerAspect} for usage.
  *
- * @see #view()
+ * @see #path()
  * @see #catchException()
  * @see #exceptionType()
  * @see #message()
@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface OnError {
 
-    @AliasFor("view")
+    @AliasFor("path")
     String value() default "";
 
     /**
@@ -28,21 +28,21 @@ public @interface OnError {
      * @see OnErrorViewChangerAspect
      */
     @AliasFor("value")
-    String view() default "";
+    String path() default "";
 
     /**
-     * Defines {@link Method Method} type:
-     * {@link Method#VIEW VIEW},
-     * {@link Method#REDIRECT REDIRECT} or
-     * {@link Method#FORWARD FORWARD}
+     * Defines {@link Action Action} type:
+     * {@link Action#VIEW VIEW},
+     * {@link Action#REDIRECT REDIRECT} or
+     * {@link Action#FORWARD FORWARD}
      *
-     * @see Method Method
+     * @see Action Action
      */
-    Method method() default Method.VIEW;
+    Action action() default Action.VIEW;
 
     /**
      * Catch {@link #exceptionType} or its sub-class exceptions on method invocation,
-     * add {@link #message} to {@link Errors} argument and change view to {@link #view}.
+     * add {@link #message} to {@link Errors} argument and change path to {@link #path}.
      *
      * @see OnErrorViewChangerAspect
      */
@@ -78,7 +78,7 @@ public @interface OnError {
      * {@link #REDIRECT} or
      * {@link #FORWARD}
      *
-     * @see OnError#method()
+     * @see OnError#action()
      */
-    enum Method {VIEW, REDIRECT, FORWARD}
+    enum Action {VIEW, REDIRECT, FORWARD}
 }
