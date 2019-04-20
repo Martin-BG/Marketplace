@@ -27,7 +27,7 @@ public class UserRoleBindingModel implements Bindable<User>, Serializable {
     @ValidUserUsername
     @SpELAssert(message = "{user.update-role.username.not-found}", groups = GroupOne.class,
             value = "@userRepository.countByUsername(#this) == 1L")
-    @SpELAssert(message = "{user.update-role.username.is-root", groups = GroupTwo.class,
+    @SpELAssert(message = "{user.update-role.username.is-root}", groups = GroupTwo.class,
             value = "#isNotRoot(@userRepository.findUserEager(#this).get())",
             helpers = UserValidationHelper.class)
     private String username;
