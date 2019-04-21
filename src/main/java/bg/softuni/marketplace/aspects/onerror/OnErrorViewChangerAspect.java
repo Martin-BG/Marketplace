@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 /**
  * Wrap calls to {@link OnError} annotated Controller
- * methods and change returned path to {@link OnError#path} on errors.
+ * methods and change returned view to {@link OnError#view} on errors.
  * <br>
  * Catch specified by {@link OnError#exceptionType} exception type (and sub-types)
  * thrown on method invocation when {@link OnError#catchException} is set.
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * <li>At lest one non-null parameter of type {@link Errors}</li>
  * </ul>
  * <p>
- * <ul>Returned value is changed to the one set in {@link OnError#path}
+ * <ul>Returned value is changed to the one set in {@link OnError#view}
  * annotation in the following scenarios:
  * <li>Exception of type {@link OnError#exceptionType} if {@link OnError#catchException} is set</li>
  * <li>Errors in any of the non-null {@link Errors} arguments</li>
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * "user" data is preserved and returned back to the view.
  * <pre>
  * {@code @}PostMapping
- * {@code @}OnError(path = "/register", catchException = true)
+ * {@code @}OnError(view = "/register", catchException = true)
  *  public String post(@Valid @ModelAttribute("user") User user,
  *                      Errors errors) {
  *      //... any exception thrown here will be handled automatically
@@ -99,7 +99,7 @@ public class OnErrorViewChangerAspect {
         errorsList.removeIf(errors -> !errors.hasErrors());
 
         if (exceptionCough || !errorsList.isEmpty()) {
-            result = buildUrl(annotation);
+            result = buildView(annotation);
         }
 
         return result;
@@ -111,17 +111,17 @@ public class OnErrorViewChangerAspect {
                 && !annotation.exceptionTypeIgnore().isAssignableFrom(throwable.getClass());
     }
 
-    private static String buildUrl(OnError annotation) {
+    private static String buildView(OnError annotation) {
         String url;
         switch (annotation.action()) {
         case FORWARD:
-            url = "forward:" + annotation.path();
+            url = "forward:" + annotation.view();
             break;
         case REDIRECT:
-            url = "redirect:" + annotation.path();
+            url = "redirect:" + annotation.view();
             break;
         default:
-            url = annotation.path();
+            url = annotation.view();
             break;
         }
         return url;

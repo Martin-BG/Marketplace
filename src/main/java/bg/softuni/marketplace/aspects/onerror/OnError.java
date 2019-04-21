@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 /**
  * See {@link OnErrorViewChangerAspect} for usage.
  *
- * @see #path()
+ * @see #view()
  * @see #catchException()
  * @see #exceptionType()
  * @see #message()
@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface OnError {
 
-    @AliasFor("path")
+    @AliasFor("view")
     String value() default "";
 
     /**
@@ -28,7 +28,7 @@ public @interface OnError {
      * @see OnErrorViewChangerAspect
      */
     @AliasFor("value")
-    String path() default "";
+    String view() default "";
 
     /**
      * Defines {@link Action Action} type:
@@ -42,7 +42,7 @@ public @interface OnError {
 
     /**
      * Catch {@link #exceptionType} or its sub-class exceptions on method invocation,
-     * add {@link #message} to {@link Errors} argument and change path to {@link #path}.
+     * add {@link #message} to {@link Errors} argument and change view to {@link #view}.
      *
      * @see OnErrorViewChangerAspect
      */

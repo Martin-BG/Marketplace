@@ -43,7 +43,7 @@ public class AllUserController extends BaseController {
     }
 
     @PatchMapping
-    @OnError(path = WebConfig.URL_USER_ALL,
+    @OnError(view = WebConfig.URL_USER_ALL,
             action = OnError.Action.REDIRECT,
             catchException = true,
             exceptionTypeIgnore = AccessDeniedException.class)
