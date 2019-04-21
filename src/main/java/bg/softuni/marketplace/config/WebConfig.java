@@ -13,16 +13,14 @@ public class WebConfig implements WebMvcConfigurer {
     public static final String URL_INDEX = "/";
     public static final String URL_ERROR_UNAUTHORIZED = "/unauthorized";
 
-    private static final String USER_BASE_URL = "/user";
-    public static final String URL_USER_REGISTER = USER_BASE_URL + "/register";
-    public static final String URL_USER_LOGIN = USER_BASE_URL + "/login";
-    public static final String URL_USER_LOGOUT = USER_BASE_URL + "/logout";
-    public static final String URL_USER_HOME = USER_BASE_URL + "/home";
-
-    public static final String ADMIN_BASE_URL = "/admin";
-    public static final String URL_ADMIN_USERS = ADMIN_BASE_URL + "/users";
-
-    private static final String API_BASE_URL = "/api";
+    public static final String URL_ADMIN_BASE = "/admin";
+    public static final String URL_ADMIN_USERS = URL_ADMIN_BASE + "/users";
+    private static final String URL_USER_BASE = "/user";
+    public static final String URL_USER_REGISTER = URL_USER_BASE + "/register";
+    public static final String URL_USER_LOGIN = URL_USER_BASE + "/login";
+    public static final String URL_USER_LOGOUT = URL_USER_BASE + "/logout";
+    public static final String URL_USER_HOME = URL_USER_BASE + "/home";
+    private static final String URL_API_BASE = "/api";
 
     private final HandlerInterceptor thymeleafLayoutInterceptor;
     private final HandlerInterceptor titleInterceptor;

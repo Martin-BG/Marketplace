@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .antMatchers(WebConfig.URL_USER_REGISTER, WebConfig.URL_USER_LOGIN)
                     .anonymous()
-                .antMatchers(WebConfig.ADMIN_BASE_URL + "/**")
+                .antMatchers(WebConfig.URL_ADMIN_BASE + "/**")
                     .hasAuthority(Authority.Role.ADMIN)
                 .anyRequest()
                     .authenticated()
