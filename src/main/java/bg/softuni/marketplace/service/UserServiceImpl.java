@@ -61,42 +61,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Validate(returnOnError = true,
-            catchException = true,
             groups = AllGroups.class)
     @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true)
     public void registerUser(@NotNull UserRegisterBindingModel bindingModel,
                              @NotNull Errors errors) {
-        User user = new User(
-                bindingModel.getUsername(),
-                passwordEncoder.encode(bindingModel.getPassword()),
-                bindingModel.getEmail(),
-                getRolesForUser());
-
+        User user = getUserFromModel(bindingModel);
         repository.save(user);
     }
 
     @Override
     @Validate(returnOnError = true,
-            catchException = true,
             groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
     public void updateRole(@NotNull UserRoleBindingModel bindingModel,
                            @NotNull Errors errors) {
-        User user = repository
+        repository
                 .findUserEager(bindingModel.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "User not found: " + bindingModel.getUsername()));
-
-        List<Role> rolesForAuthority = roleService
-                .getRolesForAuthority(bindingModel.getAuthority(), Role.class);
-
-        user.getAuthorities()
-                .retainAll(rolesForAuthority);
-
-        user.getAuthorities()
-                .addAll(rolesForAuthority);
+                .ifPresentOrElse(
+                        user -> updateRoleForUser(user, bindingModel.getAuthority()),
+                        () -> errors.reject("username", "{user.update-role.username.not-found}"));
     }
 
     @Transactional(readOnly = true)
@@ -137,6 +122,25 @@ public class UserServiceImpl implements UserService {
         viewModel.setAuthority(highestAuthority);
 
         return viewModel;
+    }
+
+    private void updateRoleForUser(User user, Authority authority) {
+        List<Role> rolesForAuthority = roleService
+                .getRolesForAuthority(authority, Role.class);
+
+        user.getAuthorities()
+                .retainAll(rolesForAuthority);
+
+        user.getAuthorities()
+                .addAll(rolesForAuthority);
+    }
+
+    private User getUserFromModel(@NotNull UserRegisterBindingModel bindingModel) {
+        return new User(
+                bindingModel.getUsername(),
+                passwordEncoder.encode(bindingModel.getPassword()),
+                bindingModel.getEmail(),
+                getRolesForUser());
     }
 
     private List<Role> getRolesForUser() {
