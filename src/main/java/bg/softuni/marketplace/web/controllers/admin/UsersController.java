@@ -1,4 +1,4 @@
-package bg.softuni.marketplace.web.controllers.user;
+package bg.softuni.marketplace.web.controllers.admin;
 
 import bg.softuni.marketplace.aspects.onerror.OnError;
 import bg.softuni.marketplace.config.WebConfig;
@@ -23,11 +23,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping(WebConfig.URL_ADMIN_USERS)
-public class AllUserController extends BaseController {
+public class UsersController extends BaseController {
 
     public static final String USERS_ATTRIBUTE_NAME = "users";
 
-    private static final String VIEW_USERS_ALL = "user/all";
+    private static final String VIEW_USERS_ALL = "admin/users";
 
     private final UserService userService;
 
@@ -60,8 +60,8 @@ public class AllUserController extends BaseController {
     @OnError(view = WebConfig.URL_ADMIN_USERS,
             action = OnError.Action.REDIRECT,
             catchException = true)
-    public String patch(@ModelAttribute UserDeleteBindingModel bindingModel,
-                        Errors errors) {
+    public String delete(@ModelAttribute UserDeleteBindingModel bindingModel,
+                         Errors errors) {
         userService.deleteUser(bindingModel, errors);
 
         return redirect(WebConfig.URL_ADMIN_USERS);
