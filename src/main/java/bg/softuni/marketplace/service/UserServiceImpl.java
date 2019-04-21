@@ -1,25 +1,22 @@
 package bg.softuni.marketplace.service;
 
 import bg.softuni.marketplace.aspects.validate.Validate;
-import bg.softuni.marketplace.domain.entities.Role;
 import bg.softuni.marketplace.domain.entities.User;
-import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.groups.AllGroups;
 import bg.softuni.marketplace.repository.UserRepository;
+import bg.softuni.marketplace.service.helpers.UserServiceHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
@@ -27,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -46,9 +42,7 @@ public class UserServiceImpl implements UserService {
             () -> new UsernameNotFoundException("Username not found");
 
     private final UserRepository repository;
-    private final ModelMapper mapper;
-    private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService;
+    private final UserServiceHelper serviceHelper;
 
     @Override
     @Transactional(readOnly = true)
@@ -65,7 +59,8 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true)
     public void registerUser(@NotNull UserRegisterBindingModel bindingModel,
                              @NotNull Errors errors) {
-        User user = getUserFromModel(bindingModel);
+        boolean isRoot = repository.count() == 0;
+        User user = serviceHelper.getUserFromModel(bindingModel, isRoot);
         repository.save(user);
     }
 
@@ -80,7 +75,7 @@ public class UserServiceImpl implements UserService {
         repository
                 .findUserEager(bindingModel.getUsername())
                 .ifPresentOrElse(
-                        user -> updateRoleForUser(user, bindingModel.getAuthority()),
+                        user -> serviceHelper.updateRoleForUser(user, bindingModel.getAuthority()),
                         () -> errors.reject("username", "{user.update-role.username.not-found}"));
     }
 
@@ -90,7 +85,7 @@ public class UserServiceImpl implements UserService {
         return repository
                 .findAll()
                 .stream()
-                .map(this::mapUserToViewModel)
+                .map(serviceHelper::mapUserToViewModel)
                 .collect(Collectors.toList());
     }
 
@@ -103,53 +98,5 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                            @NotNull Errors errors) {
         repository.deleteByUsername(bindingModel.getUsername());
-    }
-
-    private UserViewModel mapUserToViewModel(User user) {
-        UserViewModel viewModel = mapper
-                .map(user, UserViewModel.class);
-
-        Authority highestAuthority = user
-                .getAuthorities()
-                .stream()
-                .map(Role::getAuthority)
-                .map(Authority::fromRole)
-                .filter(Objects::nonNull)
-                .sorted()
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-
-        viewModel.setAuthority(highestAuthority);
-
-        return viewModel;
-    }
-
-    private void updateRoleForUser(User user, Authority authority) {
-        List<Role> rolesForAuthority = roleService
-                .getRolesForAuthority(authority, Role.class);
-
-        user.getAuthorities()
-                .retainAll(rolesForAuthority);
-
-        user.getAuthorities()
-                .addAll(rolesForAuthority);
-    }
-
-    private User getUserFromModel(@NotNull UserRegisterBindingModel bindingModel) {
-        return new User(
-                bindingModel.getUsername(),
-                passwordEncoder.encode(bindingModel.getPassword()),
-                bindingModel.getEmail(),
-                getRolesForUser());
-    }
-
-    private List<Role> getRolesForUser() {
-        if (repository.count() == 0L) {
-            return roleService.findAll(Role.class);
-        } else {
-            return List.of(roleService
-                    .findByAuthority(Authority.USER, Role.class)
-                    .orElseThrow());
-        }
     }
 }
