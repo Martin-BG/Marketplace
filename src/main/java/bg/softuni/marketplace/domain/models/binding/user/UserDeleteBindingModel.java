@@ -8,7 +8,6 @@ import bg.softuni.marketplace.domain.validation.annotations.composite.user.Valid
 import bg.softuni.marketplace.domain.validation.annotations.spel.SpELAssert;
 import bg.softuni.marketplace.domain.validation.groups.GroupOne;
 import bg.softuni.marketplace.domain.validation.groups.GroupTwo;
-import bg.softuni.marketplace.domain.validation.helpers.UserValidationHelper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,8 +27,7 @@ public class UserDeleteBindingModel implements Bindable<User>, Serializable {
     @SpELAssert(message = "{user.delete.username.not-found}", groups = GroupOne.class,
             value = "@userRepository.countByUsername(#this) == 1L")
     @SpELAssert(message = "{user.delete.username.is-root}", groups = GroupTwo.class,
-            value = "#isNotRoot(@userRepository.findUserEager(#this).get())",
-            helpers = UserValidationHelper.class)
+            value = "not @userServiceHelper.isRoot(@userRepository.findUserEager(#this).get())")
     private String username;
 
     @ValidAuthority
