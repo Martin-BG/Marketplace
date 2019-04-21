@@ -48,8 +48,8 @@
                     <li class="nav-item ml-3"
                         sec:authorize="hasRole(T(bg.softuni.marketplace.domain.enums.Authority).ADMIN)">
                         <a class="nav-link"
-                           th:classappend="${#request.getServletPath() == T(bg.softuni.marketplace.config.WebConfig).URL_USER_ALL ? 'active' : ''}"
-                           th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_ALL}__}"
+                           th:classappend="${#request.getServletPath().startsWith(T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS) ? 'active' : ''}"
+                           th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                            th:text="#{nav.users}"/>
                     </li>
                     <li class="nav-item ml-3">

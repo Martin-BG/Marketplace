@@ -33,7 +33,7 @@
                 <th:block th:if="${canChangeRoles}">
                     <td th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).USER}">
                         <form class="d-inline mr-3"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_ALL}__}"
+                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="patch">
                             <input hidden name="username" th:value="*{username}">
                             <input hidden name="authority"
@@ -45,7 +45,7 @@
                     </td>
                     <td th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).TRADER}">
                         <form class="d-inline"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_ALL}__}"
+                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="patch">
                             <input hidden name="username" th:value="*{username}">
                             <input hidden name="authority"
@@ -57,7 +57,7 @@
                     </td>
                     <td th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).ADMIN}">
                         <form class="d-inline"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_ALL}__}"
+                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="patch">
                             <input hidden name="username" th:value="*{username}">
                             <input hidden name="authority"
@@ -69,7 +69,7 @@
                     </td>
                     <td>
                         <form class="d-inline"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_ALL}__}"
+                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="delete">
                             <input hidden name="username" th:value="*{username}">
                             <input hidden name="authority" th:value="*{authority}">

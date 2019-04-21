@@ -22,7 +22,7 @@ import java.util.List;
 @Title("nav.users")
 @RequiredArgsConstructor
 @Controller
-@RequestMapping(WebConfig.URL_USER_ALL)
+@RequestMapping(WebConfig.URL_ADMIN_USERS)
 public class AllUserController extends BaseController {
 
     public static final String USERS_ATTRIBUTE_NAME = "users";
@@ -43,27 +43,27 @@ public class AllUserController extends BaseController {
     @PatchMapping
     @PreAuthorize("principal.username ne #bindingModel.username " +
             "and #bindingModel.authority ne T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
-    @OnError(view = WebConfig.URL_USER_ALL,
+    @OnError(view = WebConfig.URL_ADMIN_USERS,
             action = OnError.Action.REDIRECT,
             catchException = true)
     public String patch(@ModelAttribute UserRoleBindingModel bindingModel,
                         Errors errors) {
         userService.updateRole(bindingModel, errors);
 
-        return redirect(WebConfig.URL_USER_ALL);
+        return redirect(WebConfig.URL_ADMIN_USERS);
     }
 
 
     @DeleteMapping
     @PreAuthorize("principal.username ne #bindingModel.username " +
             "and #bindingModel.authority ne T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
-    @OnError(view = WebConfig.URL_USER_ALL,
+    @OnError(view = WebConfig.URL_ADMIN_USERS,
             action = OnError.Action.REDIRECT,
             catchException = true)
     public String patch(@ModelAttribute UserDeleteBindingModel bindingModel,
                         Errors errors) {
         userService.deleteUser(bindingModel, errors);
 
-        return redirect(WebConfig.URL_USER_ALL);
+        return redirect(WebConfig.URL_ADMIN_USERS);
     }
 }
