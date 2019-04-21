@@ -34,5 +34,8 @@ public enum Authority {
         public static final String ADMIN = ROLE_PREFIX + "ADMIN";
         public static final String TRADER = ROLE_PREFIX + "TRADER";
         public static final String USER = ROLE_PREFIX + "USER";
+
+        private Role() {
+        }
     }
 }
