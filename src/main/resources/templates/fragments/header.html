@@ -45,12 +45,21 @@
                            th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_HOME}__}"
                            th:text="#{nav.home}"/>
                     </li>
-                    <li class="nav-item ml-3"
+                    <li class="nav-item dropdown ml-3"
                         sec:authorize="hasRole(T(bg.softuni.marketplace.domain.enums.Authority).ADMIN)">
-                        <a class="nav-link"
-                           th:classappend="${#request.getServletPath().startsWith(T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS) ? 'active' : ''}"
-                           th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
-                           th:text="#{nav.users}"/>
+                        <a aria-expanded="false" aria-haspopup="true"
+                           class="nav-link dropdown-toggle"
+                           data-toggle="dropdown"
+                           href="#"
+                           id="navbarDropdown" role="button"
+                           th:classappend="${#request.getServletPath().startsWith(T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_BASE) ? 'active' : ''}"
+                           th:text="#{nav.admin}"/>
+                        <div aria-labelledby="navbarDropdown" class="dropdown-menu">
+                            <a class="dropdown-item"
+                               th:classappend="${#request.getServletPath() == T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS ? 'active' : ''}"
+                               th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
+                               th:text="#{nav.users}"/>
+                        </div>
                     </li>
                     <li class="nav-item ml-3">
                         <form th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_LOGOUT}__}"
