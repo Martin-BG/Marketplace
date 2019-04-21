@@ -5,6 +5,9 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.lang.annotation.Annotation;
 
+import static bg.softuni.marketplace.web.common.ViewActionPrefix.FORWARD;
+import static bg.softuni.marketplace.web.common.ViewActionPrefix.REDIRECT;
+
 final class Helper {
 
     private Helper() {
@@ -23,6 +26,6 @@ final class Helper {
     }
 
     static boolean isRedirectOrForward(String viewName) {
-        return viewName.startsWith("redirect:") || viewName.startsWith("forward:");
+        return viewName.startsWith(REDIRECT) || viewName.startsWith(FORWARD);
     }
 }

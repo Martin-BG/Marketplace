@@ -1,5 +1,6 @@
 package bg.softuni.marketplace.aspects.onerror;
 
+import bg.softuni.marketplace.web.common.ViewActionPrefix;
 import lombok.extern.java.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -111,22 +112,6 @@ public class OnErrorViewChangerAspect {
                 && !annotation.exceptionTypeIgnore().isAssignableFrom(throwable.getClass());
     }
 
-    private static String buildView(OnError annotation) {
-        String url;
-        switch (annotation.action()) {
-        case FORWARD:
-            url = "forward:" + annotation.view();
-            break;
-        case REDIRECT:
-            url = "redirect:" + annotation.view();
-            break;
-        default:
-            url = annotation.view();
-            break;
-        }
-        return url;
-    }
-
     private static List<Errors> getNonNullErrorsParameters(ProceedingJoinPoint pjp) {
         return Arrays
                 .stream(pjp.getArgs())
@@ -134,5 +119,21 @@ public class OnErrorViewChangerAspect {
                 .filter(object -> Errors.class.isAssignableFrom(object.getClass()))
                 .map(object -> (Errors) object)
                 .collect(Collectors.toList());
+    }
+
+    private static String buildView(OnError annotation) {
+        String url;
+        switch (annotation.action()) {
+        case FORWARD:
+            url = ViewActionPrefix.FORWARD + annotation.view();
+            break;
+        case REDIRECT:
+            url = ViewActionPrefix.REDIRECT + annotation.view();
+            break;
+        default:
+            url = annotation.view();
+            break;
+        }
+        return url;
     }
 }

@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import java.beans.PropertyEditorSupport;
 import java.util.List;
 
+import static bg.softuni.marketplace.web.common.ViewActionPrefix.FORWARD;
+import static bg.softuni.marketplace.web.common.ViewActionPrefix.REDIRECT;
+
 @Log
 public class BaseController {
 
@@ -15,11 +18,11 @@ public class BaseController {
     }
 
     protected static String redirect(String url) {
-        return "redirect:" + url;
+        return REDIRECT + url;
     }
 
     protected static String forward(String url) {
-        return "forward:" + url;
+        return FORWARD + url;
     }
 
     /**
