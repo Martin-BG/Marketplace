@@ -4,6 +4,7 @@ import bg.softuni.marketplace.aspects.validate.Validate;
 import bg.softuni.marketplace.domain.entities.Role;
 import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
+import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
@@ -80,16 +81,16 @@ public class UserServiceImpl implements UserService {
             groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#userRoleBindingModel.username")})
-    public void updateRole(@NotNull UserRoleBindingModel userRoleBindingModel,
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
+    public void updateRole(@NotNull UserRoleBindingModel bindingModel,
                            @NotNull Errors errors) {
         User user = repository
-                .findUserEager(userRoleBindingModel.getUsername())
+                .findUserEager(bindingModel.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "User not found: " + userRoleBindingModel.getUsername()));
+                        "User not found: " + bindingModel.getUsername()));
 
         List<Role> rolesForAuthority = roleService
-                .getRolesForAuthority(userRoleBindingModel.getAuthority(), Role.class);
+                .getRolesForAuthority(bindingModel.getAuthority(), Role.class);
 
         user.getAuthorities()
                 .retainAll(rolesForAuthority);
@@ -106,6 +107,17 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(this::mapUserToViewModel)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Validate(returnOnError = true,
+            groups = AllGroups.class)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
+    public void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
+                           @NotNull Errors errors) {
+        repository.deleteByUsername(bindingModel.getUsername());
     }
 
     private UserViewModel mapUserToViewModel(User user) {

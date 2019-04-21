@@ -12,6 +12,7 @@
             <th scope="col" th:text="#{users.table-header.role}"/>
             <th scope="col" th:text="#{users.table-header.actions}"/>
             <th scope="col"/>
+            <th scope="col"/>
         </tr>
         </thead>
         <tbody>
@@ -25,6 +26,7 @@
                 <td th:text="*{email}"/>
                 <td th:text="*{authority.name()}"/>
                 <th:block th:unless="${canChangeRoles}">
+                    <td/>
                     <td/>
                     <td/>
                 </th:block>
@@ -62,6 +64,17 @@
                                    th:value="${T(bg.softuni.marketplace.domain.enums.Authority).ADMIN}">
                             <button class="btn btn-light btn-sm border-dark table-button-large"
                                     th:text="#{users.table-button.admin}"
+                                    type="submit"/>
+                        </form>
+                    </td>
+                    <td>
+                        <form class="d-inline"
+                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_ALL}__}"
+                              th:method="delete">
+                            <input hidden name="username" th:value="*{username}">
+                            <input hidden name="authority" th:value="*{authority}">
+                            <button class="btn btn-danger btn-sm border-dark table-button-large"
+                                    th:text="#{users.table-button.delete}"
                                     type="submit"/>
                         </form>
                     </td>

@@ -18,4 +18,6 @@ public interface UserRepository extends GenericRepository<User, UUID> {
     long countByUsername(@ValidUserUsername String username);
 
     long countByEmail(@ValidUserEmail String email);
+
+    void deleteByUsername(@ValidUserUsername String username);
 }
