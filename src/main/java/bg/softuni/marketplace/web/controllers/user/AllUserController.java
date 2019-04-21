@@ -9,7 +9,7 @@ import bg.softuni.marketplace.web.annotations.Layout;
 import bg.softuni.marketplace.web.annotations.Title;
 import bg.softuni.marketplace.web.controllers.BaseController;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -43,10 +43,11 @@ public class AllUserController extends BaseController {
     }
 
     @PatchMapping
+    @PreAuthorize("principal.username ne #userRoleBindingModel.username " +
+            "and #userRoleBindingModel.authority ne T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     @OnError(view = WebConfig.URL_USER_ALL,
             action = OnError.Action.REDIRECT,
-            catchException = true,
-            exceptionTypeIgnore = AccessDeniedException.class)
+            catchException = true)
     public String patch(@ModelAttribute UserRoleBindingModel userRoleBindingModel,
                         Errors errors) {
         userService.updateRole(userRoleBindingModel, errors);

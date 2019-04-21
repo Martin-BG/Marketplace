@@ -16,8 +16,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,7 +59,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("isAnonymous()")
     @Validate(returnOnError = true,
             catchException = true,
             groups = AllGroups.class)
@@ -78,9 +75,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Secured(Authority.Role.ADMIN)
-    @PreAuthorize("principal.username != #userRoleBindingModel.username " +
-            "and #userRoleBindingModel.authority != T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     @Validate(returnOnError = true,
             catchException = true,
             groups = AllGroups.class)
@@ -104,7 +98,6 @@ public class UserServiceImpl implements UserService {
                 .addAll(rolesForAuthority);
     }
 
-    @Secured(Authority.Role.ADMIN)
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = ALL_USERS_CACHE, sync = true)
     public List<UserViewModel> allUsers() {
