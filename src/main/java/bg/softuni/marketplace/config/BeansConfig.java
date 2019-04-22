@@ -14,6 +14,10 @@ public class BeansConfig {
     /**
      * Configure ModelMapper to use field instead of property access for mapping between classes
      * and instances thus promoting better encapsulation and immutability.
+     * <p>
+     * Expect a single "Illegal reflective access by org.modelmapper.internal.PropertyInfoImpl$FieldPropertyInfo..."
+     * warning in logs on first usage because of a ModelMapper
+     * <a href="https://github.com/modelmapper/modelmapper/issues/414#issuecomment-469730463">issue</a>
      *
      * @return ModelMapper bean
      */
