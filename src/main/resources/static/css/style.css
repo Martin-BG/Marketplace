@@ -84,3 +84,7 @@ div.form-group label {
 .app-main-mt {
     margin-top: 6rem
 }
+
+a.app-color:hover {
+    color: white;
+}
