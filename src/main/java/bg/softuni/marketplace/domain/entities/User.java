@@ -7,6 +7,7 @@ import bg.softuni.marketplace.domain.validation.annotations.composite.user.Valid
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.jpa.QueryHints;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -24,8 +25,13 @@ import java.util.Set;
                 @UniqueConstraint(name = "uk_users_email", columnNames = {"email"})
         }
 )
-@NamedQuery(name = "User.findUserEager",
-        query = "SELECT u FROM User u LEFT JOIN FETCH u.authorities AS a WHERE u.username = :username")
+@NamedQuery(
+        name = "User.findUserEager",
+        query = "SELECT u FROM User u LEFT JOIN FETCH u.authorities AS a WHERE u.username = :username",
+        hints = {
+                @QueryHint(name = QueryHints.HINT_READONLY, value = "true")
+        }
+)
 public class User extends BaseUuidEntity implements UserDetails, Viewable<User> {
 
     private static final long serialVersionUID = 1L;
@@ -46,8 +52,10 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
-            joinColumns = {@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_users_roles_users"))},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_users_roles_roles"))})
+            joinColumns = {
+                    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_users_roles_users"))},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_users_roles_roles"))})
     private Set<Role> authorities = new HashSet<>();
 
     private boolean isAccountNonLocked = true;
