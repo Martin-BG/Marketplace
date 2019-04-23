@@ -17,6 +17,4 @@ public interface UserServiceHelper {
     User getUserFromModel(UserRegisterBindingModel bindingModel, boolean isRoot);
 
     List<Role> getRolesForUser(boolean isRoot);
-
-    boolean isRoot(User user);
 }

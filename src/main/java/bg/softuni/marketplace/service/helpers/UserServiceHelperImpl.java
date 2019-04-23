@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-@Component("userServiceHelper")
+@Component
 public class UserServiceHelperImpl implements UserServiceHelper {
 
     private final ModelMapper mapper;
@@ -68,13 +68,5 @@ public class UserServiceHelperImpl implements UserServiceHelper {
                     .findByAuthority(Authority.USER, Role.class)
                     .orElseThrow());
         }
-    }
-
-    public boolean isRoot(User user) {
-        return user
-                .getAuthorities()
-                .stream()
-                .map(Role::getAuthority)
-                .anyMatch(Authority.Role.ROOT::equals);
     }
 }
