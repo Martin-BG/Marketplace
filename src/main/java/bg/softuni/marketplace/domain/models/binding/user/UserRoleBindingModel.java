@@ -25,9 +25,9 @@ public class UserRoleBindingModel implements Bindable<User>, Serializable {
 
     @ValidUserUsername
     @SpELAssert(message = "{user.update-role.username.not-found}", groups = GroupOne.class,
-            value = "@userRepository.countByUsername(#this) == 1L")
+            value = "@userRepository.hasUsername(#this)")
     @SpELAssert(message = "{user.update-role.username.is-root}", groups = GroupTwo.class,
-            value = "not @userServiceHelper.isRoot(@userRepository.findUserEager(#this).get())")
+            value = "not @userRepository.hasAuthority(#this, T(bg.softuni.marketplace.domain.enums.Authority).ROOT)")
     private String username;
 
     @ValidAuthority
