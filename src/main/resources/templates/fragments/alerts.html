@@ -1,0 +1,9 @@
+<th:block th:fragment="alerts" th:if="${alerts}" xmlns:th="http://www.thymeleaf.org">
+    <div class="app-alerts">
+        <div class="alert"
+             th:classappend="|${alert.isInfo() ? 'alert-info' : ''}${alert.isSuccess() ? 'alert-success' : ''}${alert.isError() ? 'alert-danger' : ''}|"
+             th:each="alert : ${alerts}">
+            <span th:text="${alert.text}"></span>
+        </div>
+    </div>
+</th:block>

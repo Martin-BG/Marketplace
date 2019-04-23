@@ -92,3 +92,12 @@ a.app-color:hover {
 .app-table {
     width: auto;
 }
+
+.app-alerts {
+    float: right;
+    position: fixed;
+    top: 5rem;
+    right: 0;
+    text-align: center;
+    margin: 1rem;
+}
