@@ -97,6 +97,8 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
     public void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                            @NotNull Errors errors) {
-        repository.deleteByUsername(bindingModel.getUsername());
+        if (repository.deleteByUsername(bindingModel.getUsername()) == 0) {
+            errors.reject("username", "{user.delete.username.not-found}");
+        }
     }
 }
