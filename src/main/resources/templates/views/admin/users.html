@@ -1,9 +1,7 @@
 <th:block
         xmlns:th="http://www.thymeleaf.org">
-    <div class="header mt-5 mb-4 w-75 mx-auto">
-        <h2 th:text="#{users.title}"/>
-    </div>
-    <table class="table mt-4 mb-5 w-75 mx-auto">
+    <h1 class="app-form-header" th:text="#{users.title}"/>
+    <table class="table mt-4 mb-5 mx-auto app-table">
         <thead>
         <tr class="font-weight-bold">
             <th scope="col" th:text="#{users.table-header.index}"/>
@@ -11,8 +9,6 @@
             <th scope="col" th:text="#{users.table-header.email}"/>
             <th scope="col" th:text="#{users.table-header.role}"/>
             <th scope="col" th:text="#{users.table-header.actions}"/>
-            <th scope="col"/>
-            <th scope="col"/>
         </tr>
         </thead>
         <tbody>
@@ -27,12 +23,11 @@
                 <td th:text="*{authority.name()}"/>
                 <th:block th:unless="${canChangeRoles}">
                     <td/>
-                    <td/>
-                    <td/>
                 </th:block>
                 <th:block th:if="${canChangeRoles}">
-                    <td th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).USER}">
+                    <td>
                         <form class="d-inline"
+                              th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).USER}"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="patch">
                             <input hidden name="username" th:value="*{username}">
@@ -42,9 +37,8 @@
                                     th:text="#{users.table-button.user}"
                                     type="submit"/>
                         </form>
-                    </td>
-                    <td th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).TRADER}">
                         <form class="d-inline"
+                              th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).TRADER}"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="patch">
                             <input hidden name="username" th:value="*{username}">
@@ -54,9 +48,8 @@
                                     th:text="#{users.table-button.trader}"
                                     type="submit"/>
                         </form>
-                    </td>
-                    <td th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).ADMIN}">
                         <form class="d-inline"
+                              th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).ADMIN}"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="patch">
                             <input hidden name="username" th:value="*{username}">
@@ -66,8 +59,6 @@
                                     th:text="#{users.table-button.admin}"
                                     type="submit"/>
                         </form>
-                    </td>
-                    <td>
                         <form class="d-inline"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="delete">

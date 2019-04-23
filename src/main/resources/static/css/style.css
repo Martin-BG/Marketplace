@@ -88,3 +88,7 @@ div.form-group label {
 a.app-color:hover {
     color: white;
 }
+
+.app-table {
+    width: auto;
+}
