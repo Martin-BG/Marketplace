@@ -68,5 +68,11 @@ public interface UserRepository extends GenericRepository<User, UUID> {
     @QueryHints(@QueryHint(name = HINT_READONLY, value = "true"))
     boolean hasEmail(@ValidUserEmail String email);
 
-    void deleteByUsername(@ValidUserUsername String username);
+    /**
+     * Delete {@link User} by {@code username}
+     *
+     * @param username {@link String}
+     * @return number of {@link User}s deleted; (0 if no user with {@code username} found)
+     */
+    int deleteByUsername(@ValidUserUsername String username);
 }
