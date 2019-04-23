@@ -6,10 +6,9 @@ import bg.softuni.marketplace.domain.validation.annotations.composite.user.Valid
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserPassword;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import bg.softuni.marketplace.domain.validation.annotations.custom.EqualFields;
-import bg.softuni.marketplace.domain.validation.annotations.custom.Unique;
+import bg.softuni.marketplace.domain.validation.annotations.spel.SpELAssert;
 import bg.softuni.marketplace.domain.validation.groups.GroupOne;
 import bg.softuni.marketplace.domain.validation.groups.GroupTwo;
-import bg.softuni.marketplace.repository.UserRepository;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,8 +27,8 @@ public class UserRegisterBindingModel implements Bindable<User>, Serializable {
     private static final long serialVersionUID = 1L;
 
     @ValidUserUsername
-    @Unique(message = "{user.username.used}", groups = GroupTwo.class,
-            bean = UserRepository.class, method = "countByUsername")
+    @SpELAssert(message = "{user.username.used}", groups = GroupTwo.class,
+            value = "not @userRepository.hasUsername(#this)")
     private String username;
 
     @ValidUserPassword
@@ -39,7 +38,7 @@ public class UserRegisterBindingModel implements Bindable<User>, Serializable {
     private String confirmPassword;
 
     @ValidUserEmail
-    @Unique(message = "{user.email.used}", groups = GroupTwo.class,
-            bean = UserRepository.class, method = "countByEmail")
+    @SpELAssert(message = "{user.email.used}", groups = GroupTwo.class,
+            value = "not @userRepository.hasEmail(#this)")
     private String email;
 }
