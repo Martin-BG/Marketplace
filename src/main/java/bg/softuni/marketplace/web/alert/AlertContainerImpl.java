@@ -24,7 +24,9 @@ public class AlertContainerImpl implements AlertContainer, Serializable {
 
     @Override
     public void clear() {
-        alerts.clear();
+        synchronized (alerts) {
+            alerts.clear();
+        }
     }
 
     @Override
@@ -65,7 +67,9 @@ public class AlertContainerImpl implements AlertContainer, Serializable {
             throw new IllegalArgumentException("Unsupported or invalid AlertType: " + type);
         }
 
-        alerts.addFirst(alert);
+        synchronized (alerts) {
+            alerts.addFirst(alert);
+        }
     }
 
     @Override
