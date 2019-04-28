@@ -1,6 +1,7 @@
 package bg.softuni.marketplace.web.controllers.admin;
 
 import bg.softuni.marketplace.aspects.onerror.OnError;
+import bg.softuni.marketplace.aspects.onsuccess.OnSuccess;
 import bg.softuni.marketplace.config.WebConfig;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
@@ -17,6 +18,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static bg.softuni.marketplace.aspects.onerror.OnError.Action.REDIRECT;
+import static bg.softuni.marketplace.aspects.onerror.OnError.ErrorToAlert.ALL;
 
 @Layout
 @Title("nav.users")
@@ -44,8 +48,11 @@ public class UsersController extends BaseController {
     @PreAuthorize("principal.username ne #bindingModel.username " +
             "and #bindingModel.authority ne T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     @OnError(view = WebConfig.URL_ADMIN_USERS,
-            action = OnError.Action.REDIRECT,
-            catchException = true)
+            action = REDIRECT,
+            catchException = true,
+            alert = ALL)
+    @OnSuccess(message = "users.update-role.success",
+            args = {"#bindingModel.username", "#bindingModel.authority"})
     public String patch(@ModelAttribute UserRoleBindingModel bindingModel,
                         Errors errors) {
         userService.updateRole(bindingModel, errors);
@@ -58,8 +65,11 @@ public class UsersController extends BaseController {
     @PreAuthorize("principal.username ne #bindingModel.username " +
             "and #bindingModel.authority ne T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     @OnError(view = WebConfig.URL_ADMIN_USERS,
-            action = OnError.Action.REDIRECT,
-            catchException = true)
+            action = REDIRECT,
+            catchException = true,
+            alert = ALL)
+    @OnSuccess(message = "users.delete-user.success",
+            args = "#bindingModel.username")
     public String delete(@ModelAttribute UserDeleteBindingModel bindingModel,
                          Errors errors) {
         userService.deleteUser(bindingModel, errors);
