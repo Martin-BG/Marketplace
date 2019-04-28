@@ -2,8 +2,11 @@ package bg.softuni.marketplace.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor
@@ -27,6 +30,12 @@ public class WebConfig implements WebMvcConfigurer {
     private final HandlerInterceptor thymeleafLayoutInterceptor;
     private final HandlerInterceptor titleInterceptor;
     private final HandlerInterceptor alertInterceptor;
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer
+                .addPathPrefix(URL_API_BASE, HandlerTypePredicate.forAnnotation(RestController.class));
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
