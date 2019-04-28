@@ -54,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage(WebConfig.URL_USER_LOGIN)
                 .defaultSuccessUrl(WebConfig.URL_USER_HOME)
+                .permitAll()
                 .and()
             .rememberMe()
                 .userDetailsService(userService)
