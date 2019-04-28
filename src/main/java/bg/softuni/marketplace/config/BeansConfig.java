@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.context.request.RequestContextListener;
 
 @Configuration
 public class BeansConfig {
@@ -42,5 +43,13 @@ public class BeansConfig {
         HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
         repository.setSessionAttributeName(WebSecurityConfig.CSRF_ATTRIBUTE_NAME);
         return repository;
+    }
+
+    /**
+     * Required for Session and Request scoped beans
+     */
+    @Bean
+    public RequestContextListener requestContextListener() {
+        return new RequestContextListener();
     }
 }
