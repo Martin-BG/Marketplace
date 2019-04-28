@@ -34,34 +34,38 @@ public class AlertContainerImpl implements AlertContainer, Serializable {
 
     @Override
     public void addInfo(String text) {
-        alerts.addFirst(Alert.info(text));
+        add(AlertType.INFO, text);
     }
 
     @Override
     public void addSuccess(String text) {
-        alerts.addFirst(Alert.success(text));
+        add(AlertType.SUCCESS, text);
     }
 
     @Override
     public void addError(String text) {
-        alerts.addFirst(Alert.error(text));
+        add(AlertType.ERROR, text);
     }
 
     @Override
     public void add(AlertType type, String text) {
+        Alert alert;
+
         switch (type) {
         case INFO:
-            addInfo(text);
+            alert = Alert.info(text);
             break;
         case SUCCESS:
-            addSuccess(text);
+            alert = Alert.success(text);
             break;
         case ERROR:
-            addError(text);
+            alert = Alert.error(text);
             break;
         default:
             throw new IllegalArgumentException("Unsupported or invalid AlertType: " + type);
         }
+
+        alerts.addFirst(alert);
     }
 
     @Override
