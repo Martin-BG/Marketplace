@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.validation.ValidationAutoConfigura
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
@@ -45,6 +46,7 @@ public class ValidationConfig {
      * @see ValidationAutoConfiguration#defaultValidator defaultValidator
      */
     @Bean
+    @Primary
     public LocalValidatorFactoryBean defaultValidator(MessageSource messageSource,
                                                       SpringConstraintValidatorFactory constraintValidatorFactory) {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
