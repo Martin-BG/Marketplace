@@ -1,6 +1,11 @@
 package bg.softuni.marketplace.aspects.onerror;
 
+import bg.softuni.marketplace.web.alert.Alert;
+import bg.softuni.marketplace.web.alert.AlertContainer;
+import bg.softuni.marketplace.web.alert.AlertType;
+import bg.softuni.marketplace.web.common.MessageHelper;
 import bg.softuni.marketplace.web.common.ViewActionPrefix;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -10,7 +15,10 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 
+import javax.validation.ConstraintViolation;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -20,11 +28,13 @@ import java.util.stream.Collectors;
 /**
  * Wrap calls to {@link OnError} annotated Controller
  * methods and change returned view to {@link OnError#view} on errors.
- * <br>
+ * <p>
  * Catch specified by {@link OnError#exceptionType} exception type (and sub-types)
  * thrown on method invocation when {@link OnError#catchException} is set.
  * A message set in {@link OnError#message}
  * is added to all non-null arguments of type {@link Errors} on exception.
+ * <p>
+ * Add errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}
  * <p>
  * <ul>Annotated method is required to have:
  * <li>{@link String} return type</li>
@@ -56,10 +66,14 @@ import java.util.stream.Collectors;
  */
 
 @Log
+@RequiredArgsConstructor
 @Aspect
 @Order
 @Component
 public class OnErrorViewChangerAspect {
+
+    private final MessageHelper messageHelper;
+    private final AlertContainer alertContainer;
 
     @Around("@annotation(OnError)")
     public Object validate(ProceedingJoinPoint pjp) throws Throwable {
@@ -101,6 +115,8 @@ public class OnErrorViewChangerAspect {
 
         if (exceptionCough || !errorsList.isEmpty()) {
             result = buildView(annotation);
+
+            addErrorsToAlerts(errorsList, annotation.alert());
         }
 
         return result;
@@ -135,5 +151,34 @@ public class OnErrorViewChangerAspect {
             break;
         }
         return url;
+    }
+
+    private void addErrorsToAlerts(List<Errors> errorsList, OnError.ErrorToAlert errorToAlert) {
+        if (errorToAlert == OnError.ErrorToAlert.GLOBAL || errorToAlert == OnError.ErrorToAlert.ALL) {
+            errorsList
+                    .forEach(errors -> {
+                        List<ObjectError> objectErrors = errors.getGlobalErrors();
+                        objectErrors
+                                .forEach(objectError -> {
+                                            String message = messageHelper.getLocalizedMessage(
+                                                    objectError.getCode(), objectError.getArguments());
+                                            alertContainer.addError(message);
+                                        }
+                                );
+                    });
+        }
+
+        if (errorToAlert == OnError.ErrorToAlert.FIELD || errorToAlert == OnError.ErrorToAlert.ALL) {
+            errorsList
+                    .forEach(errors -> {
+                        List<FieldError> fieldErrors = errors.getFieldErrors();
+                        fieldErrors
+                                .forEach(fieldError -> {
+                                            String message = fieldError.unwrap(ConstraintViolation.class).getMessage();
+                                            alertContainer.addError(fieldError.getField() + ": " + message);
+                                        }
+                                );
+                    });
+        }
     }
 }

@@ -1,5 +1,8 @@
 package bg.softuni.marketplace.aspects.onerror;
 
+import bg.softuni.marketplace.web.alert.Alert;
+import bg.softuni.marketplace.web.alert.AlertContainer;
+import bg.softuni.marketplace.web.alert.AlertType;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.validation.Errors;
 
@@ -74,6 +77,19 @@ public @interface OnError {
     String message() default "on-error.exception.default-message";
 
     /**
+     * Add errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}:
+     * <ul>
+     * <li>{@link ErrorToAlert#NONE NONE} - no errors</li>
+     * <li>{@link ErrorToAlert#GLOBAL GLOBAL} - add Global errors only (default)</li>
+     * <li>{@link ErrorToAlert#FIELD FIELD} - add Field errors only</li>
+     * <li>{@link ErrorToAlert#ALL ALL} - add both Global and Field errors</li>
+     * </ul>
+     *
+     * @see ErrorToAlert
+     */
+    ErrorToAlert alert() default ErrorToAlert.GLOBAL;
+
+    /**
      * Defines the view type: {@link #VIEW},
      * {@link #REDIRECT} or
      * {@link #FORWARD}
@@ -81,4 +97,15 @@ public @interface OnError {
      * @see OnError#action()
      */
     enum Action {VIEW, REDIRECT, FORWARD}
+
+    /**
+     * Add errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}:
+     * <ul>
+     * <li>{@link #NONE} - no errors</li>
+     * <li>{@link #GLOBAL} - add Global errors only (default)</li>
+     * <li>{@link #FIELD} - add Field errors only</li>
+     * <li>{@link #ALL} - add both Global and Field errors</li>
+     * </ul>
+     */
+    enum ErrorToAlert {NONE, GLOBAL, FIELD, ALL}
 }
