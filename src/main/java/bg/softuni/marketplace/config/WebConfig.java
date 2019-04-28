@@ -15,19 +15,23 @@ public class WebConfig implements WebMvcConfigurer {
 
     public static final String URL_ADMIN_BASE = "/admin";
     public static final String URL_ADMIN_USERS = URL_ADMIN_BASE + "/users";
+
     private static final String URL_USER_BASE = "/user";
     public static final String URL_USER_REGISTER = URL_USER_BASE + "/register";
     public static final String URL_USER_LOGIN = URL_USER_BASE + "/login";
     public static final String URL_USER_LOGOUT = URL_USER_BASE + "/logout";
     public static final String URL_USER_HOME = URL_USER_BASE + "/home";
+
     private static final String URL_API_BASE = "/api";
 
     private final HandlerInterceptor thymeleafLayoutInterceptor;
     private final HandlerInterceptor titleInterceptor;
+    private final HandlerInterceptor alertInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(thymeleafLayoutInterceptor);
         registry.addInterceptor(titleInterceptor);
+        registry.addInterceptor(alertInterceptor);
     }
 }

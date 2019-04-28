@@ -12,6 +12,7 @@ public class InterceptorsConfig {
 
     public static final String VIEW_ATTRIBUTE_NAME = "view";
     public static final String TITLE_ATTRIBUTE_NAME = "title";
+    public static final String ALERT_ATTRIBUTE_NAME = "alert";
 
     @Bean
     public HandlerInterceptor thymeleafLayoutInterceptor() {
