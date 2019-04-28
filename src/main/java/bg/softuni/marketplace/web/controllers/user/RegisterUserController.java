@@ -1,6 +1,7 @@
 package bg.softuni.marketplace.web.controllers.user;
 
 import bg.softuni.marketplace.aspects.onerror.OnError;
+import bg.softuni.marketplace.aspects.onsuccess.OnSuccess;
 import bg.softuni.marketplace.config.WebConfig;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.service.UserService;
@@ -50,6 +51,7 @@ public class RegisterUserController extends BaseController {
     @OnError(view = VIEW_REGISTER,
             catchException = true,
             exceptionTypeIgnore = AccessDeniedException.class)
+    @OnSuccess("user.register.success")
     public String post(@ModelAttribute(USER_ATTRIBUTE_NAME) UserRegisterBindingModel user,
                        Errors errors) {
         userService.registerUser(user, errors);
