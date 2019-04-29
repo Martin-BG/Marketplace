@@ -160,11 +160,10 @@ public class OnErrorViewChangerAspect {
                         List<ObjectError> objectErrors = errors.getGlobalErrors();
                         objectErrors
                                 .forEach(objectError -> {
-                                            String message = messageHelper.getLocalizedMessage(
-                                                    objectError.getCode(), objectError.getArguments());
-                                            alertContainer.addError(message);
-                                        }
-                                );
+                                    String message = messageHelper.getLocalizedMessage(
+                                            objectError.getCode(), objectError.getArguments());
+                                    alertContainer.addError(message);
+                                });
                     });
         }
 
@@ -178,8 +177,7 @@ public class OnErrorViewChangerAspect {
                                             .unwrap(ConstraintViolation.class)
                                             .getMessage();
                                     alertContainer.addError("* " + message);
-                                        }
-                                );
+                                });
                     });
         }
     }
