@@ -26,12 +26,12 @@ public class UserDeleteBindingModel implements Bindable<User>, Serializable {
     @ValidUserUsername
     @SpELAssert(message = "{user.delete.username.not-found}", groups = GroupOne.class,
             value = "@userRepository.hasUsername(#this)")
-    @SpELAssert(message = "{user.update-role.username.is-root}", groups = GroupTwo.class,
+    @SpELAssert(message = "{user.delete.username.is-root}", groups = GroupTwo.class,
             value = "not @userRepository.hasAuthority(#this, T(bg.softuni.marketplace.domain.enums.Authority).ROOT)")
     private String username;
 
     @ValidAuthority
-    @SpELAssert(message = "{user.delete.username.is-root}", groups = GroupOne.class,
+    @SpELAssert(message = "{user.delete.authority.is-root}", groups = GroupOne.class,
             value = "#this != T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     private Authority authority;
 }
