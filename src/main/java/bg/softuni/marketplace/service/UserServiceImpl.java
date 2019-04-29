@@ -76,7 +76,9 @@ public class UserServiceImpl implements UserService {
                 .findUserEager(bindingModel.getUsername())
                 .ifPresentOrElse(
                         user -> serviceHelper.updateRoleForUser(user, bindingModel.getAuthority()),
-                        () -> errors.reject("username", "{user.update-role.username.not-found}"));
+                        () -> {
+                            throw new UsernameNotFoundException("Username not found: " + bindingModel.getUsername());
+                        });
     }
 
     @Transactional(readOnly = true)
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                            @NotNull Errors errors) {
         if (repository.deleteByUsername(bindingModel.getUsername()) == 0) {
-            errors.reject("username", "{user.delete.username.not-found}");
+            throw new UsernameNotFoundException("Username not found: " + bindingModel.getUsername());
         }
     }
 }
