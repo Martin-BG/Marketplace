@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -85,7 +86,7 @@ public class UserServiceImpl implements UserService {
     @Cacheable(cacheNames = ALL_USERS_CACHE, sync = true)
     public List<UserViewModel> allUsers() {
         return repository
-                .findAll()
+                .findAll(Sort.by(Sort.Order.asc("username")))
                 .stream()
                 .map(serviceHelper::mapUserToViewModel)
                 .collect(Collectors.toList());
