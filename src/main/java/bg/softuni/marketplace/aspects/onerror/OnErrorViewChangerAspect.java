@@ -175,7 +175,7 @@ public class OnErrorViewChangerAspect {
                         fieldErrors
                                 .forEach(fieldError -> {
                                             String message = fieldError.unwrap(ConstraintViolation.class).getMessage();
-                                            alertContainer.addError(fieldError.getField() + ": " + message);
+                                    alertContainer.addError("* " + message);
                                         }
                                 );
                     });
