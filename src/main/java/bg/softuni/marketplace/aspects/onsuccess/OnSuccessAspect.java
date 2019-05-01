@@ -41,7 +41,7 @@ public class OnSuccessAspect {
     private final AlertContainer alertContainer;
 
     @AfterReturning("@annotation(OnSuccess)")
-    public void validate(JoinPoint joinPoint) {
+    public void onSuccess(JoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 
         OnSuccess annotation = Objects.requireNonNull( // cannot be null, added to please static code analysis
