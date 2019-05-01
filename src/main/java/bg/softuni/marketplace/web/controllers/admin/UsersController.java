@@ -36,7 +36,7 @@ public class UsersController extends BaseController {
     private final UserService userService;
 
     @GetMapping
-    public String get(Model model) {
+    public String viewUsers(Model model) {
         List<UserViewModel> users = userService.allUsers();
 
         model.addAttribute(USERS_ATTRIBUTE_NAME, users);
@@ -53,8 +53,8 @@ public class UsersController extends BaseController {
             alert = ALL)
     @OnSuccess(message = "users.update-role.success",
             args = {"#bindingModel.username", "#bindingModel.authority"})
-    public String patch(@ModelAttribute UserRoleBindingModel bindingModel,
-                        Errors errors) {
+    public String updateRole(@ModelAttribute UserRoleBindingModel bindingModel,
+                             Errors errors) {
         userService.updateRole(bindingModel, errors);
 
         return redirect(WebConfig.URL_ADMIN_USERS);
@@ -70,8 +70,8 @@ public class UsersController extends BaseController {
             alert = ALL)
     @OnSuccess(message = "users.delete-user.success",
             args = "#bindingModel.username")
-    public String delete(@ModelAttribute UserDeleteBindingModel bindingModel,
-                         Errors errors) {
+    public String deleteUser(@ModelAttribute UserDeleteBindingModel bindingModel,
+                             Errors errors) {
         userService.deleteUser(bindingModel, errors);
 
         return redirect(WebConfig.URL_ADMIN_USERS);

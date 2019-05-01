@@ -16,7 +16,7 @@ public class IndexController extends BaseController {
 
     @GetMapping(WebConfig.URL_INDEX)
     @Title("nav.index")
-    public String index(Principal principal) {
+    public String viewIndex(Principal principal) {
         if (principal != null) {
             return redirect(WebConfig.URL_USER_HOME);
         }

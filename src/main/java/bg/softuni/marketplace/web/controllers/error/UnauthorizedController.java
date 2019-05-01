@@ -17,7 +17,7 @@ public class UnauthorizedController {
     @GetMapping(WebConfig.URL_ERROR_UNAUTHORIZED)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @Title(title = "error.unauthorized.title", append = false)
-    public String get() {
+    public String viewUnauthorized() {
         return VIEW_ERROR_UNAUTHORIZED;
     }
 }

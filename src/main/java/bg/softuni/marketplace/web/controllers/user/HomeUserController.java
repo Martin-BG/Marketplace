@@ -16,7 +16,7 @@ public class HomeUserController {
     private static final String VIEW_HOME = "user/home";
 
     @GetMapping
-    public String get() {
+    public String viewHome() {
         return VIEW_HOME;
     }
 }

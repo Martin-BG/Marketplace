@@ -24,7 +24,7 @@ public class LoginUserController extends BaseController {
     }
 
     @GetMapping
-    public String get() {
+    public String viewLogin() {
         return VIEW_USER_LOGIN;
     }
 }

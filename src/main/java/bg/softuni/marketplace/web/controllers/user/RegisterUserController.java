@@ -43,7 +43,7 @@ public class RegisterUserController extends BaseController {
     }
 
     @GetMapping
-    public String get() {
+    public String viewRegister() {
         return VIEW_REGISTER;
     }
 
@@ -52,8 +52,8 @@ public class RegisterUserController extends BaseController {
             catchException = true,
             exceptionTypeIgnore = AccessDeniedException.class)
     @OnSuccess("user.register.success")
-    public String post(@ModelAttribute(USER_ATTRIBUTE_NAME) UserRegisterBindingModel user,
-                       Errors errors) {
+    public String registerUser(@ModelAttribute(USER_ATTRIBUTE_NAME) UserRegisterBindingModel user,
+                               Errors errors) {
         userService.registerUser(user, errors);
 
         return redirect(WebConfig.URL_USER_LOGIN + "?register");
