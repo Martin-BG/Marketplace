@@ -30,14 +30,14 @@ public final class AlertInterceptor extends HandlerInterceptorAdapter {
                            HttpServletResponse response,
                            Object handler,
                            ModelAndView modelAndView) {
+        if (alertContainer.isEmpty()) {
+            return;
+        }
+
         if (handler instanceof HandlerMethod) {
             String originalViewName = modelAndView.getViewName();
 
             if (originalViewName == null || Helper.isRedirectOrForward(originalViewName)) {
-                return;
-            }
-
-            if (alertContainer.isEmpty()) {
                 return;
             }
 
