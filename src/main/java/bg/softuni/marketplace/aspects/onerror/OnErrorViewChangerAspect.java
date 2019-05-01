@@ -76,7 +76,7 @@ public class OnErrorViewChangerAspect {
     private final AlertContainer alertContainer;
 
     @Around("@annotation(OnError)")
-    public Object validate(ProceedingJoinPoint pjp) throws Throwable {
+    public Object onError(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
 
         if (!String.class.isAssignableFrom(methodSignature.getReturnType())) {
