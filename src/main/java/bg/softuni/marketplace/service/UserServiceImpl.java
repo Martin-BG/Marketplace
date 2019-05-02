@@ -25,7 +25,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Log
@@ -39,8 +38,7 @@ public class UserServiceImpl implements UserService {
     private static final String USERS_CACHE = "usersCache";
     private static final String ALL_USERS_CACHE = "allUsersCache";
 
-    private static final Supplier<UsernameNotFoundException> USERNAME_NOT_FOUND_EXCEPTION =
-            () -> new UsernameNotFoundException("Username not found");
+    private static final String USERNAME_NOT_FOUND = "Username not found: ";
 
     private final UserRepository repository;
     private final UserServiceHelper serviceHelper;
@@ -51,7 +49,7 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) {
         return repository
                 .findUserEager(username)
-                .orElseThrow(USERNAME_NOT_FOUND_EXCEPTION);
+                .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND + username));
     }
 
     @Override
@@ -78,7 +76,7 @@ public class UserServiceImpl implements UserService {
                 .ifPresentOrElse(
                         user -> serviceHelper.updateRoleForUser(user, bindingModel.getAuthority()),
                         () -> {
-                            throw new UsernameNotFoundException("Username not found: " + bindingModel.getUsername());
+                            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
                         });
     }
 
@@ -101,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                            @NotNull Errors errors) {
         if (repository.deleteByUsername(bindingModel.getUsername()) == 0) {
-            throw new UsernameNotFoundException("Username not found: " + bindingModel.getUsername());
+            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
         }
     }
 }
