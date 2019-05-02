@@ -46,9 +46,11 @@ public class RoleServiceImpl implements RoleService {
     @CacheEvict(cacheNames = {ROLES_CACHE, ROLES_FOR_AUTHORITY_CACHE}, allEntries = true)
     public void initRoles() {
         if (repository.count() == 0L) {
-            Set<Role> roles = Arrays.stream(Authority.values())
+            Set<Role> roles = Arrays
+                    .stream(Authority.values())
                     .map(Role::new)
                     .collect(Collectors.toSet());
+
             repository.saveAll(roles);
 
             log.log(Level.INFO, "Roles created: " +
