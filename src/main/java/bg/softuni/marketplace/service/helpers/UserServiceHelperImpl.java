@@ -7,7 +7,6 @@ import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingMode
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,7 @@ import java.util.Objects;
 @Component
 public class UserServiceHelperImpl implements UserServiceHelper {
 
-    private final ModelMapper mapper;
+    private final Mapper mapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
 
