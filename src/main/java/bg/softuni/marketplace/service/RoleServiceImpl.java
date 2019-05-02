@@ -29,7 +29,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class RoleServiceImpl implements RoleService {
 
-    private static final String ROLES_CACHE = "rolesCache";
+    private static final String ROLES_ALL_CACHE = "rolesAllCache";
+    private static final String ROLES_BY_AUTHORITY_CACHE = "rolesByAuthorityCache";
     private static final String ROLES_FOR_AUTHORITY_CACHE = "rolesForAuthorityCache";
 
     private final RoleRepository repository;
@@ -37,7 +38,7 @@ public class RoleServiceImpl implements RoleService {
 
     @PostConstruct
     @Transactional
-    @CacheEvict(cacheNames = {ROLES_CACHE, ROLES_FOR_AUTHORITY_CACHE}, allEntries = true)
+    @CacheEvict(cacheNames = {ROLES_ALL_CACHE, ROLES_BY_AUTHORITY_CACHE, ROLES_FOR_AUTHORITY_CACHE}, allEntries = true)
     public void initRoles() {
         if (repository.count() == 0L) {
             Set<Role> roles = Arrays
@@ -54,7 +55,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = ROLES_CACHE, key = "#authority")
+    @Cacheable(cacheNames = ROLES_BY_AUTHORITY_CACHE, key = "#authority.name() + #viewModelClass.name")
     public <V extends Viewable<? extends Role>>
     Optional<V> findByAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass) {
         return repository
@@ -64,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = ROLES_FOR_AUTHORITY_CACHE, key = "#authority")
+    @Cacheable(cacheNames = ROLES_FOR_AUTHORITY_CACHE, key = "#authority.name() + #viewModelClass.name")
     public <V extends Viewable<? extends Role>>
     List<V> getRolesForAuthority(@NotNull Authority authority, @NotNull Class<V> viewModelClass) {
         List<Role> roles = repository.findAll();
@@ -86,6 +87,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = ROLES_ALL_CACHE, key = "#viewModelClass.name")
     public <V extends Viewable<? extends Role>> List<V> findAll(@NotNull Class<V> viewModelClass) {
         List<Role> roles = repository.findAll();
 
