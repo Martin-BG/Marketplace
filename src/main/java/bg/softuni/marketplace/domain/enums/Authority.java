@@ -18,7 +18,7 @@ public enum Authority {
     private final String role;
 
     Authority() {
-        this.role = ROLE_PREFIX + name();
+        role = ROLE_PREFIX + name();
     }
 
     public static Authority fromRole(String role) {
