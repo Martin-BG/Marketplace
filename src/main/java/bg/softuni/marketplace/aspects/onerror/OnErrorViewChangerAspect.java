@@ -153,7 +153,7 @@ public class OnErrorViewChangerAspect {
         return url;
     }
 
-    private void addErrorsToAlerts(List<Errors> errorsList, OnError.ErrorToAlert errorToAlert) {
+    private void addErrorsToAlerts(List<? extends Errors> errorsList, OnError.ErrorToAlert errorToAlert) {
         if (errorToAlert == OnError.ErrorToAlert.GLOBAL || errorToAlert == OnError.ErrorToAlert.ALL) {
             errorsList
                     .forEach(errors -> {
