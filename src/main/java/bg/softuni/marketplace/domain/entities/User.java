@@ -63,7 +63,7 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
     private boolean isCredentialsNonExpired = true;
     private boolean isEnabled = true;
 
-    public User(String username, String password, String email, Collection<Role> authorities) {
+    public User(String username, String password, String email, Collection<? extends Role> authorities) {
         this.username = username;
         this.password = password;
         this.email = email;
