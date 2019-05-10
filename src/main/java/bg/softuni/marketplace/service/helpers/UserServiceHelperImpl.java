@@ -21,6 +21,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
 
+    @Override
     public UserViewModel mapUserToViewModel(User user) {
         UserViewModel viewModel = mapper
                 .map(user, UserViewModel.class);
@@ -40,6 +41,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
         return viewModel;
     }
 
+    @Override
     public void updateRoleForUser(User user, Authority authority) {
         List<Role> rolesForAuthority = roleService
                 .getRolesForAuthority(authority, Role.class);
@@ -51,6 +53,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
                 .addAll(rolesForAuthority);
     }
 
+    @Override
     public User getUserFromModel(UserRegisterBindingModel bindingModel, boolean isRoot) {
         return new User(
                 bindingModel.getUsername(),
@@ -59,6 +62,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
                 getRolesForUser(isRoot));
     }
 
+    @Override
     public List<Role> getRolesForUser(boolean isRoot) {
         if (isRoot) {
             return roleService.findAll(Role.class);
