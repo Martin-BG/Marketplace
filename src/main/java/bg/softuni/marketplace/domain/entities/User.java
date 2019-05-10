@@ -58,15 +58,26 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
                     @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_users_roles_roles"))})
     private Set<Role> authorities = new HashSet<>();
 
-    private boolean isAccountNonLocked = true;
-    private boolean isAccountNonExpired = true;
-    private boolean isCredentialsNonExpired = true;
-    private boolean isEnabled = true;
+    private boolean isAccountNonLocked;
+    private boolean isAccountNonExpired;
+    private boolean isCredentialsNonExpired;
+    private boolean isEnabled;
 
-    public User(String username, String password, String email, Collection<? extends Role> authorities) {
+    public User(String username,
+                String password,
+                String email,
+                Collection<? extends Role> authorities,
+                boolean isActive) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.authorities.addAll(authorities);
+
+        if (isActive) {
+            isAccountNonLocked = true;
+            isAccountNonExpired = true;
+            isCredentialsNonExpired = true;
+            isEnabled = true;
+        }
     }
 }

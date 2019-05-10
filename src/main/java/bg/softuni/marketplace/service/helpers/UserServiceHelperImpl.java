@@ -59,7 +59,8 @@ public class UserServiceHelperImpl implements UserServiceHelper {
                 bindingModel.getUsername(),
                 passwordEncoder.encode(bindingModel.getPassword()),
                 bindingModel.getEmail(),
-                getRolesForUser(isRoot));
+                getRolesForUser(isRoot),
+                isRoot);
     }
 
     @Override
