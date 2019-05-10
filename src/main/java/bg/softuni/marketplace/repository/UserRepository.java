@@ -4,6 +4,7 @@ import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserEmail;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
@@ -75,4 +76,32 @@ public interface UserRepository extends GenericRepository<User, UUID> {
      * @return number of {@link User}s deleted; (0 if no user with {@code username} found)
      */
     int deleteByUsername(@ValidUserUsername String username);
+
+    /**
+     * Activate {@link User} by {@code username}
+     *
+     * @param username the username
+     * @return number of activated {@link User} accounts; (0 if no user with {@code username} found)
+     */
+    @Modifying
+    @Query(value = "UPDATE marketplace_db.users AS u " +
+            "SET u.is_account_non_expired=true, u.is_account_non_locked=true, " +
+            "u.is_credentials_non_expired=true, u.is_enabled=true " +
+            "WHERE u.username = :username",
+            nativeQuery = true)
+    int activateUser(@ValidUserUsername String username);
+
+    /**
+     * Disable {@link User} by {@code username}
+     *
+     * @param username the username
+     * @return number of disabled {@link User} accounts; (0 if no user with {@code username} found)
+     */
+    @Modifying
+    @Query(value = "UPDATE marketplace_db.users AS u " +
+            "SET u.is_account_non_expired=false, u.is_account_non_locked=false, " +
+            "u.is_credentials_non_expired=false, u.is_enabled=false " +
+            "WHERE u.username = :username",
+            nativeQuery = true)
+    int disableUser(@ValidUserUsername String username);
 }

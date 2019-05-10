@@ -5,6 +5,7 @@ import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
+import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.groups.AllGroups;
 import bg.softuni.marketplace.repository.UserRepository;
@@ -88,6 +89,32 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(serviceHelper::mapUserToViewModel)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Validate(returnOnError = true,
+            groups = AllGroups.class)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
+    public void activateUser(@NotNull UserStatusBindingModel bindingModel,
+                             @NotNull Errors errors) {
+        if (repository.activateUser(bindingModel.getUsername()) == 0) {
+            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
+        }
+    }
+
+    @Override
+    @Validate(returnOnError = true,
+            groups = AllGroups.class)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
+    public void disableUser(@NotNull UserStatusBindingModel bindingModel,
+                            @NotNull Errors errors) {
+        if (repository.disableUser(bindingModel.getUsername()) == 0) {
+            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
+        }
     }
 
     @Override

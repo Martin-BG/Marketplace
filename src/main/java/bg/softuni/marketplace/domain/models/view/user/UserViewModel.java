@@ -22,6 +22,8 @@ public final class UserViewModel implements Viewable<User>, Serializable {
 
     private String email;
 
+    private boolean isEnabled;
+
     @Setter
     private Authority authority;
 }

@@ -3,6 +3,7 @@ package bg.softuni.marketplace.service;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
+import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.Errors;
@@ -19,6 +20,12 @@ public interface UserService extends UserDetailsService {
                     @NotNull Errors errors);
 
     List<UserViewModel> allUsers();
+
+    void activateUser(@NotNull UserStatusBindingModel bindingModel,
+                      @NotNull Errors errors);
+
+    void disableUser(@NotNull UserStatusBindingModel bindingModel,
+                     @NotNull Errors errors);
 
     void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                     @NotNull Errors errors);
