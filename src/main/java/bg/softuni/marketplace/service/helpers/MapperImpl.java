@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Mapper with generics for type-safety
+ * {@link Mapper} implementation, using {@link ModelMapper} for mapping.
  */
 @RequiredArgsConstructor
 @Validated
