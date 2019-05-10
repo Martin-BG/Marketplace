@@ -73,11 +73,9 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
         this.email = email;
         this.authorities.addAll(authorities);
 
-        if (isActive) {
-            isAccountNonLocked = true;
-            isAccountNonExpired = true;
-            isCredentialsNonExpired = true;
-            isEnabled = true;
-        }
+        isAccountNonLocked = isActive;
+        isAccountNonExpired = isActive;
+        isCredentialsNonExpired = isActive;
+        isEnabled = isActive;
     }
 }
