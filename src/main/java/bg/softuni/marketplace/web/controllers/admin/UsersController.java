@@ -7,6 +7,7 @@ import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
+import bg.softuni.marketplace.service.SessionService;
 import bg.softuni.marketplace.service.UserService;
 import bg.softuni.marketplace.web.annotations.Layout;
 import bg.softuni.marketplace.web.annotations.Title;
@@ -38,8 +39,8 @@ public class UsersController extends BaseController {
 
     private static final String VIEW_USERS_ALL = "admin/users";
 
-
     private final UserService userService;
+    private final SessionService sessionService;
 
     @GetMapping
     public String viewUsers(Model model) {
@@ -62,6 +63,8 @@ public class UsersController extends BaseController {
     public String updateRole(@ModelAttribute UserRoleBindingModel bindingModel,
                              Errors errors) {
         userService.updateRole(bindingModel, errors);
+
+        sessionService.logoutUser(bindingModel.getUsername());
 
         return redirect(WebConfig.URL_ADMIN_USERS);
     }
@@ -93,6 +96,8 @@ public class UsersController extends BaseController {
                               Errors errors) {
         userService.disableUser(bindingModel, errors);
 
+        sessionService.logoutUser(bindingModel.getUsername());
+
         return redirect(WebConfig.URL_ADMIN_USERS);
     }
 
@@ -108,6 +113,8 @@ public class UsersController extends BaseController {
     public String deleteUser(@ModelAttribute UserDeleteBindingModel bindingModel,
                              Errors errors) {
         userService.deleteUser(bindingModel, errors);
+
+        sessionService.logoutUser(bindingModel.getUsername());
 
         return redirect(WebConfig.URL_ADMIN_USERS);
     }
