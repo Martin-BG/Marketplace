@@ -20,6 +20,7 @@ public class IndexController extends BaseController {
         if (principal != null) {
             return redirect(WebConfig.URL_USER_HOME);
         }
+
         return VIEW_INDEX;
     }
 }
