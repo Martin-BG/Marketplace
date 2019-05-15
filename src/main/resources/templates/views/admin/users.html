@@ -33,7 +33,7 @@
                                    th:value="${T(bg.softuni.marketplace.domain.enums.Authority).USER}">
                             <button class="btn btn-light btn-sm border-dark table-button-large"
                                     th:text="#{users.table-button.user}"
-                                    th:disabled="*{!isEnabled()}"
+                                    th:disabled="*{!active}"
                                     type="submit"/>
                         </form>
                         <form class="d-inline"
@@ -45,7 +45,7 @@
                                    th:value="${T(bg.softuni.marketplace.domain.enums.Authority).TRADER}">
                             <button class="btn btn-light btn-sm border-dark table-button-large"
                                     th:text="#{users.table-button.trader}"
-                                    th:disabled="*{!isEnabled()}"
+                                    th:disabled="*{!active}"
                                     type="submit"/>
                         </form>
                         <form class="d-inline"
@@ -57,13 +57,13 @@
                                    th:value="${T(bg.softuni.marketplace.domain.enums.Authority).ADMIN}">
                             <button class="btn btn-light btn-sm border-dark table-button-large"
                                     th:text="#{users.table-button.admin}"
-                                    th:disabled="*{!isEnabled()}"
+                                    th:disabled="*{!active}"
                                     type="submit"/>
                         </form>
                         <form class="d-inline"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_ACTIVATE}__)}"
                               th:method="patch"
-                              th:unless="*{isEnabled()}">
+                              th:unless="*{active}">
                             <input hidden name="username" th:value="*{username}">
                             <button class="btn btn-success btn-sm border-dark table-button-large"
                                     th:text="#{users.table-button.activate}"
@@ -71,7 +71,7 @@
                         </form>
                         <form class="d-inline"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_DISABLE}__)}"
-                              th:if="*{isEnabled()}"
+                              th:if="*{active}"
                               th:method="patch">
                             <input hidden name="username" th:value="*{username}">
                             <button class="btn btn-warning btn-sm border-dark table-button-large"

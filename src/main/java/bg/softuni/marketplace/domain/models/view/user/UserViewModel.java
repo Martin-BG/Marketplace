@@ -20,7 +20,7 @@ public final class UserViewModel implements Viewable<User>, Serializable {
 
     private String username;
 
-    private boolean isEnabled;
+    private boolean active;
 
     @Setter
     private Authority authority;

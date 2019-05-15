@@ -74,8 +74,7 @@ public interface UserRepository extends GenericRepository<User, UUID> {
      */
     @Modifying
     @Query(value = "UPDATE marketplace_db.users AS u " +
-            "SET u.is_account_non_expired=true, u.is_account_non_locked=true, " +
-            "u.is_credentials_non_expired=true, u.is_enabled=true " +
+            "SET u.active=true " +
             "WHERE u.username = :username",
             nativeQuery = true)
     int activateUser(@ValidUserUsername String username);
@@ -88,8 +87,7 @@ public interface UserRepository extends GenericRepository<User, UUID> {
      */
     @Modifying
     @Query(value = "UPDATE marketplace_db.users AS u " +
-            "SET u.is_account_non_expired=false, u.is_account_non_locked=false, " +
-            "u.is_credentials_non_expired=false, u.is_enabled=false " +
+            "SET u.active=false " +
             "WHERE u.username = :username",
             nativeQuery = true)
     int disableUser(@ValidUserUsername String username);

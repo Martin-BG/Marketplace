@@ -52,10 +52,7 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
                     @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_users_roles_roles"))})
     private Set<Role> authorities = new HashSet<>();
 
-    private boolean isAccountNonLocked;
-    private boolean isAccountNonExpired;
-    private boolean isCredentialsNonExpired;
-    private boolean isEnabled;
+    private boolean active;
 
     public User(String username,
                 String password,
@@ -64,10 +61,26 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
         this.username = username;
         this.password = password;
         this.authorities.addAll(authorities);
+        active = isActive;
+    }
 
-        isAccountNonLocked = isActive;
-        isAccountNonExpired = isActive;
-        isCredentialsNonExpired = isActive;
-        isEnabled = isActive;
+    @Override
+    public boolean isAccountNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return active;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
     }
 }
