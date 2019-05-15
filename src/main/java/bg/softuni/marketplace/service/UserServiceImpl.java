@@ -135,7 +135,6 @@ public class UserServiceImpl implements UserService {
                         },
                         () -> {
                             throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
-                        }
-                );
+                        });
     }
 }
