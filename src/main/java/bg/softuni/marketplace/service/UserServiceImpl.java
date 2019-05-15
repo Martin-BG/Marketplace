@@ -1,6 +1,7 @@
 package bg.softuni.marketplace.service;
 
 import bg.softuni.marketplace.aspects.validate.Validate;
+import bg.softuni.marketplace.domain.entities.Profile;
 import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
@@ -8,6 +9,7 @@ import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.groups.AllGroups;
+import bg.softuni.marketplace.repository.ProfileRepository;
 import bg.softuni.marketplace.repository.UserRepository;
 import bg.softuni.marketplace.service.helpers.UserServiceHelper;
 import lombok.RequiredArgsConstructor;
@@ -41,14 +43,15 @@ public class UserServiceImpl implements UserService {
 
     private static final String USERNAME_NOT_FOUND = "Username not found: ";
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
     private final UserServiceHelper serviceHelper;
 
     @Override
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = USERS_CACHE, key = "#username")
     public UserDetails loadUserByUsername(String username) {
-        return repository
+        return userRepository
                 .findUserEager(username)
                 .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND + username));
     }
@@ -59,9 +62,12 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true)
     public void registerUser(@NotNull UserRegisterBindingModel bindingModel,
                              @NotNull Errors errors) {
-        boolean isRoot = repository.count() == 0;
+        boolean isRoot = userRepository.count() == 0;
         User user = serviceHelper.getUserFromModel(bindingModel, isRoot);
-        repository.save(user);
+        userRepository.save(user);
+
+        Profile profile = serviceHelper.getUserProfile(user, bindingModel.getEmail());
+        profileRepository.save(profile);
     }
 
     @Override
@@ -72,7 +78,7 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
     public void updateRole(@NotNull UserRoleBindingModel bindingModel,
                            @NotNull Errors errors) {
-        repository
+        userRepository
                 .findUserEager(bindingModel.getUsername())
                 .ifPresentOrElse(
                         user -> serviceHelper.updateRoleForUser(user, bindingModel.getAuthority()),
@@ -84,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = ALL_USERS_CACHE, sync = true)
     public List<UserViewModel> allUsers() {
-        return repository
+        return userRepository
                 .findAll(Sort.by(Sort.Order.asc("username")))
                 .stream()
                 .map(serviceHelper::mapUserToViewModel)
@@ -99,7 +105,7 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
     public void activateUser(@NotNull UserStatusBindingModel bindingModel,
                              @NotNull Errors errors) {
-        if (repository.activateUser(bindingModel.getUsername()) == 0) {
+        if (userRepository.activateUser(bindingModel.getUsername()) == 0) {
             throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
         }
     }
@@ -112,7 +118,7 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
     public void disableUser(@NotNull UserStatusBindingModel bindingModel,
                             @NotNull Errors errors) {
-        if (repository.disableUser(bindingModel.getUsername()) == 0) {
+        if (userRepository.disableUser(bindingModel.getUsername()) == 0) {
             throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
         }
     }
@@ -125,8 +131,16 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
     public void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                            @NotNull Errors errors) {
-        if (repository.deleteByUsername(bindingModel.getUsername()) == 0) {
-            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
-        }
+        userRepository
+                .findUserByUsername(bindingModel.getUsername())
+                .ifPresentOrElse(
+                        user -> {
+                            profileRepository.deleteById(user.getId());
+                            userRepository.delete(user);
+                        },
+                        () -> {
+                            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
+                        }
+                );
     }
 }

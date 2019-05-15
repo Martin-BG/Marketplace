@@ -6,7 +6,6 @@
         <tr class="font-weight-bold">
             <th scope="col" th:text="#{users.table-header.index}"/>
             <th scope="col" th:text="#{users.table-header.username}"/>
-            <th scope="col" th:text="#{users.table-header.email}"/>
             <th scope="col" th:text="#{users.table-header.role}"/>
             <th scope="col" th:text="#{users.table-header.actions}"/>
         </tr>
@@ -19,7 +18,6 @@
             <tr>
                 <td class="font-weight-bold" scope="row" th:text="${iStat.index + 1}"/>
                 <td th:text="*{username}"/>
-                <td th:text="*{email}"/>
                 <td th:text="*{authority.name()}"/>
                 <th:block th:unless="${canChangeRoles}">
                     <td/>

@@ -39,6 +39,6 @@ public class UserRegisterBindingModel implements Bindable<User>, Serializable {
 
     @ValidUserEmail
     @SpELAssert(message = "{user.email.used}", groups = GroupTwo.class,
-            value = "not @userRepository.hasEmail(#this)")
+            value = "not @profileRepository.hasEmail(#this)")
     private String email;
 }

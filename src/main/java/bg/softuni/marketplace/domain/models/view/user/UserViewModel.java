@@ -20,8 +20,6 @@ public final class UserViewModel implements Viewable<User>, Serializable {
 
     private String username;
 
-    private String email;
-
     private boolean isEnabled;
 
     @Setter

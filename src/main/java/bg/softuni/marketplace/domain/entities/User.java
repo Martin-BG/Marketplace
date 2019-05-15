@@ -2,7 +2,6 @@ package bg.softuni.marketplace.domain.entities;
 
 import bg.softuni.marketplace.domain.api.Viewable;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserAuthorities;
-import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserEmail;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserEncryptedPassword;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import lombok.Getter;
@@ -21,8 +20,7 @@ import java.util.Set;
 @Table(
         name = "users",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_users_username", columnNames = {"username"}),
-                @UniqueConstraint(name = "uk_users_email", columnNames = {"email"})
+                @UniqueConstraint(name = "uk_users_username", columnNames = {"username"})
         }
 )
 @NamedQuery(
@@ -44,10 +42,6 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
     @Column(nullable = false, length = ValidUserEncryptedPassword.MAX_LENGTH)
     private String password;
 
-    @ValidUserEmail
-    @Column(nullable = false, length = ValidUserEmail.MAX_LENGTH)
-    private String email;
-
     @ValidUserAuthorities
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -65,12 +59,10 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
 
     public User(String username,
                 String password,
-                String email,
                 Collection<? extends Role> authorities,
                 boolean isActive) {
         this.username = username;
         this.password = password;
-        this.email = email;
         this.authorities.addAll(authorities);
 
         isAccountNonLocked = isActive;

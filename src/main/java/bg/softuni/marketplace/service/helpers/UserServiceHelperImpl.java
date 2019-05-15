@@ -1,10 +1,12 @@
 package bg.softuni.marketplace.service.helpers;
 
+import bg.softuni.marketplace.domain.entities.Profile;
 import bg.softuni.marketplace.domain.entities.Role;
 import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
+import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserEmail;
 import bg.softuni.marketplace.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,7 +63,6 @@ public class UserServiceHelperImpl implements UserServiceHelper {
         return new User(
                 bindingModel.getUsername(),
                 passwordEncoder.encode(bindingModel.getPassword()),
-                bindingModel.getEmail(),
                 getRolesForUser(isRoot),
                 isRoot);
     }
@@ -75,5 +76,11 @@ public class UserServiceHelperImpl implements UserServiceHelper {
                     .findByAuthority(Authority.USER, Role.class)
                     .orElseThrow());
         }
+    }
+
+    @Override
+    public Profile getUserProfile(@NotNull User user,
+                                  @ValidUserEmail String email) {
+        return new Profile(user, email);
     }
 }

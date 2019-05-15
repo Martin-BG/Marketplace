@@ -1,10 +1,12 @@
 package bg.softuni.marketplace.service.helpers;
 
+import bg.softuni.marketplace.domain.entities.Profile;
 import bg.softuni.marketplace.domain.entities.Role;
 import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
+import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserEmail;
 import bg.softuni.marketplace.service.UserService;
 
 import javax.validation.constraints.NotNull;
@@ -47,4 +49,14 @@ public interface UserServiceHelper {
      * @return the roles for user
      */
     List<Role> getRolesForUser(boolean isRoot);
+
+    /**
+     * Instantiates a profile for {@link User}.
+     *
+     * @param user  {@link User}
+     * @param email user email
+     * @return {@link Profile} for the user
+     */
+    Profile getUserProfile(@NotNull User user,
+                           @ValidUserEmail String email);
 }
