@@ -25,6 +25,6 @@ public class UserStatusBindingModel implements Bindable<User>, Serializable {
     @SpELAssert(message = "{user.status.username.not-found}", groups = GroupOne.class,
             value = "@userRepository.hasUsername(#this)")
     @SpELAssert(message = "{user.status.username.is-root}", groups = GroupTwo.class,
-            value = "not @userRepository.hasAuthority(#this, T(bg.softuni.marketplace.domain.enums.Authority).ROOT)")
+            value = "not @userRepository.isRoot(#this)")
     private String username;
 }

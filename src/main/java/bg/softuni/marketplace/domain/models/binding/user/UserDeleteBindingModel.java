@@ -3,7 +3,7 @@ package bg.softuni.marketplace.domain.models.binding.user;
 import bg.softuni.marketplace.domain.api.Bindable;
 import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
-import bg.softuni.marketplace.domain.validation.annotations.composite.role.ValidAuthority;
+import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserAuthority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import bg.softuni.marketplace.domain.validation.annotations.spel.SpELAssert;
 import bg.softuni.marketplace.domain.validation.groups.GroupOne;
@@ -27,10 +27,10 @@ public class UserDeleteBindingModel implements Bindable<User>, Serializable {
     @SpELAssert(message = "{user.delete.username.not-found}", groups = GroupOne.class,
             value = "@userRepository.hasUsername(#this)")
     @SpELAssert(message = "{user.delete.username.is-root}", groups = GroupTwo.class,
-            value = "not @userRepository.hasAuthority(#this, T(bg.softuni.marketplace.domain.enums.Authority).ROOT)")
+            value = "not @userRepository.isRoot(#this)")
     private String username;
 
-    @ValidAuthority
+    @ValidUserAuthority
     @SpELAssert(message = "{user.delete.authority.is-root}", groups = GroupOne.class,
             value = "#this != T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     private Authority authority;

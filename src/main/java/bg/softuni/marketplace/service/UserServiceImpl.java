@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Log
 @RequiredArgsConstructor
-@Service
+@Service("userService")
 @Primary
 @Validated
 @Transactional
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Cacheable(cacheNames = USERS_CACHE, key = "#username")
     public UserDetails loadUserByUsername(String username) {
         return userRepository
-                .findUserEager(username)
+                .findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND + username));
     }
 
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     public void updateRole(@NotNull UserRoleBindingModel bindingModel,
                            @NotNull Errors errors) {
         userRepository
-                .findUserEager(bindingModel.getUsername())
+                .findUserByUsername(bindingModel.getUsername())
                 .ifPresentOrElse(
                         user -> serviceHelper.updateRoleForUser(user, bindingModel.getAuthority()),
                         () -> {

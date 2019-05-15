@@ -10,11 +10,11 @@ public class AuthorityConverter implements AttributeConverter<Authority, String>
 
     @Override
     public String convertToDatabaseColumn(Authority authority) {
-        return authority == null ? null : authority.name();
+        return authority.getId();
     }
 
     @Override
-    public Authority convertToEntityAttribute(String authority) {
-        return Authority.valueOf(authority);
+    public Authority convertToEntityAttribute(String id) {
+        return Authority.fromId(id);
     }
 }

@@ -1,41 +1,82 @@
 package bg.softuni.marketplace.domain.enums;
 
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public enum Authority {
-    ROOT,
-    ADMIN,
-    TRADER,
-    USER;
+public enum Authority implements GrantedAuthority {
 
-    private static final Map<String, Authority> STRING_TO_ENUM = Stream.of(Authority.values())
-            .collect(Collectors.toUnmodifiableMap(Authority::asRole, authority -> authority));
+    ROOT("root"),
+    ADMIN("admin"),
+    TRADER("trader"),
+    USER("user");
+
+    /**
+     * @see #fromId(String)
+     */
+    private static final Map<String, Authority> STRING_TO_ENUM = Stream
+            .of(Authority.values())
+            .collect(Collectors.toUnmodifiableMap(Authority::getId, authority -> authority));
+    /**
+     * @see #getGrantedAuthorities()
+     */
+    private static final Map<Authority, Set<Authority>> GRANTED_AUTHORITIES = Stream
+            .of(Authority.values())
+            .collect(Collectors.toMap(
+                    k -> k,
+                    k -> EnumSet.range(k, Authority.USER),
+                    (l, r) -> {
+                        throw new IllegalArgumentException("Duplicate keys " + l + "and " + r + ".");
+                    },
+                    () -> new EnumMap<>(Authority.class)));
 
     private static final String ROLE_PREFIX = "ROLE_";
 
     private final String role;
+    private final String id;
 
-    Authority() {
+    Authority(String id) {
+        this.id = id;
         role = ROLE_PREFIX + name();
     }
 
-    public static Authority fromRole(String role) {
-        return role == null ? null : STRING_TO_ENUM.get(role);
+    /**
+     * Gets Authority from authority id.
+     *
+     * @param id the id
+     * @return the authority
+     * @see bg.softuni.marketplace.domain.converters.AuthorityConverter#convertToEntityAttribute(String)
+     */
+    public static Authority fromId(String id) {
+        return STRING_TO_ENUM.get(id);
     }
 
-    public String asRole() {
+    /**
+     * Gets authority id, used for persisting.
+     *
+     * @return the id
+     * @see bg.softuni.marketplace.domain.converters.AuthorityConverter#convertToDatabaseColumn(Authority)
+     */
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getAuthority() {
         return role;
     }
 
-    public static final class Role {
-        public static final String ROOT = ROLE_PREFIX + "ROOT";
-        public static final String ADMIN = ROLE_PREFIX + "ADMIN";
-        public static final String TRADER = ROLE_PREFIX + "TRADER";
-        public static final String USER = ROLE_PREFIX + "USER";
-
-        private Role() {
-        }
+    /**
+     * Gets granted authorities set for this authority.
+     *
+     * @return the granted authorities set
+     */
+    public Set<Authority> getGrantedAuthorities() {
+        return GRANTED_AUTHORITIES.get(this);
     }
 }

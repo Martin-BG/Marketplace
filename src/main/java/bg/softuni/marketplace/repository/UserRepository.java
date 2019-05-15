@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.QueryHint;
-import javax.validation.constraints.NotNull;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,37 +21,11 @@ public interface UserRepository extends GenericRepository<User, UUID> {
 
     /**
      * Find {@link User} by username.
-     * Roles are lazily initialized by default, use {@link #findUserEager(String)} instead to eagerly fetch Roles.
      *
      * @param username the username
      * @return {@link Optional}<{@link User}>
-     * @see #findUserEager(String)
      */
     Optional<User> findUserByUsername(@ValidUserUsername String username);
-
-    /**
-     * Find {@link User} with all roles.
-     * Uses a {@link javax.persistence.NamedQuery @NamedQuery} defined in {@link User}.
-     *
-     * @param username username
-     * @return {@link Optional}<{@link User}>
-     * @see User
-     */
-    Optional<User> findUserEager(@ValidUserUsername String username);
-
-    /**
-     * Check if username exists and has specified authority.
-     * Uses a custom {@link Query @Query}.
-     *
-     * @param username  {@link String}
-     * @param authority {@link Authority}
-     * @return {@code true} - username with authority found,
-     * {@code false} - either username not found or missing authority
-     */
-    @Query("SELECT (COUNT(u) > 0) FROM User u LEFT JOIN u.authorities AS a " +
-            "WHERE u.username = :username AND a.authority = :authority")
-    @QueryHints(@QueryHint(name = HINT_READONLY, value = "true"))
-    boolean hasAuthority(@ValidUserUsername String username, @NotNull Authority authority);
 
     /**
      * Check if {@link User} with specified username exists.
@@ -65,6 +38,19 @@ public interface UserRepository extends GenericRepository<User, UUID> {
     @Query("SELECT (COUNT(u) > 0) FROM User u WHERE u.username = :username")
     @QueryHints(@QueryHint(name = HINT_READONLY, value = "true"))
     boolean hasUsername(@ValidUserUsername String username);
+
+    /**
+     * Check if username exists and has {@link Authority#ROOT} authority.
+     * Uses a custom {@link Query @Query}.
+     *
+     * @param username {@link String}
+     * @return {@code true} - username with {@link Authority#ROOT ROOT} authority found,
+     * {@code false} - either username not found or not {@link Authority#ROOT ROOT}
+     */
+    @Query("SELECT (COUNT(u) > 0) FROM User u " +
+            "WHERE u.username = :username AND u.authority = bg.softuni.marketplace.domain.enums.Authority.ROOT")
+    @QueryHints(@QueryHint(name = HINT_READONLY, value = "true"))
+    boolean isRoot(@ValidUserUsername String username);
 
     /**
      * Activate {@link User} by {@code username}
