@@ -47,7 +47,8 @@ public class UserServiceHelperImpl implements UserServiceHelper {
     }
 
     @Override
-    public void updateRoleForUser(@NotNull User user, @NotNull Authority authority) {
+    public void updateRoleForUser(@NotNull User user,
+                                  @NotNull Authority authority) {
         List<Role> rolesForAuthority = roleService
                 .getRolesForAuthority(authority, Role.class);
 
@@ -59,7 +60,8 @@ public class UserServiceHelperImpl implements UserServiceHelper {
     }
 
     @Override
-    public User getUserFromModel(@NotNull UserRegisterBindingModel bindingModel, boolean isRoot) {
+    public User getUserFromModel(@NotNull UserRegisterBindingModel bindingModel,
+                                 boolean isRoot) {
         return new User(
                 bindingModel.getUsername(),
                 passwordEncoder.encode(bindingModel.getPassword()),

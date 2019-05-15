@@ -57,8 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Validate(returnOnError = true,
-            groups = AllGroups.class)
+    @Validate(returnOnError = true, groups = AllGroups.class)
     @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true)
     public void registerUser(@NotNull UserRegisterBindingModel bindingModel,
                              @NotNull Errors errors) {
@@ -71,8 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Validate(returnOnError = true,
-            groups = AllGroups.class)
+    @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
@@ -98,8 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Validate(returnOnError = true,
-            groups = AllGroups.class)
+    @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
@@ -111,8 +108,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Validate(returnOnError = true,
-            groups = AllGroups.class)
+    @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
@@ -124,8 +120,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Validate(returnOnError = true,
-            groups = AllGroups.class)
+    @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
             @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})

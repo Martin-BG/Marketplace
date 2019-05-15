@@ -31,7 +31,8 @@ public interface UserServiceHelper {
      * @param user      the user
      * @param authority the authority
      */
-    void updateRoleForUser(@NotNull User user, @NotNull Authority authority);
+    void updateRoleForUser(@NotNull User user,
+                           @NotNull Authority authority);
 
     /**
      * Gets {@link User} from {@link UserRegisterBindingModel} model.
@@ -40,7 +41,8 @@ public interface UserServiceHelper {
      * @param isRoot       is this user ROOT (the first user)
      * @return the {@link User} from model
      */
-    User getUserFromModel(@NotNull UserRegisterBindingModel bindingModel, boolean isRoot);
+    User getUserFromModel(@NotNull UserRegisterBindingModel bindingModel,
+                          boolean isRoot);
 
     /**
      * Gets default roles for new user.
