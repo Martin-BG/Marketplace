@@ -7,6 +7,7 @@ import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingMode
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.service.UserService;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface UserServiceHelper {
      * @param user the user
      * @return the user view model
      */
-    UserViewModel mapUserToViewModel(User user);
+    UserViewModel mapUserToViewModel(@NotNull User user);
 
     /**
      * Update role for user.
@@ -28,7 +29,7 @@ public interface UserServiceHelper {
      * @param user      the user
      * @param authority the authority
      */
-    void updateRoleForUser(User user, Authority authority);
+    void updateRoleForUser(@NotNull User user, @NotNull Authority authority);
 
     /**
      * Gets {@link User} from {@link UserRegisterBindingModel} model.
@@ -37,7 +38,7 @@ public interface UserServiceHelper {
      * @param isRoot       is this user ROOT (the first user)
      * @return the {@link User} from model
      */
-    User getUserFromModel(UserRegisterBindingModel bindingModel, boolean isRoot);
+    User getUserFromModel(@NotNull UserRegisterBindingModel bindingModel, boolean isRoot);
 
     /**
      * Gets default roles for new user.

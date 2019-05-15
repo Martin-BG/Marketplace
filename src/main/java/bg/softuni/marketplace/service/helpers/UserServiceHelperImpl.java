@@ -9,11 +9,14 @@ import bg.softuni.marketplace.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
+@Validated
 @Component
 public class UserServiceHelperImpl implements UserServiceHelper {
 
@@ -22,7 +25,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
     private final RoleService roleService;
 
     @Override
-    public UserViewModel mapUserToViewModel(User user) {
+    public UserViewModel mapUserToViewModel(@NotNull User user) {
         UserViewModel viewModel = mapper
                 .map(user, UserViewModel.class);
 
@@ -42,7 +45,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
     }
 
     @Override
-    public void updateRoleForUser(User user, Authority authority) {
+    public void updateRoleForUser(@NotNull User user, @NotNull Authority authority) {
         List<Role> rolesForAuthority = roleService
                 .getRolesForAuthority(authority, Role.class);
 
@@ -54,7 +57,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
     }
 
     @Override
-    public User getUserFromModel(UserRegisterBindingModel bindingModel, boolean isRoot) {
+    public User getUserFromModel(@NotNull UserRegisterBindingModel bindingModel, boolean isRoot) {
         return new User(
                 bindingModel.getUsername(),
                 passwordEncoder.encode(bindingModel.getPassword()),
