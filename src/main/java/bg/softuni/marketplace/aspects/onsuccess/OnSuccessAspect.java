@@ -48,7 +48,10 @@ public class OnSuccessAspect {
                 AnnotationUtils.getAnnotation(methodSignature.getMethod(), OnSuccess.class));
 
         if (!annotation.message().isEmpty() && hasErrors(joinPoint)) {
-            Object[] arguments = getArguments(joinPoint, methodSignature, annotation);
+            Object[] arguments = getArguments(
+                    joinPoint.getArgs(),
+                    methodSignature.getParameterNames(),
+                    annotation.args());
 
             String message = messageHelper.getLocalizedMessage(annotation.message(), arguments);
 
@@ -67,14 +70,11 @@ public class OnSuccessAspect {
                 .isEmpty();
     }
 
-    private static Object[] getArguments(JoinPoint joinPoint, MethodSignature methodSignature, OnSuccess annotation) {
-        Object[] arguments = new Object[annotation.args().length];
+    private static Object[] getArguments(Object[] args, String[] paramNames, String[] expressions) {
+        Object[] arguments = new Object[expressions.length];
 
-        for (int i = 0; i < annotation.args().length; i++) {
-            arguments[i] = getArgumentValue(
-                    methodSignature.getParameterNames(),
-                    joinPoint.getArgs(),
-                    annotation.args()[i]);
+        for (int i = 0; i < expressions.length; i++) {
+            arguments[i] = getArgumentValue(args, paramNames, expressions[i]);
         }
 
         return arguments;
@@ -85,7 +85,7 @@ public class OnSuccessAspect {
      * <a href="https://github.com/Richa-b/custom-annotation-with-dynamic-values-using-aop">
      * Getting Dynamic Values From method Parameters in Custom Annotations using Spring AOP</a>
      */
-    private static Object getArgumentValue(String[] parameterNames, Object[] args, String key) {
+    private static Object getArgumentValue(Object[] args, String[] parameterNames, String expression) {
         ExpressionParser parser = new SpelExpressionParser();
         StandardEvaluationContext context = new StandardEvaluationContext();
 
@@ -94,7 +94,7 @@ public class OnSuccessAspect {
         }
 
         return parser
-                .parseExpression(key)
+                .parseExpression(expression)
                 .getValue(context, Object.class);
     }
 }
