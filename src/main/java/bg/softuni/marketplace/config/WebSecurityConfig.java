@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .antMatchers(WebConfig.URL_INDEX)
                     .permitAll()
-                .antMatchers(WebConfig.URL_USER_REGISTER, WebConfig.URL_USER_LOGIN)
+                .antMatchers(WebConfig.URL_USER_REGISTER)
                     .anonymous()
                 .antMatchers(WebConfig.URL_ADMIN_BASE + "/**")
                     .hasRole(Authority.ADMIN.name())
