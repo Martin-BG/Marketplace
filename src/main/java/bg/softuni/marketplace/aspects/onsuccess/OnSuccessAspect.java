@@ -45,7 +45,7 @@ public class OnSuccessAspect {
         OnSuccess annotation = Objects.requireNonNull( // cannot be null, added to please static code analysis
                 AnnotationUtils.getAnnotation(methodSignature.getMethod(), OnSuccess.class));
 
-        if (!annotation.message().isEmpty() && hasErrors(joinPoint)) {
+        if (!annotation.message().isEmpty() && hasErrors(joinPoint.getArgs())) {
             Object[] arguments = Helper.getArguments(
                     joinPoint.getArgs(),
                     methodSignature.getParameterNames(),
@@ -57,9 +57,9 @@ public class OnSuccessAspect {
         }
     }
 
-    private static boolean hasErrors(JoinPoint joinPoint) {
+    private static boolean hasErrors(Object[] args) {
         return Arrays
-                .stream(joinPoint.getArgs())
+                .stream(args)
                 .filter(Objects::nonNull)
                 .filter(object -> Errors.class.isAssignableFrom(object.getClass()))
                 .map(object -> (Errors) object)
