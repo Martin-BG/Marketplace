@@ -12,9 +12,16 @@ import java.lang.annotation.*;
  * See {@link OnErrorViewChangerAspect} for usage.
  *
  * @see #view()
+ * @see #action()
  * @see #catchException()
  * @see #exceptionType()
+ * @see #exceptionTypeIgnore()
  * @see #message()
+ * @see #args()
+ * @see #alert()
+ * @see #ignoreMissingErrors()
+ * @see Action
+ * @see ErrorToAlert
  */
 
 @Target({ElementType.METHOD, ElementType.TYPE})
@@ -77,6 +84,16 @@ public @interface OnError {
     String message() default "on-error.exception.default-message";
 
     /**
+     * Message arguments - values defined using Spring Expression Language
+     * <p>
+     * args = {"#user.username", "#user.email"}
+     *
+     * @see <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">
+     * Spring Expression Language (SpEL) Documentation</a>
+     */
+    String[] args() default {};
+
+    /**
      * Add errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}:
      * <ul>
      * <li>{@link ErrorToAlert#NONE NONE} - no errors</li>
@@ -88,6 +105,14 @@ public @interface OnError {
      * @see ErrorToAlert
      */
     ErrorToAlert alert() default ErrorToAlert.GLOBAL;
+
+    /**
+     * Do do not throw {@link OnErrorViewChangerException} if no param of type
+     * {@link Errors} is present at annotated method.
+     *
+     * @see OnErrorViewChangerAspect
+     */
+    boolean ignoreMissingErrors() default false;
 
     /**
      * Defines the view type: {@link #VIEW},

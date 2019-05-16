@@ -1,5 +1,6 @@
 package bg.softuni.marketplace.aspects.onerror;
 
+import bg.softuni.marketplace.aspects.Helper;
 import bg.softuni.marketplace.web.alert.Alert;
 import bg.softuni.marketplace.web.alert.AlertContainer;
 import bg.softuni.marketplace.web.alert.AlertType;
@@ -31,10 +32,11 @@ import java.util.stream.Collectors;
  * <p>
  * Catch specified by {@link OnError#exceptionType} exception type (and sub-types)
  * thrown on method invocation when {@link OnError#catchException} is set.
- * A message set in {@link OnError#message}
- * is added to all non-null arguments of type {@link Errors} on exception.
  * <p>
- * Add errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}
+ * Non-empty message set in {@link OnError#message message} with {@link OnError#args args}
+ * is added as {@link AlertType#ERROR ERROR} to the {@link AlertContainer} on exception.
+ * <p>
+ * Add all errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}
  * <p>
  * <ul>Annotated method is required to have:
  * <li>{@link String} return type</li>
@@ -49,6 +51,7 @@ import java.util.stream.Collectors;
  * <p>
  * Throws {@link OnErrorViewChangerException} for invalid method signature<br>
  * Throws {@link OnErrorViewChangerException} if annotated method has no non-null {@link Errors} arguments
+ * and {@link OnError#ignoreMissingErrors} is {@code false}
  * <hr>
  * In the following example in case of any exception or validation errors returned value will be set to "/register".
  * "user" data is preserved and returned back to the view.
@@ -100,15 +103,22 @@ public class OnErrorViewChangerAspect {
             }
         }
 
-        List<Errors> errorsList = getNonNullErrorsParameters(pjp);
+        if (exceptionCough && !annotation.message().isEmpty()) {
+            Object[] arguments = Helper.getArguments(
+                    pjp.getArgs(),
+                    methodSignature.getParameterNames(),
+                    annotation.args());
 
-        if (errorsList.isEmpty()) {
-            throw new OnErrorViewChangerException(pjp.getSignature()
-                    + " no non-null argument of type Error.class found");
+            String message = messageHelper.getLocalizedMessage(annotation.message(), arguments);
+
+            alertContainer.add(AlertType.ERROR, message);
         }
 
-        if (exceptionCough && !annotation.message().isEmpty()) {
-            errorsList.forEach(error -> error.reject(annotation.message()));
+        List<Errors> errorsList = getNonNullErrorsParameters(pjp);
+
+        if (errorsList.isEmpty() && !annotation.ignoreMissingErrors()) {
+            throw new OnErrorViewChangerException(pjp.getSignature()
+                    + " no non-null argument of type Errors.class found");
         }
 
         errorsList.removeIf(errors -> !errors.hasErrors());
