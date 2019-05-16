@@ -51,10 +51,8 @@ div.form-group label {
     background: transparent;
     border: none;
     padding: 8px 0;
-}
-
-.logout-button:focus {
-    outline: none;
+    width: 100%;
+    text-align: left;
 }
 
 .app-button {
