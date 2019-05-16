@@ -101,3 +101,8 @@ a.app-color:hover {
     text-align: center;
     margin: 1rem;
 }
+
+.app-hr {
+    border-width: 2px;
+    background-color: #1e3b90;
+}

@@ -6,6 +6,8 @@
 
         <h1 class="app-form-header" th:text="#{user.register-form.title}"/>
 
+        <hr class="app-hr"/>
+
         <div class="form-group">
             <label th:for="${#ids.next('username')}" th:text="#{user.register-form.username}"/>
             <input class="form-control" th:classappend="${#fields.hasErrors('username')}? app-border-error"
@@ -46,6 +48,8 @@
                 <li class="app-color-error" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
             </ul>
         </th:block>
+
+        <hr class="app-hr"/>
 
         <div class="app-form-actions">
             <button class="btn app-color app-button" th:text="#{user.register-form.button}" type="submit"/>

@@ -5,6 +5,8 @@
 
         <h1 class="app-form-header" th:text="#{user.login-form.title}"/>
 
+        <hr class="app-hr"/>
+
         <div class="form-group">
             <label for="username" th:text="#{user.login-form.username}"/>
             <input class="form-control" id="username" name="username" th:classappend="${param.error}? app-border-error"
@@ -37,6 +39,8 @@
         <th:block th:if="${param.register}">
             <div class="app-color-good" th:text="#{user.login-form.register}"/>
         </th:block>
+
+        <hr class="app-hr"/>
 
         <div class="app-form-actions">
             <button class="btn app-color app-button" th:text="#{user.login-form.button}" type="submit"/>
