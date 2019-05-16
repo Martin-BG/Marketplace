@@ -24,6 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
     public static final String URL_USER_LOGIN = URL_USER_BASE + "/login";
     public static final String URL_USER_LOGOUT = URL_USER_BASE + "/logout";
     public static final String URL_USER_HOME = URL_USER_BASE + "/home";
+    public static final String URL_USER_PROFILE = URL_USER_BASE + "/profile";
 
     private static final String URL_API_BASE = "/api";
 

@@ -7,10 +7,12 @@ import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
+import bg.softuni.marketplace.domain.models.view.profile.ProfileViewModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.groups.AllGroups;
 import bg.softuni.marketplace.repository.ProfileRepository;
 import bg.softuni.marketplace.repository.UserRepository;
+import bg.softuni.marketplace.service.helpers.Mapper;
 import bg.softuni.marketplace.service.helpers.UserServiceHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final UserServiceHelper serviceHelper;
+    private final Mapper mapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -136,5 +139,14 @@ public class UserServiceImpl implements UserService {
                         () -> {
                             throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
                         });
+    }
+
+    @Override
+    public ProfileViewModel getProfile(@NotNull String username) {
+        return userRepository
+                .findUserByUsername(username)
+                .flatMap(user -> profileRepository.findById(user.getId()))
+                .map(profile -> mapper.map(profile, ProfileViewModel.class))
+                .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND + username));
     }
 }

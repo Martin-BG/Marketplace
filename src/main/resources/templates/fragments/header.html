@@ -62,6 +62,12 @@
                         </div>
                     </li>
                     <li class="nav-item ml-3">
+                        <a class="nav-link"
+                           th:classappend="${#request.getServletPath() == T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE ? 'active' : ''}"
+                           th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__${#authentication.getName()}__}"
+                           th:text="#{nav.profile}"/>
+                    </li>
+                    <li class="nav-item ml-3">
                         <form th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_LOGOUT}__}"
                               th:method="post">
                             <button class="logout-button nav-link"

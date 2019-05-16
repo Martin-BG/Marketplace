@@ -17,10 +17,13 @@
                 th:with="canChangeRoles=*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).ROOT} and ${#authentication.getName()} != *{username}">
             <tr>
                 <td class="font-weight-bold" scope="row" th:text="${iStat.index + 1}"/>
-                <td th:text="*{username}"/>
+                <td>
+                    <a th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__*{username}__}"
+                       th:text="*{username}"/>
+                </td>
                 <td th:text="*{authority.name()}"/>
                 <th:block th:unless="${canChangeRoles}">
-                    <td/>
+                    <td class="text-danger" scope="row" th:text="#{users.table-actions.forbidden}"/>
                 </th:block>
                 <th:block th:if="${canChangeRoles}">
                     <td>
