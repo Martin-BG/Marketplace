@@ -1,5 +1,6 @@
 package bg.softuni.marketplace.aspects.validate;
 
+import bg.softuni.marketplace.aspects.Helper;
 import lombok.extern.java.Log;
 import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -34,7 +35,7 @@ import java.util.stream.IntStream;
  * on methods annotated with {@link Validate}.<br>
  * Optionally can validate method parameters and throw {@link ConstraintViolationException} on errors.<br>
  * Optionally can catch specified exception type (and its sub-types) thrown by
- * method invocation and add message to provided {@link Errors} object.<br>
+ * method invocation and add message with arguments to a provided {@link Errors} object.<br>
  * Optionally can skip method invocation if validation fails.<br>
  * In case of exception or validation errors it returns {@link Optional#empty} if this is the
  * return type of the method or null in all other cases.<br><br>
@@ -102,6 +103,46 @@ public class ValidateMethodArgumentsAspect {
         executableValidator = javaxValidator.forExecutables();
     }
 
+    private static String constraintViolationsToString(Set<? extends ConstraintViolation<?>> constraintViolations) {
+        return constraintViolations.stream()
+                .map(cv -> (cv == null) ? "null" : (cv.getPropertyPath() + ": " + cv.getMessage()))
+                .collect(Collectors.joining("\n\t* "));
+    }
+
+    private void validateParameters(ProceedingJoinPoint pjp, MethodSignature methodSignature, Validate annotation) {
+        Object object = pjp.getThis();
+        Method method = methodSignature.getMethod();
+        Object[] parameterValues = pjp.getArgs();
+        Class<?>[] groups = annotation.groups();
+
+        Set<ConstraintViolation<Object>> constraintViolations = executableValidator.validateParameters(
+                object, method, parameterValues, groups);
+
+        if (!constraintViolations.isEmpty()) {
+            String message = String.format(
+                    "%d constraint violation(s) detected on [%s] method parameter(s) validation:%n\t* %s",
+                    constraintViolations.size(),
+                    pjp.getSignature(),
+                    constraintViolationsToString(constraintViolations));
+            throw new ConstraintViolationException(message, constraintViolations);
+        }
+    }
+
+    private static List<MethodParameter> getMethodParameters(MethodSignature methodSignature) {
+        return IntStream
+                .range(0, methodSignature.getParameterNames().length)
+                .mapToObj(i -> new MethodParameter(methodSignature.getMethod(), i))
+                .collect(Collectors.toList());
+    }
+
+    private static Object getDefaultReturnObject(MethodSignature methodSignature) {
+        if (methodSignature.getReturnType().equals(Optional.class)) {
+            return Optional.empty();
+        }
+
+        return null;
+    }
+
     @Around("@annotation(Validate)")
     public Object validate(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
@@ -150,52 +191,17 @@ public class ValidateMethodArgumentsAspect {
             if (annotation.catchException() && annotation.exceptionType().isAssignableFrom(throwable.getClass())) {
                 log.log(Level.WARNING, "@Validate Aspect cough an Exception", throwable);
 
-                errors.reject(annotation.message());
+                Object[] arguments = Helper.getArguments(
+                        pjp.getArgs(),
+                        methodSignature.getParameterNames(),
+                        annotation.args());
+
+                errors.reject(annotation.message(), arguments, null);
 
                 return getDefaultReturnObject(methodSignature);
             }
 
             throw throwable;
         }
-    }
-
-    private void validateParameters(ProceedingJoinPoint pjp, MethodSignature methodSignature, Validate annotation) {
-        Object object = pjp.getThis();
-        Method method = methodSignature.getMethod();
-        Object[] parameterValues = pjp.getArgs();
-        Class<?>[] groups = annotation.groups();
-
-        Set<ConstraintViolation<Object>> constraintViolations = executableValidator.validateParameters(
-                object, method, parameterValues, groups);
-
-        if (!constraintViolations.isEmpty()) {
-            String message = String.format(
-                    "%d constraint violation(s) detected on [%s] method parameter(s) validation:%n\t* %s",
-                    constraintViolations.size(),
-                    pjp.getSignature(),
-                    constraintViolationsToString(constraintViolations));
-            throw new ConstraintViolationException(message, constraintViolations);
-        }
-    }
-
-    private static String constraintViolationsToString(Set<? extends ConstraintViolation<?>> constraintViolations) {
-        return constraintViolations.stream()
-                .map(cv -> (cv == null) ? "null" : (cv.getPropertyPath() + ": " + cv.getMessage()))
-                .collect(Collectors.joining("\n\t* "));
-    }
-
-    private static List<MethodParameter> getMethodParameters(MethodSignature methodSignature) {
-        return IntStream
-                .range(0, methodSignature.getParameterNames().length)
-                .mapToObj(i -> new MethodParameter(methodSignature.getMethod(), i))
-                .collect(Collectors.toList());
-    }
-
-    private static Object getDefaultReturnObject(MethodSignature methodSignature) {
-        if (methodSignature.getReturnType().equals(Optional.class)) {
-            return Optional.empty();
-        }
-
-        return null;
     }
 }

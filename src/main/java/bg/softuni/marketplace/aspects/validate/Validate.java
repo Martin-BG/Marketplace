@@ -14,6 +14,7 @@ import java.util.Optional;
  * @see #catchException()
  * @see #exceptionType()
  * @see #message()
+ * @see #args()
  * @see #groups()
  */
 
@@ -71,6 +72,16 @@ public @interface Validate {
      * @see #catchException()
      */
     String message() default "validate.exception.default-message";
+
+    /**
+     * Message arguments - values defined using Spring Expression Language
+     * <p>
+     * args = {"#user.username", "#user.email"}
+     *
+     * @see <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">
+     * Spring Expression Language (SpEL) Documentation</a>
+     */
+    String[] args() default {};
 
     /**
      * Validation groups. Failed validation in one group prevents validation of groups after it.
