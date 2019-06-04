@@ -6,6 +6,7 @@ import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserAuthority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserEncryptedPassword;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.util.Collection;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(
         name = "users",
@@ -43,16 +45,6 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
     private Authority authority;
 
     private boolean active;
-
-    public User(String username,
-                String password,
-                Authority authority,
-                boolean isActive) {
-        this.username = username;
-        this.password = password;
-        this.authority = authority;
-        active = isActive;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
