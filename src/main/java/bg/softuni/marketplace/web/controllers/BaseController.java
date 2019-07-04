@@ -6,6 +6,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import java.beans.PropertyEditorSupport;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static bg.softuni.marketplace.web.common.ViewActionPrefix.FORWARD;
@@ -18,11 +20,11 @@ public class BaseController {
     }
 
     protected static String redirect(String url) {
-        return REDIRECT + url;
+        return REDIRECT + URLEncoder.encode(url, StandardCharsets.UTF_8);
     }
 
     protected static String forward(String url) {
-        return FORWARD + url;
+        return FORWARD + URLEncoder.encode(url, StandardCharsets.UTF_8);
     }
 
     /**
@@ -64,7 +66,7 @@ public class BaseController {
         PropertyEditorSupport noTrimPropertyEditor = new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) {
-                super.setValue(text);
+                setValue(text);
             }
         };
 
