@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "app.server.timezone",
+      "type": "java.lang.String",
+      "description": "The Default time zone used by the application."
+    },
+    {
+      "name": "app.date.format",
+      "type": "java.lang.String",
+      "description": "Date format used by application."
+    }
+  ]
+}
