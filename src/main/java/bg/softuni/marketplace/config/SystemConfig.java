@@ -9,14 +9,14 @@ import java.util.TimeZone;
 @Configuration
 public class SystemConfig {
 
-    @Value("${app.server.timezone}")
-    private String systemTimeZone;
+    @Value("${app.time-zone}")
+    private String timeZone = "UTC";
 
     /**
      * Set system {@link TimeZone} to match setting used for database connection
      */
     @PostConstruct
     void systemConfig() {
-        TimeZone.setDefault(TimeZone.getTimeZone(systemTimeZone));
+        TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
 }
