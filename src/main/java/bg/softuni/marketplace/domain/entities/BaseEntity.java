@@ -2,6 +2,8 @@ package bg.softuni.marketplace.domain.entities;
 
 import bg.softuni.marketplace.domain.api.Identifiable;
 
+import java.io.Serializable;
+
 /**
  * Base Entity class
  * Defines equals() and hashCode() methods according to best practices by Vlad Mihalcea
@@ -9,7 +11,7 @@ import bg.softuni.marketplace.domain.api.Identifiable;
  * @see <a href="https://vladmihalcea.com/the-best-way-to-implement-equals-hashcode-and-tostring-with-jpa-and-hibernate/">
  * The best way to implement equals, hashCode, and toString with JPA and Hibernate</a>
  */
-abstract class BaseEntity<I> implements Identifiable<I> {
+abstract class BaseEntity<I> implements Identifiable<I>, Serializable {
 
     @Override
     public int hashCode() {
