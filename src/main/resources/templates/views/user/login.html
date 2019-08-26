@@ -32,6 +32,10 @@
             <div class="app-color-info" th:text="#{user.login-form.session-expired}"/>
         </th:block>
 
+        <th:block th:if="${param.invalid}">
+            <div class="app-color-error" th:text="#{user.login-form.invalid-session}"/>
+        </th:block>
+
         <th:block th:if="${param.logout}">
             <div class="app-color-good" th:text="#{user.login-form.logout}"/>
         </th:block>

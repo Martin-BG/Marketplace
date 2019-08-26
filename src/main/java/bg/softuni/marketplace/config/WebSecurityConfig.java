@@ -66,7 +66,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(accessDeniedHandler)
                 .and()
             .sessionManagement()
-                .invalidSessionUrl(WebConfig.URL_USER_LOGIN + "?expired");
+                .maximumSessions(1)
+                    .maxSessionsPreventsLogin(false)
+                    .expiredUrl(WebConfig.URL_USER_LOGIN + "?expired")
+                    .and()
+                .sessionFixation()
+                    .changeSessionId()
+                .invalidSessionUrl(WebConfig.URL_USER_LOGIN + "?invalid");
         // @formatter:on
     }
 }
