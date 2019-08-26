@@ -18,7 +18,7 @@
             <tr>
                 <td class="font-weight-bold" scope="row" th:text="${iStat.index + 1}"/>
                 <td>
-                    <a th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__*{username}__}"
+                    <a th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__*{id}__}"
                        th:text="*{username}"/>
                 </td>
                 <td th:text="*{authority.name()}"/>

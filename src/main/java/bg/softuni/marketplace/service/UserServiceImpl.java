@@ -12,6 +12,7 @@ import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.groups.AllGroups;
 import bg.softuni.marketplace.repository.ProfileRepository;
 import bg.softuni.marketplace.repository.UserRepository;
+import bg.softuni.marketplace.service.exception.IdNotFoundException;
 import bg.softuni.marketplace.service.helpers.Mapper;
 import bg.softuni.marketplace.service.helpers.UserServiceHelper;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Log
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
     private static final String ALL_USERS_CACHE = "allUsersCache";
 
     private static final String USERNAME_NOT_FOUND = "Username not found: ";
+    private static final String ID_NOT_FOUND = "Id not found: ";
 
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
@@ -142,11 +145,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileViewModel getProfile(@NotNull String username) {
-        return userRepository
-                .findUserByUsername(username)
-                .flatMap(user -> profileRepository.findById(user.getId()))
-                .map(profile -> mapper.map(profile, ProfileViewModel.class))
-                .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND + username));
+    public ProfileViewModel getUserProfile(@NotNull UUID id) {
+        return profileRepository
+                .findById(id)
+                .map(profile -> {
+                    ProfileViewModel profileViewModel = mapper.map(profile, ProfileViewModel.class);
+                    profileViewModel.setUsername(profile.getUser().getUsername());
+                    return profileViewModel;
+                })
+                .orElseThrow(() -> {
+                    throw new IdNotFoundException(ID_NOT_FOUND + id);
+                });
     }
 }

@@ -5,6 +5,7 @@ import bg.softuni.marketplace.domain.entities.Profile;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -19,4 +20,7 @@ public final class ProfileViewModel implements Viewable<Profile>, Serializable {
     private UUID id;
 
     private String email;
+
+    @Setter
+    private String username;
 }

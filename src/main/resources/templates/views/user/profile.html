@@ -4,7 +4,7 @@
           th:method="patch"
           th:object="${__${T(bg.softuni.marketplace.web.controllers.user.ProfileUserController).USER_PROFILE_ATTRIBUTE_NAME}__}">
 
-        <h1 class="app-form-header" th:text="#{user.profile-form.title(${username})}"/>
+        <h1 class="app-form-header" th:text="#{user.profile-form.title(*{username})}"/>
 
         <hr class="app-hr"/>
 

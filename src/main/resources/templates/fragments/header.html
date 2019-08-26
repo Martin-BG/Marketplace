@@ -64,7 +64,7 @@
                     <li class="nav-item ml-3">
                         <a class="nav-link"
                            th:classappend="${#request.getServletPath() == T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE ? 'active' : ''}"
-                           th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__${#authentication.getName()}__}"
+                           th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__${#authentication.principal.id}__}"
                            th:text="#{nav.profile}"/>
                     </li>
                     <li class="nav-item ml-3">
