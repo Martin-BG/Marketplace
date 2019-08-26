@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                     .permitAll()
-                .antMatchers(WebConfig.URL_INDEX)
+                .antMatchers(WebConfig.URL_INDEX, WebConfig.URL_USER_LOGIN)
                     .permitAll()
                 .antMatchers(WebConfig.URL_USER_REGISTER)
                     .anonymous()
