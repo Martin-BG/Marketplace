@@ -32,6 +32,8 @@ import java.util.UUID;
 @MappedSuperclass
 abstract class BaseUuidEntity extends BaseEntity<UUID> {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")

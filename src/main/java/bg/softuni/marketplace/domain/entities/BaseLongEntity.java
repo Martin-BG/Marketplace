@@ -19,6 +19,8 @@ import javax.persistence.*;
 @MappedSuperclass
 abstract class BaseLongEntity extends BaseEntity<Long> {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false, insertable = false, updatable = false)
