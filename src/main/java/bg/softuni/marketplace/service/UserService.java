@@ -11,6 +11,7 @@ import org.springframework.validation.Errors;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService extends UserDetailsService {
@@ -33,4 +34,6 @@ public interface UserService extends UserDetailsService {
                     @NotNull Errors errors);
 
     ProfileViewModel getUserProfile(@NotNull UUID id);
+
+    Optional<String> getUsernameById(@NotNull UUID id);
 }

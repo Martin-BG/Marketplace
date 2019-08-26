@@ -7,6 +7,7 @@ import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
+import bg.softuni.marketplace.domain.models.projection.user.UserUsernameProjection;
 import bg.softuni.marketplace.domain.models.view.profile.ProfileViewModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.groups.AllGroups;
@@ -31,6 +32,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -156,5 +158,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> {
                     throw new IdNotFoundException(ID_NOT_FOUND + id);
                 });
+    }
+
+    @Override
+    public Optional<String> getUsernameById(@NotNull UUID id) {
+        return userRepository
+                .findProjectedById(id, UserUsernameProjection.class)
+                .map(UserUsernameProjection::getUsername);
     }
 }
