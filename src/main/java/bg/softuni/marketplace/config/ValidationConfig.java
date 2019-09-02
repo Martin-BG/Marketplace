@@ -20,7 +20,7 @@ public class ValidationConfig {
      * {@link org.springframework.validation.annotation.Validated} annotation should be present on the class for validation to work.
      * <p>
      * Could be useful in repository methods to prevent request with invalid parameters
-     * (ex. empty or not properly username in findUserByUsername)
+     * (ex. empty or not properly formatted username in findUserByUsername)
      * <p><a href="https://www.baeldung.com/javax-validation-method-constraints">More information</a></p>
      * <hr>
      * <pre>
