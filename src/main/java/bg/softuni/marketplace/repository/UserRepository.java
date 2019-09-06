@@ -81,7 +81,7 @@ public interface UserRepository extends GenericRepository<User, UUID> {
     int disableUser(@ValidUserUsername String username);
 
     /**
-     * User exists with id and not authority.
+     * User exists by id and not authority.
      *
      * @param id        the id
      * @param authority the authority
@@ -89,4 +89,16 @@ public interface UserRepository extends GenericRepository<User, UUID> {
      * false if user id not found or user {@link Authority} equals {@code authority}
      */
     boolean existsByIdAndAuthorityNot(@ValidId UUID id, @NotNull Authority authority);
+
+    /**
+     * User exists by id, active and not authority.
+     *
+     * @param id        the id
+     * @param active    true for active user, false for inactive user
+     * @param authority the authority
+     * @return true if user with {@code id}, {@code active} and not {@code authority} exists,
+     * false if user id not found, {@code active} not equals user status
+     * or user {@link Authority} equals {@code authority}
+     */
+    boolean existsByIdAndActiveAndAuthorityNot(UUID id, boolean active, Authority authority);
 }

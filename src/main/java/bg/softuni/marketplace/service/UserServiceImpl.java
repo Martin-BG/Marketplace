@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
                         user -> {
                             serviceHelper.updateRoleForUser(user, bindingModel.getAuthority());
                             sessionService.logoutUser(user.getUsername());
-                            bindingModel.setUsername(user.getUsername()); // For use by UI alerts
+                            bindingModel.setUsername(user.getUsername());
                         },
                         () -> {
                             throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
@@ -140,14 +140,16 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                            @NotNull Errors errors) {
         userRepository
-                .findUserByUsername(bindingModel.getUsername())
+                .findById(bindingModel.getId())
                 .ifPresentOrElse(
                         user -> {
                             profileRepository.deleteById(user.getId());
                             userRepository.delete(user);
+                            sessionService.logoutUser(user.getUsername());
+                            bindingModel.setUsername(user.getUsername());
                         },
                         () -> {
-                            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
+                            throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
                         });
     }
 

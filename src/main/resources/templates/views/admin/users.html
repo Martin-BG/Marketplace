@@ -84,10 +84,10 @@
                         <form class="d-inline"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
                               th:method="delete">
-                            <input hidden name="username" th:value="*{username}">
-                            <input hidden name="authority" th:value="*{authority}">
+                            <input hidden name="id" th:value="*{id}">
                             <button class="btn btn-danger btn-sm border-dark table-button-large"
                                     th:text="#{users.table-button.delete}"
+                                    th:disabled="*{active}"
                                     type="submit"/>
                         </form>
                     </td>

@@ -53,8 +53,7 @@ public class UsersController extends BaseController {
     }
 
     @PatchMapping(params = {USERS_PARAM_UPDATE})
-    @PreAuthorize("#user.id ne #bindingModel.id " +
-            "and #bindingModel.authority ne T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
+    @PreAuthorize("#user.id ne #bindingModel.id")
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
     @OnSuccess(message = "users.update-role.success", args = {"#bindingModel.username", "#bindingModel.authority"})
     public String updateRole(@ModelAttribute UserRoleBindingModel bindingModel,
@@ -89,14 +88,13 @@ public class UsersController extends BaseController {
     }
 
     @DeleteMapping
-    @PreAuthorize("principal.username ne #bindingModel.username " +
-            "and #bindingModel.authority ne T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
+    @PreAuthorize("#user.id ne #bindingModel.id")
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
     @OnSuccess(message = "users.delete-user.success", args = "#bindingModel.username")
     public String deleteUser(@ModelAttribute UserDeleteBindingModel bindingModel,
+                             @AuthenticationPrincipal User user,
                              Errors errors) {
         userService.deleteUser(bindingModel, errors);
-        sessionService.logoutUser(bindingModel.getUsername());
 
         return redirect(URL_ADMIN_USERS);
     }
