@@ -31,7 +31,7 @@
                               th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).USER}"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_UPDATE}__)}"
                               th:method="patch">
-                            <input hidden name="username" th:value="*{username}">
+                            <input hidden name="id" th:value="*{id}">
                             <input hidden name="authority"
                                    th:value="${T(bg.softuni.marketplace.domain.enums.Authority).USER}">
                             <button class="btn btn-light btn-sm border-dark table-button-large"
@@ -43,7 +43,7 @@
                               th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).TRADER}"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_UPDATE}__)}"
                               th:method="patch">
-                            <input hidden name="username" th:value="*{username}">
+                            <input hidden name="id" th:value="*{id}">
                             <input hidden name="authority"
                                    th:value="${T(bg.softuni.marketplace.domain.enums.Authority).TRADER}">
                             <button class="btn btn-light btn-sm border-dark table-button-large"
@@ -55,7 +55,7 @@
                               th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).ADMIN}"
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_UPDATE}__)}"
                               th:method="patch">
-                            <input hidden name="username" th:value="*{username}">
+                            <input hidden name="id" th:value="*{id}">
                             <input hidden name="authority"
                                    th:value="${T(bg.softuni.marketplace.domain.enums.Authority).ADMIN}">
                             <button class="btn btn-light btn-sm border-dark table-button-large"

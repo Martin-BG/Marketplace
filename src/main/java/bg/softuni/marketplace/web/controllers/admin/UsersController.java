@@ -2,6 +2,7 @@ package bg.softuni.marketplace.web.controllers.admin;
 
 import bg.softuni.marketplace.aspects.onerror.OnError;
 import bg.softuni.marketplace.aspects.onsuccess.OnSuccess;
+import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
@@ -13,6 +14,7 @@ import bg.softuni.marketplace.web.annotations.Title;
 import bg.softuni.marketplace.web.controllers.BaseController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -51,14 +53,14 @@ public class UsersController extends BaseController {
     }
 
     @PatchMapping(params = {USERS_PARAM_UPDATE})
-    @PreAuthorize("principal.username ne #bindingModel.username " +
+    @PreAuthorize("#user.id ne #bindingModel.id " +
             "and #bindingModel.authority ne T(bg.softuni.marketplace.domain.enums.Authority).ROOT")
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
     @OnSuccess(message = "users.update-role.success", args = {"#bindingModel.username", "#bindingModel.authority"})
     public String updateRole(@ModelAttribute UserRoleBindingModel bindingModel,
+                             @AuthenticationPrincipal User user,
                              Errors errors) {
         userService.updateRole(bindingModel, errors);
-        sessionService.logoutUser(bindingModel.getUsername());
 
         return redirect(URL_ADMIN_USERS);
     }

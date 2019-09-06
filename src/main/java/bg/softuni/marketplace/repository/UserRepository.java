@@ -2,6 +2,7 @@ package bg.softuni.marketplace.repository;
 
 import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
+import bg.softuni.marketplace.domain.validation.annotations.composite.common.ValidId;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.QueryHint;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -77,4 +79,14 @@ public interface UserRepository extends GenericRepository<User, UUID> {
             "WHERE u.username = :username",
             nativeQuery = true)
     int disableUser(@ValidUserUsername String username);
+
+    /**
+     * User exists with id and not authority.
+     *
+     * @param id        the id
+     * @param authority the authority
+     * @return true if user with {@code id} and not {@code authority} exists,
+     * false if user id not found or user {@link Authority} equals {@code authority}
+     */
+    boolean existsByIdAndAuthorityNot(@ValidId UUID id, @NotNull Authority authority);
 }

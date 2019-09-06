@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final UserServiceHelper serviceHelper;
+    private final SessionService sessionService;
     private final Mapper mapper;
 
     @Override
@@ -85,11 +86,15 @@ public class UserServiceImpl implements UserService {
     public void updateRole(@NotNull UserRoleBindingModel bindingModel,
                            @NotNull Errors errors) {
         userRepository
-                .findUserByUsername(bindingModel.getUsername())
+                .findById(bindingModel.getId())
                 .ifPresentOrElse(
-                        user -> serviceHelper.updateRoleForUser(user, bindingModel.getAuthority()),
+                        user -> {
+                            serviceHelper.updateRoleForUser(user, bindingModel.getAuthority());
+                            sessionService.logoutUser(user.getUsername());
+                            bindingModel.setUsername(user.getUsername()); // For use by UI alerts
+                        },
                         () -> {
-                            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
+                            throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
                         });
     }
 
