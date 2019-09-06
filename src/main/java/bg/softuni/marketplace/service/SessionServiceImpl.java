@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotNull;
-import java.util.UUID;
-
 @RequiredArgsConstructor
 @Service
 @Validated
@@ -18,7 +15,6 @@ import java.util.UUID;
 public class SessionServiceImpl implements SessionService {
 
     private final FindByIndexNameSessionRepository<? extends Session> sessions;
-    private final UserService userService;
 
     @Override
     public void logoutUser(@ValidUserUsername String username) {
@@ -26,12 +22,5 @@ public class SessionServiceImpl implements SessionService {
                 .findByPrincipalName(username)
                 .keySet()
                 .forEach(sessions::deleteById);
-    }
-
-    @Override
-    public void logoutUser(@NotNull UUID id) {
-        userService
-                .getUsernameById(id)
-                .ifPresent(this::logoutUser);
     }
 }
