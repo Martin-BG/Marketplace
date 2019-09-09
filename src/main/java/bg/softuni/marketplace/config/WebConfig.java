@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerTypePredicate;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -31,6 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final HandlerInterceptor thymeleafLayoutInterceptor;
     private final HandlerInterceptor titleInterceptor;
     private final HandlerInterceptor alertInterceptor;
+    private final HandlerMethodArgumentResolver methodArgumentResolver;
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -43,5 +47,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(thymeleafLayoutInterceptor);
         registry.addInterceptor(titleInterceptor);
         registry.addInterceptor(alertInterceptor);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(methodArgumentResolver);
     }
 }
