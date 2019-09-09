@@ -6,16 +6,12 @@ import bg.softuni.marketplace.domain.validation.annotations.composite.common.Val
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.QueryHint;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 import java.util.UUID;
-
-import static org.hibernate.jpa.QueryHints.HINT_READONLY;
 
 @Validated
 @Repository
@@ -31,28 +27,12 @@ public interface UserRepository extends GenericRepository<User, UUID> {
 
     /**
      * Check if {@link User} with specified username exists.
-     * Uses a custom {@link Query @Query}.
      *
      * @param username {@link String}
      * @return {@code true} - {@link User} with username found,
      * {@code false} - no {@link User} with username found.
      */
-    @Query("SELECT (COUNT(u) > 0) FROM User u WHERE u.username = :username")
-    @QueryHints(@QueryHint(name = HINT_READONLY, value = "true"))
-    boolean hasUsername(@ValidUserUsername String username);
-
-    /**
-     * Check if username exists and has {@link Authority#ROOT} authority.
-     * Uses a custom {@link Query @Query}.
-     *
-     * @param username {@link String}
-     * @return {@code true} - username with {@link Authority#ROOT ROOT} authority found,
-     * {@code false} - either username not found or not {@link Authority#ROOT ROOT}
-     */
-    @Query("SELECT (COUNT(u) > 0) FROM User u " +
-            "WHERE u.username = :username AND u.authority = bg.softuni.marketplace.domain.enums.Authority.ROOT")
-    @QueryHints(@QueryHint(name = HINT_READONLY, value = "true"))
-    boolean isRoot(@ValidUserUsername String username);
+    boolean existsByUsername(@ValidUserUsername String username);
 
     /**
      * Activate {@link User} by {@code username}

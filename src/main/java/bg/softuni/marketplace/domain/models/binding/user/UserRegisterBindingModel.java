@@ -28,7 +28,7 @@ public class UserRegisterBindingModel implements Bindable<User>, Serializable {
 
     @ValidUserUsername
     @SpELAssert(message = "{user.username.used}", groups = GroupTwo.class,
-            value = "not @userRepository.hasUsername(#this)")
+            value = "not @userRepository.existsByUsername(#this)")
     private String username;
 
     @ValidUserPassword
@@ -39,6 +39,6 @@ public class UserRegisterBindingModel implements Bindable<User>, Serializable {
 
     @ValidUserEmail
     @SpELAssert(message = "{user.email.used}", groups = GroupTwo.class,
-            value = "not @profileRepository.hasEmail(#this)")
+            value = "not @profileRepository.existsByEmail(#this)")
     private String email;
 }
