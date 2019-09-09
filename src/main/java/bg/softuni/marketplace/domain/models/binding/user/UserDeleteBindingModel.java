@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"username"})
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 public class UserDeleteBindingModel implements Bindable<User>, Serializable {
 
