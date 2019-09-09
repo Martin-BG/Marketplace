@@ -5,7 +5,6 @@ import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.validation.annotations.composite.common.ValidId;
 import bg.softuni.marketplace.domain.validation.annotations.spel.SpELAssert;
 import bg.softuni.marketplace.domain.validation.groups.GroupOne;
-import bg.softuni.marketplace.service.UserServiceImpl;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,11 +25,6 @@ public class UserDeleteBindingModel implements Bindable<User>, Serializable {
 
     private static final String ID_VALIDATION =
             "@userRepository.existsByIdAndActiveAndAuthorityNot(#this, false, " + ROOT_EXPR + ")";
-
-    /**
-     * Populated by {@link UserServiceImpl#deleteUser}, for use by UI alerts
-     */
-    private String username;
 
     @ValidId
     @SpELAssert(message = "{user.delete.invalid-user}", groups = GroupOne.class, value = ID_VALIDATION)

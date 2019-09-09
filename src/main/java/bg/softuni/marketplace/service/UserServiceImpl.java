@@ -82,20 +82,19 @@ public class UserServiceImpl implements UserService {
     @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
-    public void updateRole(@NotNull UserRoleBindingModel bindingModel,
-                           @NotNull Errors errors) {
-        userRepository
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#result")})
+    public String updateRole(@NotNull UserRoleBindingModel bindingModel,
+                             @NotNull Errors errors) {
+        return userRepository
                 .findById(bindingModel.getId())
-                .ifPresentOrElse(
-                        user -> {
-                            serviceHelper.updateRoleForUser(user, bindingModel.getAuthority());
-                            sessionService.logoutUser(user.getUsername());
-                            bindingModel.setUsername(user.getUsername());
-                        },
-                        () -> {
-                            throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
-                        });
+                .map(user -> {
+                    serviceHelper.updateRoleForUser(user, bindingModel.getAuthority());
+                    sessionService.logoutUser(user.getUsername());
+                    return user.getUsername();
+                })
+                .orElseThrow(() -> {
+                    throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
+                });
     }
 
     @Transactional(readOnly = true)
@@ -149,21 +148,20 @@ public class UserServiceImpl implements UserService {
     @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
-    public void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
-                           @NotNull Errors errors) {
-        userRepository
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#result")})
+    public String deleteUser(@NotNull UserDeleteBindingModel bindingModel,
+                             @NotNull Errors errors) {
+        return userRepository
                 .findById(bindingModel.getId())
-                .ifPresentOrElse(
-                        user -> {
-                            profileRepository.deleteById(user.getId());
-                            userRepository.delete(user);
-                            sessionService.logoutUser(user.getUsername());
-                            bindingModel.setUsername(user.getUsername());
-                        },
-                        () -> {
-                            throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
-                        });
+                .map(user -> {
+                    profileRepository.deleteById(user.getId());
+                    userRepository.delete(user);
+                    sessionService.logoutUser(user.getUsername());
+                    return user.getUsername();
+                })
+                .orElseThrow(() -> {
+                    throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
+                });
     }
 
     @Override

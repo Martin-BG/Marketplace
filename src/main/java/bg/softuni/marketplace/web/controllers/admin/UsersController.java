@@ -54,11 +54,13 @@ public class UsersController extends BaseController {
     @PatchMapping(params = {USERS_PARAM_UPDATE})
     @PreAuthorize("#user.id ne #bindingModel.id")
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
-    @OnSuccess(message = "users.update-role.success", args = {"#bindingModel.username", "#bindingModel.authority"})
+    @OnSuccess(message = "users.update-role.success", args = {"#username", "#bindingModel.authority"})
     public String updateRole(@ModelAttribute UserRoleBindingModel bindingModel,
+                             Errors errors,
                              @AuthenticationPrincipal User user,
-                             Errors errors) {
-        userService.updateRole(bindingModel, errors);
+                             StringParameter username) {
+        String updatedUserUsername = userService.updateRole(bindingModel, errors);
+        username.setValue(updatedUserUsername);
 
         return redirect(URL_ADMIN_USERS);
     }
@@ -94,11 +96,13 @@ public class UsersController extends BaseController {
     @DeleteMapping
     @PreAuthorize("#user.id ne #bindingModel.id")
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
-    @OnSuccess(message = "users.delete-user.success", args = "#bindingModel.username")
+    @OnSuccess(message = "users.delete-user.success", args = "#username")
     public String deleteUser(@ModelAttribute UserDeleteBindingModel bindingModel,
+                             Errors errors,
                              @AuthenticationPrincipal User user,
-                             Errors errors) {
-        userService.deleteUser(bindingModel, errors);
+                             StringParameter username) {
+        String deletedUserUsername = userService.deleteUser(bindingModel, errors);
+        username.setValue(deletedUserUsername);
 
         return redirect(URL_ADMIN_USERS);
     }

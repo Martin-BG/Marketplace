@@ -19,8 +19,8 @@ public interface UserService extends UserDetailsService {
     void registerUser(@NotNull UserRegisterBindingModel bindingModel,
                       @NotNull Errors errors);
 
-    void updateRole(@NotNull UserRoleBindingModel bindingModel,
-                    @NotNull Errors errors);
+    String updateRole(@NotNull UserRoleBindingModel bindingModel,
+                      @NotNull Errors errors);
 
     List<UserViewModel> allUsers();
 
@@ -30,8 +30,8 @@ public interface UserService extends UserDetailsService {
     String disableUser(@NotNull UserStatusBindingModel bindingModel,
                        @NotNull Errors errors);
 
-    void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
-                    @NotNull Errors errors);
+    String deleteUser(@NotNull UserDeleteBindingModel bindingModel,
+                      @NotNull Errors errors);
 
     ProfileViewModel getUserProfile(@NotNull UUID id);
 
