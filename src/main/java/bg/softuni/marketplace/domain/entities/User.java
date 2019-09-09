@@ -44,6 +44,7 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
     @Column(nullable = false, length = ValidUserAuthority.MAX_LENGTH)
     private Authority authority;
 
+    @Setter
     private boolean active;
 
     @Override

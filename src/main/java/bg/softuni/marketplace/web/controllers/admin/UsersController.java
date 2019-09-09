@@ -7,11 +7,11 @@ import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
-import bg.softuni.marketplace.service.SessionService;
 import bg.softuni.marketplace.service.UserService;
 import bg.softuni.marketplace.web.annotations.Layout;
 import bg.softuni.marketplace.web.annotations.Title;
 import bg.softuni.marketplace.web.controllers.BaseController;
+import bg.softuni.marketplace.web.resolvers.parameters.StringParameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,7 +42,6 @@ public class UsersController extends BaseController {
     private static final String VIEW_USERS_ALL = "admin/users";
 
     private final UserService userService;
-    private final SessionService sessionService;
 
     @GetMapping
     public String viewUsers(Model model) {
@@ -65,24 +64,29 @@ public class UsersController extends BaseController {
     }
 
     @PatchMapping(params = {USERS_PARAM_ACTIVATE})
-    @PreAuthorize("principal.username ne #bindingModel.username")
+    @PreAuthorize("#user.id ne #bindingModel.id")
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
-    @OnSuccess(message = "users.activate.success", args = "#bindingModel.username")
+    @OnSuccess(message = "users.activate.success", args = "#username")
     public String activateUser(@ModelAttribute UserStatusBindingModel bindingModel,
-                               Errors errors) {
-        userService.activateUser(bindingModel, errors);
+                               Errors errors,
+                               @AuthenticationPrincipal User user,
+                               StringParameter username) {
+        String enabledUserUsername = userService.activateUser(bindingModel, errors);
+        username.setValue(enabledUserUsername);
 
         return redirect(URL_ADMIN_USERS);
     }
 
     @PatchMapping(params = {USERS_PARAM_DISABLE})
-    @PreAuthorize("principal.username ne #bindingModel.username")
+    @PreAuthorize("#user.id ne #bindingModel.id")
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
-    @OnSuccess(message = "users.disable.success", args = "#bindingModel.username")
+    @OnSuccess(message = "users.disable.success", args = "#username")
     public String disableUser(@ModelAttribute UserStatusBindingModel bindingModel,
-                              Errors errors) {
-        userService.disableUser(bindingModel, errors);
-        sessionService.logoutUser(bindingModel.getUsername());
+                              Errors errors,
+                              @AuthenticationPrincipal User user,
+                              StringParameter username) {
+        String disabledUserUsername = userService.disableUser(bindingModel, errors);
+        username.setValue(disabledUserUsername);
 
         return redirect(URL_ADMIN_USERS);
     }

@@ -67,7 +67,7 @@
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_ACTIVATE}__)}"
                               th:method="patch"
                               th:unless="*{active}">
-                            <input hidden name="username" th:value="*{username}">
+                            <input hidden name="id" th:value="*{id}">
                             <button class="btn btn-success btn-sm border-dark table-button-large"
                                     th:text="#{users.table-button.activate}"
                                     type="submit"/>
@@ -76,7 +76,7 @@
                               th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_DISABLE}__)}"
                               th:if="*{active}"
                               th:method="patch">
-                            <input hidden name="username" th:value="*{username}">
+                            <input hidden name="id" th:value="*{id}">
                             <button class="btn btn-warning btn-sm border-dark table-button-large"
                                     th:text="#{users.table-button.disable}"
                                     type="submit"/>

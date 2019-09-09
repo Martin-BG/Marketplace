@@ -24,11 +24,11 @@ public interface UserService extends UserDetailsService {
 
     List<UserViewModel> allUsers();
 
-    void activateUser(@NotNull UserStatusBindingModel bindingModel,
-                      @NotNull Errors errors);
+    String activateUser(@NotNull UserStatusBindingModel bindingModel,
+                        @NotNull Errors errors);
 
-    void disableUser(@NotNull UserStatusBindingModel bindingModel,
-                     @NotNull Errors errors);
+    String disableUser(@NotNull UserStatusBindingModel bindingModel,
+                       @NotNull Errors errors);
 
     void deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                     @NotNull Errors errors);

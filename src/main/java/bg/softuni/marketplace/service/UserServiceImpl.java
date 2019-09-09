@@ -112,24 +112,37 @@ public class UserServiceImpl implements UserService {
     @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
-    public void activateUser(@NotNull UserStatusBindingModel bindingModel,
-                             @NotNull Errors errors) {
-        if (userRepository.activateUser(bindingModel.getUsername()) == 0) {
-            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
-        }
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#result")})
+    public String activateUser(@NotNull UserStatusBindingModel bindingModel,
+                               @NotNull Errors errors) {
+        return userRepository
+                .findById(bindingModel.getId())
+                .map(user -> {
+                    user.setActive(true);
+                    return user.getUsername();
+                })
+                .orElseThrow(() -> {
+                    throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
+                });
     }
 
     @Override
     @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#bindingModel.username")})
-    public void disableUser(@NotNull UserStatusBindingModel bindingModel,
-                            @NotNull Errors errors) {
-        if (userRepository.disableUser(bindingModel.getUsername()) == 0) {
-            throw new UsernameNotFoundException(USERNAME_NOT_FOUND + bindingModel.getUsername());
-        }
+            @CacheEvict(cacheNames = USERS_CACHE, key = "#result")})
+    public String disableUser(@NotNull UserStatusBindingModel bindingModel,
+                              @NotNull Errors errors) {
+        return userRepository
+                .findById(bindingModel.getId())
+                .map(user -> {
+                    user.setActive(false);
+                    sessionService.logoutUser(user.getUsername());
+                    return user.getUsername();
+                })
+                .orElseThrow(() -> {
+                    throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
+                });
     }
 
     @Override
