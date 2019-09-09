@@ -1,8 +1,8 @@
 package bg.softuni.marketplace.web.controllers.user;
 
 import bg.softuni.marketplace.aspects.onerror.OnError;
-import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.models.view.profile.ProfileViewModel;
+import bg.softuni.marketplace.domain.models.view.user.UserDetailsModel;
 import bg.softuni.marketplace.service.UserService;
 import bg.softuni.marketplace.service.exception.IdNotFoundException;
 import bg.softuni.marketplace.web.annotations.Layout;
@@ -45,7 +45,7 @@ public class ProfileUserController extends BaseController {
             message = "user.profile.id-not-found", args = "#id",
             ignoreMissingErrors = true)
     public String viewProfile(@PathVariable @ModelAttribute UUID id,
-                              @AuthenticationPrincipal User user,
+                              @AuthenticationPrincipal UserDetailsModel user,
                               Model model) {
         ProfileViewModel profile = userService.getUserProfile(id);
         model.addAttribute(USER_PROFILE_ATTRIBUTE_NAME, profile);

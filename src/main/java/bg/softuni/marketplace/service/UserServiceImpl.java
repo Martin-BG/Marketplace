@@ -9,6 +9,7 @@ import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
 import bg.softuni.marketplace.domain.models.projection.user.UserUsernameProjection;
 import bg.softuni.marketplace.domain.models.view.profile.ProfileViewModel;
+import bg.softuni.marketplace.domain.models.view.user.UserDetailsModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.groups.AllGroups;
 import bg.softuni.marketplace.repository.ProfileRepository;
@@ -62,6 +63,7 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) {
         return userRepository
                 .findUserByUsername(username)
+                .map(UserDetailsModel::new) //Map entity to DTO
                 .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND + username));
     }
 

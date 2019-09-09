@@ -10,11 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Getter
 @NoArgsConstructor
@@ -26,7 +23,7 @@ import java.util.Collection;
                 @UniqueConstraint(name = "uk_users_username", columnNames = {"username"})
         }
 )
-public class User extends BaseUuidEntity implements UserDetails, Viewable<User> {
+public class User extends BaseUuidEntity implements Viewable<User> {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,29 +43,4 @@ public class User extends BaseUuidEntity implements UserDetails, Viewable<User> 
 
     @Setter
     private boolean active;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authority.getGrantedAuthorities();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return active;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return active;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return active;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return active;
-    }
 }

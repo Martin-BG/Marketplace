@@ -2,10 +2,10 @@ package bg.softuni.marketplace.web.controllers.admin;
 
 import bg.softuni.marketplace.aspects.onerror.OnError;
 import bg.softuni.marketplace.aspects.onsuccess.OnSuccess;
-import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserStatusBindingModel;
+import bg.softuni.marketplace.domain.models.view.user.UserDetailsModel;
 import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.service.UserService;
 import bg.softuni.marketplace.web.annotations.Layout;
@@ -57,7 +57,7 @@ public class UsersController extends BaseController {
     @OnSuccess(message = "users.update-role.success", args = {"#username", "#bindingModel.authority"})
     public String updateRole(@ModelAttribute UserRoleBindingModel bindingModel,
                              Errors errors,
-                             @AuthenticationPrincipal User user,
+                             @AuthenticationPrincipal UserDetailsModel user,
                              StringParameter username) {
         String updatedUserUsername = userService.updateRole(bindingModel, errors);
         username.setValue(updatedUserUsername);
@@ -71,7 +71,7 @@ public class UsersController extends BaseController {
     @OnSuccess(message = "users.activate.success", args = "#username")
     public String activateUser(@ModelAttribute UserStatusBindingModel bindingModel,
                                Errors errors,
-                               @AuthenticationPrincipal User user,
+                               @AuthenticationPrincipal UserDetailsModel user,
                                StringParameter username) {
         String enabledUserUsername = userService.activateUser(bindingModel, errors);
         username.setValue(enabledUserUsername);
@@ -85,7 +85,7 @@ public class UsersController extends BaseController {
     @OnSuccess(message = "users.disable.success", args = "#username")
     public String disableUser(@ModelAttribute UserStatusBindingModel bindingModel,
                               Errors errors,
-                              @AuthenticationPrincipal User user,
+                              @AuthenticationPrincipal UserDetailsModel user,
                               StringParameter username) {
         String disabledUserUsername = userService.disableUser(bindingModel, errors);
         username.setValue(disabledUserUsername);
@@ -99,7 +99,7 @@ public class UsersController extends BaseController {
     @OnSuccess(message = "users.delete-user.success", args = "#username")
     public String deleteUser(@ModelAttribute UserDeleteBindingModel bindingModel,
                              Errors errors,
-                             @AuthenticationPrincipal User user,
+                             @AuthenticationPrincipal UserDetailsModel user,
                              StringParameter username) {
         String deletedUserUsername = userService.deleteUser(bindingModel, errors);
         username.setValue(deletedUserUsername);
