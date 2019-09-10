@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private static final String USERS_CACHE = "usersCache";
+    private static final String USER_DETAILS_CACHE = "userDetailsCache";
     private static final String ALL_USERS_CACHE = "allUsersCache";
 
     private static final String USERNAME_NOT_FOUND = "Username not found: ";
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = USERS_CACHE, key = "#username")
+    @Cacheable(cacheNames = USER_DETAILS_CACHE, key = "#username")
     public UserDetails loadUserByUsername(String username) {
         return userRepository
                 .findUserByUsername(username)
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#result")})
+            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
     public String updateRole(@NotNull UserRoleBindingModel bindingModel,
                              @NotNull Errors errors) {
         return userRepository
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#result")})
+            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
     public String activateUser(@NotNull UserStatusBindingModel bindingModel,
                                @NotNull Errors errors) {
         return userRepository
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
     @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#result")})
+            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
     public String disableUser(@NotNull UserStatusBindingModel bindingModel,
                               @NotNull Errors errors) {
         return userRepository
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
     @Validate(returnOnError = true, groups = AllGroups.class)
     @Caching(evict = {
             @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USERS_CACHE, key = "#result")})
+            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
     public String deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                              @NotNull Errors errors) {
         return userRepository
