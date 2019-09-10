@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("interceptors/Helper.class")
+@DisplayName("web/interceptors/Helper.class")
 class HelperTest {
 
     @Nested
