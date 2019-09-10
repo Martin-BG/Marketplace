@@ -4,8 +4,6 @@ import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
 import bg.softuni.marketplace.domain.validation.annotations.composite.common.ValidId;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserUsername;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
@@ -33,32 +31,6 @@ public interface UserRepository extends GenericRepository<User, UUID> {
      * {@code false} - no {@link User} with username found.
      */
     boolean existsByUsername(@ValidUserUsername String username);
-
-    /**
-     * Activate {@link User} by {@code username}
-     *
-     * @param username the username
-     * @return number of activated {@link User} accounts; (0 if no user with {@code username} found)
-     */
-    @Modifying
-    @Query(value = "UPDATE marketplace_db.users AS u " +
-            "SET u.active=true " +
-            "WHERE u.username = :username",
-            nativeQuery = true)
-    int activateUser(@ValidUserUsername String username);
-
-    /**
-     * Disable {@link User} by {@code username}
-     *
-     * @param username the username
-     * @return number of disabled {@link User} accounts; (0 if no user with {@code username} found)
-     */
-    @Modifying
-    @Query(value = "UPDATE marketplace_db.users AS u " +
-            "SET u.active=false " +
-            "WHERE u.username = :username",
-            nativeQuery = true)
-    int disableUser(@ValidUserUsername String username);
 
     /**
      * User exists by id and not authority.
