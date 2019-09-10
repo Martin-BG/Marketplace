@@ -35,6 +35,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Log
@@ -87,15 +89,60 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
     public String updateRole(@NotNull UserRoleBindingModel bindingModel,
                              @NotNull Errors errors) {
-        return userRepository
-                .findById(bindingModel.getId())
-                .map(user -> {
+        return getUserByIdAndProcess(
+                bindingModel.getId(),
+                user -> {
                     serviceHelper.updateRoleForUser(user, bindingModel.getAuthority());
                     sessionService.logoutUser(user.getUsername());
                     return user.getUsername();
-                })
-                .orElseThrow(() -> {
-                    throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
+                });
+    }
+
+    @Override
+    @Validate(returnOnError = true, groups = AllGroups.class)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
+            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
+    public String activateUser(@NotNull UserStatusBindingModel bindingModel,
+                               @NotNull Errors errors) {
+        return getUserByIdAndProcess(
+                bindingModel.getId(),
+                user -> {
+                    user.setActive(true);
+                    return user.getUsername();
+                });
+    }
+
+    @Override
+    @Validate(returnOnError = true, groups = AllGroups.class)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
+            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
+    public String disableUser(@NotNull UserStatusBindingModel bindingModel,
+                              @NotNull Errors errors) {
+        return getUserByIdAndProcess(
+                bindingModel.getId(),
+                user -> {
+                    user.setActive(false);
+                    sessionService.logoutUser(user.getUsername());
+                    return user.getUsername();
+                });
+    }
+
+    @Override
+    @Validate(returnOnError = true, groups = AllGroups.class)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
+            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
+    public String deleteUser(@NotNull UserDeleteBindingModel bindingModel,
+                             @NotNull Errors errors) {
+        return getUserByIdAndProcess(
+                bindingModel.getId(),
+                user -> {
+                    profileRepository.deleteById(user.getId());
+                    userRepository.delete(user);
+                    sessionService.logoutUser(user.getUsername());
+                    return user.getUsername();
                 });
     }
 
@@ -110,60 +157,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Validate(returnOnError = true, groups = AllGroups.class)
-    @Caching(evict = {
-            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
-    public String activateUser(@NotNull UserStatusBindingModel bindingModel,
-                               @NotNull Errors errors) {
+    public Optional<String> getUsernameById(@NotNull UUID id) {
         return userRepository
-                .findById(bindingModel.getId())
-                .map(user -> {
-                    user.setActive(true);
-                    return user.getUsername();
-                })
-                .orElseThrow(() -> {
-                    throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
-                });
-    }
-
-    @Override
-    @Validate(returnOnError = true, groups = AllGroups.class)
-    @Caching(evict = {
-            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
-    public String disableUser(@NotNull UserStatusBindingModel bindingModel,
-                              @NotNull Errors errors) {
-        return userRepository
-                .findById(bindingModel.getId())
-                .map(user -> {
-                    user.setActive(false);
-                    sessionService.logoutUser(user.getUsername());
-                    return user.getUsername();
-                })
-                .orElseThrow(() -> {
-                    throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
-                });
-    }
-
-    @Override
-    @Validate(returnOnError = true, groups = AllGroups.class)
-    @Caching(evict = {
-            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
-            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
-    public String deleteUser(@NotNull UserDeleteBindingModel bindingModel,
-                             @NotNull Errors errors) {
-        return userRepository
-                .findById(bindingModel.getId())
-                .map(user -> {
-                    profileRepository.deleteById(user.getId());
-                    userRepository.delete(user);
-                    sessionService.logoutUser(user.getUsername());
-                    return user.getUsername();
-                })
-                .orElseThrow(() -> {
-                    throw new IdNotFoundException(ID_NOT_FOUND + bindingModel.getId());
-                });
+                .findProjectedById(id, UserUsernameProjection.class)
+                .map(UserUsernameProjection::getUsername);
     }
 
     @Override
@@ -175,15 +172,20 @@ public class UserServiceImpl implements UserService {
                     profileViewModel.setUsername(profile.getUser().getUsername());
                     return profileViewModel;
                 })
-                .orElseThrow(() -> {
-                    throw new IdNotFoundException(ID_NOT_FOUND + id);
-                });
+                .orElseThrow(idNotFoundException(id));
     }
 
-    @Override
-    public Optional<String> getUsernameById(@NotNull UUID id) {
+    private String getUserByIdAndProcess(@NotNull UUID id,
+                                         Function<? super User, String> function) {
         return userRepository
-                .findProjectedById(id, UserUsernameProjection.class)
-                .map(UserUsernameProjection::getUsername);
+                .findById(id)
+                .map(function)
+                .orElseThrow(idNotFoundException(id));
+    }
+
+    private static Supplier<RuntimeException> idNotFoundException(@NotNull UUID id) {
+        return () -> {
+            throw new IdNotFoundException(ID_NOT_FOUND + id);
+        };
     }
 }

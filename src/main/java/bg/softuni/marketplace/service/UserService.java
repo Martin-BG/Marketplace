@@ -22,8 +22,6 @@ public interface UserService extends UserDetailsService {
     String updateRole(@NotNull UserRoleBindingModel bindingModel,
                       @NotNull Errors errors);
 
-    List<UserViewModel> allUsers();
-
     String activateUser(@NotNull UserStatusBindingModel bindingModel,
                         @NotNull Errors errors);
 
@@ -33,7 +31,9 @@ public interface UserService extends UserDetailsService {
     String deleteUser(@NotNull UserDeleteBindingModel bindingModel,
                       @NotNull Errors errors);
 
-    ProfileViewModel getUserProfile(@NotNull UUID id);
+    List<UserViewModel> allUsers();
 
     Optional<String> getUsernameById(@NotNull UUID id);
+
+    ProfileViewModel getUserProfile(@NotNull UUID id);
 }
