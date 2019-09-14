@@ -11,6 +11,8 @@ import java.lang.annotation.*;
  * See {@link OnSuccessAspect} for usage.
  *
  * @see #message()
+ * @see #args()
+ * @see #type()
  */
 
 @Target({ElementType.METHOD, ElementType.TYPE})
