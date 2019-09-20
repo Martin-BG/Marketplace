@@ -22,11 +22,11 @@ public class UserDetailsModel implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
-    private String username;
-    private String password;
-    private Authority authority;
-    private boolean active;
+    private final UUID id;
+    private final String username;
+    private final String password;
+    private final Authority authority;
+    private final boolean active;
 
     public UserDetailsModel(User user) {
         id = user.getId();
