@@ -32,7 +32,7 @@ public class Profile extends BaseEntity<UUID> implements Viewable<Profile> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Mapped by {@link User#id}
+     * Mapped by {@link User#getId() User.id}
      * <p>
      * Use space optimized BINARY(16) instead of CHAR/VARCHAR(36) database format
      * <p>
