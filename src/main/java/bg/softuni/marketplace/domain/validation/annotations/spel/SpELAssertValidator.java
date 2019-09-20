@@ -106,7 +106,10 @@ public class SpELAssertValidator implements ConstraintValidator<SpELAssert, Obje
             for (Method helper : functions) {
                 context.registerFunction(helper.getName(), helper);
             }
-            LOG.trace(inspectFunctions(context));
+
+            if (LOG.isTraceEnabled()) {
+                LOG.trace(inspectFunctions(context));
+            }
         }
 
         return context;
