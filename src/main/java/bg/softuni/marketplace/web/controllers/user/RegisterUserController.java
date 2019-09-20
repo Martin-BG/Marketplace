@@ -32,14 +32,14 @@ public class RegisterUserController extends BaseController {
 
     private final UserService userService;
 
+    @ModelAttribute(USER_ATTRIBUTE_NAME)
+    private static UserRegisterBindingModel userRegisterBindingModel() {
+        return new UserRegisterBindingModel();
+    }
+
     @Override
     protected List<String> getUnmodifiedTextFieldsList() {
         return List.of("password", "confirmPassword");
-    }
-
-    @ModelAttribute(USER_ATTRIBUTE_NAME)
-    private UserRegisterBindingModel userRegisterBindingModel() {
-        return new UserRegisterBindingModel();
     }
 
     @GetMapping
