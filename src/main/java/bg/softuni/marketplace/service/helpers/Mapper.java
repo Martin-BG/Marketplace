@@ -36,7 +36,7 @@ public interface Mapper {
      */
     <E, V extends Viewable<? extends E>>
     Optional<V> map(@NotNull Optional<? extends E> entityOptional,
-                    @NotNull Class<V> viewModelClass);
+                    @NotNull Class<? extends V> viewModelClass);
 
     /**
      * Maps entities' {@link Collection} to {@link List} of elements of the specified view model class.
@@ -49,5 +49,5 @@ public interface Mapper {
      */
     <E, V extends Viewable<? extends E>>
     List<V> map(@NotNull Collection<? extends E> entities,
-                @NotNull Class<V> viewModelClass);
+                @NotNull Class<? extends V> viewModelClass);
 }

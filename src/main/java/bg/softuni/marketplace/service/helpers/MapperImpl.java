@@ -31,14 +31,14 @@ public class MapperImpl implements Mapper {
 
     public <E, V extends Viewable<? extends E>>
     Optional<V> map(@NotNull Optional<? extends E> entityOptional,
-                    @NotNull Class<V> viewModelClass) {
+                    @NotNull Class<? extends V> viewModelClass) {
         return entityOptional
                 .map(e -> map(e, viewModelClass));
     }
 
     public <E, V extends Viewable<? extends E>>
     List<V> map(@NotNull Collection<? extends E> entities,
-                @NotNull Class<V> viewModelClass) {
+                @NotNull Class<? extends V> viewModelClass) {
         return entities
                 .stream()
                 .map(e -> map(e, viewModelClass))
