@@ -8,6 +8,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import static bg.softuni.marketplace.domain.validation.annotations.composite.MessageCodes.CODE_USER_PASSWORD_EMPTY;
+import static bg.softuni.marketplace.domain.validation.annotations.composite.MessageCodes.CODE_USER_PASSWORD_LENGTH;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -15,8 +17,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Cannot be empty, length {@value MIN_LENGTH}-{@value MAX_LENGTH}
  */
 
-@NotEmpty(message = "{user.password.empty}")
-@Size(message = "{user.password.length}", min = ValidUserPassword.MIN_LENGTH, max = ValidUserPassword.MAX_LENGTH)
+@NotEmpty(message = "{" + CODE_USER_PASSWORD_EMPTY + "}")
+@Size(message = "{" + CODE_USER_PASSWORD_LENGTH + "}",
+        min = ValidUserPassword.MIN_LENGTH, max = ValidUserPassword.MAX_LENGTH)
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
