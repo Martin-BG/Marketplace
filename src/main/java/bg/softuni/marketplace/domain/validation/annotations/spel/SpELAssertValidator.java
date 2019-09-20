@@ -124,9 +124,9 @@ public class SpELAssertValidator implements ConstraintValidator<SpELAssert, Obje
         return evaluate(applyIfExpression, context);
     }
 
-    private boolean evaluate(Expression expression, EvaluationContext context) {
+    private static boolean evaluate(Expression expression, EvaluationContext context) {
         Boolean result = expression.getValue(context, Boolean.class);
-        return result == null ? false : result;
+        return result != null && result;
     }
 
     private String inspectFunctions(EvaluationContext context) {
