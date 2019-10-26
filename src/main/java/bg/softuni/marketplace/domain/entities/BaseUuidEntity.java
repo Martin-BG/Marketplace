@@ -13,7 +13,7 @@ import java.util.UUID;
  * <p>
  * Use space optimized BINARY(16) instead of CHAR/VARCHAR(36) database format
  * <p>
- * Use AccessType.PROPERTY for id as best practice to avoid LazyInitializationException
+ * Use {@link AccessType#PROPERTY} for id as best practice to avoid LazyInitializationException
  * <p>
  * Use private setter to prevent mutability
  * <ul>
