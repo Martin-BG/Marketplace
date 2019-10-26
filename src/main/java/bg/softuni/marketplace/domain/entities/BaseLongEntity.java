@@ -9,7 +9,7 @@ import javax.persistence.*;
 /**
  * {@link Long} implementation of {@link BaseEntity} abstract class
  * <p>
- * Use AccessType.PROPERTY for id as best practice to avoid LazyInitializationException
+ * Use {@link AccessType#PROPERTY} for id as best practice to avoid LazyInitializationException
  * <p>
  * Use private setter to prevent mutability
  */
@@ -24,5 +24,6 @@ abstract class BaseLongEntity extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false, insertable = false, updatable = false)
+    @Access(AccessType.PROPERTY)
     private Long id;
 }
