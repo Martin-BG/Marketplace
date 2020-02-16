@@ -93,7 +93,7 @@ public final class TitleInterceptor extends HandlerInterceptorAdapter {
         }
 
         public TitleInterceptor build() {
-            Assert.notNull(toBuild, "Reuse of builder is not allowed");
+            Assert.notNull(toBuild, "Builder cannot be reused");
             Assert.notNull(toBuild.messageSource, "MessageSource cannot be null");
             Assert.hasLength(toBuild.titleCode, "Title code cannot be empty or null");
             Assert.hasLength(toBuild.titleAttribute, "Title attribute name cannot be empty or null");
