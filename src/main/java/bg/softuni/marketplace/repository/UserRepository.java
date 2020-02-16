@@ -52,5 +52,5 @@ public interface UserRepository extends GenericRepository<User, UUID> {
      * false if user id not found, {@code active} not equals user status
      * or user {@link Authority} equals {@code authority}
      */
-    boolean existsByIdAndActiveAndAuthorityNot(UUID id, boolean active, Authority authority);
+    boolean existsByIdAndActiveAndAuthorityNot(@ValidId UUID id, boolean active, @NotNull Authority authority);
 }
