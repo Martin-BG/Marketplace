@@ -106,7 +106,7 @@ public final class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter 
         }
 
         public ThymeleafLayoutInterceptor build() {
-            Assert.notNull(toBuild, "Reuse of builder is not allowed");
+            Assert.notNull(toBuild, "Builder cannot be reused");
             Assert.hasLength(toBuild.defaultLayout, "Default layout cannot be empty or null");
             Assert.hasLength(toBuild.viewAttribute, "View attribute name cannot be empty or null");
             Assert.notNull(toBuild.viewPrefix, "View prefix cannot be null");
