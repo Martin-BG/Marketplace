@@ -34,6 +34,8 @@ public @interface OnError {
 
     /**
      * View name to be used in case of errors on method invocation.
+     * Supports <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">
+     * Spring Expression Language (SpEL)</a>.
      *
      * @see OnErrorViewChangerAspect
      */

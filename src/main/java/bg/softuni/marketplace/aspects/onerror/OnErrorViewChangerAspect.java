@@ -124,7 +124,9 @@ public class OnErrorViewChangerAspect {
         errorsList.removeIf(errors -> !errors.hasErrors());
 
         if (exceptionCough || !errorsList.isEmpty()) {
-            result = buildView(annotation);
+            String url = Helper.getValueFromExpression(
+                    pjp.getArgs(), methodSignature.getParameterNames(), annotation.view(), String.class);
+            result = buildView(annotation.action(), url);
 
             addErrorsToAlerts(errorsList, annotation.alert());
         }
@@ -147,20 +149,15 @@ public class OnErrorViewChangerAspect {
                 .collect(Collectors.toList());
     }
 
-    private static String buildView(OnError annotation) {
-        String url;
-        switch (annotation.action()) {
+    private static String buildView(OnError.Action action, String url) {
+        switch (action) {
         case FORWARD:
-            url = ViewActionPrefix.FORWARD + annotation.view();
-            break;
+            return ViewActionPrefix.FORWARD + url;
         case REDIRECT:
-            url = ViewActionPrefix.REDIRECT + annotation.view();
-            break;
+            return ViewActionPrefix.REDIRECT + url;
         default:
-            url = annotation.view();
-            break;
+            return url;
         }
-        return url;
     }
 
     private void addErrorsToAlerts(List<? extends Errors> errorsList, OnError.ErrorToAlert errorToAlert) {
