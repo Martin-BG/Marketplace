@@ -1,6 +1,6 @@
 package bg.softuni.marketplace.domain.validation.annotations.composite.user;
 
-import bg.softuni.marketplace.domain.validation.annotations.custom.EqualFields;
+import bg.softuni.marketplace.domain.validation.annotations.spel.SpELAssert;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -18,9 +18,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * otherwise value in 'confirmPassword' is considered invalid.
  */
 
-@EqualFields(message = "{" + CODE_USER_PASSWORDS_NOT_MATCH + "}",
-        fields = {"password", "confirmPassword"},
-        forField = "confirmPassword")
+@SpELAssert(message = "{" + CODE_USER_PASSWORDS_NOT_MATCH + "}",
+        value = "#this.password ne null and #this.password.equals(#this.confirmPassword)",
+        fields = "confirmPassword")
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
