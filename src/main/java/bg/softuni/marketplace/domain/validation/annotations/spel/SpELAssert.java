@@ -25,10 +25,7 @@ package bg.softuni.marketplace.domain.validation.annotations.spel;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -75,6 +72,11 @@ public @interface SpELAssert {
      */
     Class<?>[] helpers() default {};
 
+    /**
+     * Field names to link error(s) to.
+     * Used only when used on {@link ElementType#TYPE} (by default object errors are global)
+     */
+    String[] fields() default {};
 
     /**
      * Defines several <code>@SpELAssertValidator</code> annotations on the same element.

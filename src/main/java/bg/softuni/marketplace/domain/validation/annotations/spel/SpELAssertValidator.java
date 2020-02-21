@@ -64,6 +64,8 @@ public class SpELAssertValidator implements ConstraintValidator<SpELAssert, Obje
     private Expression applyIfExpression;
     private List<Method> functions = new LinkedList<>();
     private BeanFactory beanFactory;
+    private String[] fields;
+    private String message;
 
     @Override
     public void initialize(SpELAssert constraint) {
@@ -76,6 +78,9 @@ public class SpELAssertValidator implements ConstraintValidator<SpELAssert, Obje
         for (Class<?> clazz : constraint.helpers()) {
             functions = extractStaticMethods(clazz);
         }
+
+        message = constraint.message();
+        fields = constraint.fields();
     }
 
     @Override
@@ -87,8 +92,20 @@ public class SpELAssertValidator implements ConstraintValidator<SpELAssert, Obje
         EvaluationContext evalContext = createEvaluationContext(object);
 
         if (isApplyIfValid(evalContext)) {
-            LOG.trace("Evaluating expression {{}} on object: {}", expression.getExpressionString(), object);
-            return evaluate(expression, evalContext);
+            LOG.trace("Evaluating expression {{}} on an object: {}", expression.getExpressionString(), object);
+            boolean result = evaluate(expression, evalContext);
+
+            if (!result && fields.length > 0) {
+                // Report error to a specified field
+                context.disableDefaultConstraintViolation();
+                for (String field : fields) {
+                    context.buildConstraintViolationWithTemplate(message)
+                            .addPropertyNode(field)
+                            .addConstraintViolation();
+                }
+            }
+
+            return result;
         }
         return true;
     }
@@ -120,7 +137,7 @@ public class SpELAssertValidator implements ConstraintValidator<SpELAssert, Obje
             return true;
         }
 
-        LOG.trace("Evaluating applyIf {{}} on object: {}", applyIfExpression.getExpressionString(), context);
+        LOG.trace("Evaluating applyIf {{}} on an object: {}", applyIfExpression.getExpressionString(), context);
         return evaluate(applyIfExpression, context);
     }
 
