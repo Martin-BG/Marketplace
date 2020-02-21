@@ -34,8 +34,11 @@ public @interface OnError {
 
     /**
      * View name to be used in case of errors on method invocation.
-     * Supports <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">
-     * Spring Expression Language (SpEL)</a>.
+     * <p>
+     * <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">
+     * Spring Expression Language (SpEL)</a> could be used with this format:
+     * <p>
+     * view = "#{SpEL expression}"
      *
      * @see OnErrorViewChangerAspect
      */
@@ -70,7 +73,7 @@ public @interface OnError {
 
     /**
      * Exception type and its sub-classes to NOT catch on method invocation.
-     * This setting is with higher precedence than {@link #exceptionType()}
+     * This setting is with higher precedence than {@link #exceptionType()}.
      *
      * @see OnErrorViewChangerAspect
      * @see #catchException()

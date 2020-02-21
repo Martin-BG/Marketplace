@@ -55,7 +55,7 @@ public class ProfileUserController extends BaseController {
     @PatchMapping("/{id}")
     @PreAuthorize("#user.id eq #id " +
             "or hasRole(T(bg.softuni.marketplace.domain.enums.Authority).ADMIN)")
-    @OnError(view = "T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE.concat('/').concat(#id)",
+    @OnError(view = "#{T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE.concat('/').concat(#id)}",
             action = REDIRECT,
             catchException = true, exceptionType = IdNotFoundException.class,
             message = "user.profile.id-not-found", args = "#id",

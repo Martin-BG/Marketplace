@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -75,6 +77,8 @@ import java.util.stream.Collectors;
 @Component
 public class OnErrorViewChangerAspect {
 
+    private static final Pattern SPEL_PATTERN = Pattern.compile("^#\\{(.+)}$"); // "#{SpEL expression}"
+
     private final MessageHelper messageHelper;
     private final AlertContainer alertContainer;
 
@@ -124,8 +128,12 @@ public class OnErrorViewChangerAspect {
         errorsList.removeIf(errors -> !errors.hasErrors());
 
         if (exceptionCough || !errorsList.isEmpty()) {
-            String url = Helper.getValueFromExpression(
-                    pjp.getArgs(), methodSignature.getParameterNames(), annotation.view(), String.class);
+            String url = annotation.view();
+            Matcher matcher = SPEL_PATTERN.matcher(url);
+            if (matcher.matches()) {
+                url = Helper.getValueFromExpression(
+                        pjp.getArgs(), methodSignature.getParameterNames(), matcher.group(1), String.class);
+            }
             result = buildView(annotation.action(), url);
 
             addErrorsToAlerts(errorsList, annotation.alert());
