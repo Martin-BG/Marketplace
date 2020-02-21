@@ -58,7 +58,8 @@ public class ProfileUserController extends BaseController {
     @OnError(view = "T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE.concat('/').concat(#id)",
             action = REDIRECT,
             catchException = true, exceptionType = IdNotFoundException.class,
-            message = "user.profile.id-not-found", args = "#id")
+            message = "user.profile.id-not-found", args = "#id",
+            alert = OnError.ErrorToAlert.ALL)
     @OnSuccess(message = "user.profile.update-success", args = {"#username"})
     public String updateProfile(@PathVariable @ModelAttribute UUID id,
                                 @ModelAttribute ProfileUpdateBindingModel bindingModel,
