@@ -1,6 +1,6 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
     <form class="app-form"
-          th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__}"
+          th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__*{id}__}"
           th:method="patch"
           th:object="${__${T(bg.softuni.marketplace.web.controllers.user.ProfileUserController).USER_PROFILE_ATTRIBUTE_NAME}__}">
 

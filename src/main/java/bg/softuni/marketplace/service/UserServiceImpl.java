@@ -3,6 +3,7 @@ package bg.softuni.marketplace.service;
 import bg.softuni.marketplace.aspects.validate.Validate;
 import bg.softuni.marketplace.domain.entities.Profile;
 import bg.softuni.marketplace.domain.entities.User;
+import bg.softuni.marketplace.domain.models.binding.profile.ProfileUpdateBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
@@ -173,6 +174,22 @@ public class UserServiceImpl implements UserService {
                     return profileViewModel;
                 })
                 .orElseThrow(idNotFoundException(id));
+    }
+
+    @Override
+    @Validate(returnOnError = true, groups = AllGroups.class)
+    @Caching(evict = {
+            @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true),
+            @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
+    public String updateProfile(@NotNull ProfileUpdateBindingModel bindingModel,
+                                @NotNull Errors errors) {
+        return profileRepository
+                .findById(bindingModel.getId())
+                .map(profile -> {
+                    profile.setEmail(bindingModel.getEmail());
+                    return profile.getUser().getUsername();
+                })
+                .orElseThrow(idNotFoundException(bindingModel.getId()));
     }
 
     private String getUserByIdAndProcess(@NotNull UUID id,

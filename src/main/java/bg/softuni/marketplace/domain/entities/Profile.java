@@ -38,7 +38,7 @@ public class Profile extends BaseEntity<UUID> implements Viewable<Profile> {
      * <p>
      * Use AccessType.PROPERTY for id as best practice to avoid LazyInitializationException
      * <p>
-     * Use private setter to prevent mutability
+     * Use a private setter to prevent mutability
      */
     @Id
     @Column(unique = true, nullable = false, insertable = false, updatable = false, columnDefinition = "BINARY(16)")
@@ -52,6 +52,7 @@ public class Profile extends BaseEntity<UUID> implements Viewable<Profile> {
     @MapsId
     private User user;
 
+    @Setter
     @ValidUserEmail
     @Column(nullable = false, length = ValidUserEmail.MAX_LENGTH)
     private String email;

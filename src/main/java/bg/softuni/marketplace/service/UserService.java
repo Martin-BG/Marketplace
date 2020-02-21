@@ -1,5 +1,6 @@
 package bg.softuni.marketplace.service;
 
+import bg.softuni.marketplace.domain.models.binding.profile.ProfileUpdateBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserDeleteBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRegisterBindingModel;
 import bg.softuni.marketplace.domain.models.binding.user.UserRoleBindingModel;
@@ -36,4 +37,7 @@ public interface UserService extends UserDetailsService {
     Optional<String> getUsernameById(@NotNull UUID id);
 
     ProfileViewModel getUserProfile(@NotNull UUID id);
+
+    String updateProfile(@NotNull ProfileUpdateBindingModel bindingModel,
+                         @NotNull Errors errors);
 }

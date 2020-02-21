@@ -18,4 +18,6 @@ public final class MessageCodes {
     public static final String CODE_USER_MODIFY_ROOT_AUTHORITY = "user.modify.root-authority";
     public static final String CODE_USER_MODIFY_INVALID_ID = "user.modify.invalid-user";
     public static final String CODE_USER_DELETE_INVALID_ID = "user.delete.invalid-user";
+
+    public static final String CODE_PROFILE_EMAIL_USED = "profile.email.used";
 }
