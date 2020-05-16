@@ -16,7 +16,7 @@
     <description>Final Project for course Java MVC Frameworks - Spring @ SoftUni - Feb. 2019</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>14</java.version>
 
         <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
         <modelmapper.version>2.3.7</modelmapper.version>
@@ -47,6 +47,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-properties-migrator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
