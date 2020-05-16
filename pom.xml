@@ -48,11 +48,14 @@
         <!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator -->
         <webjars-locator.version>0.40</webjars-locator.version>
 
+        <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
+        <jquery.version>3.5.1</jquery.version>
+
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
         <bootstrap.version>4.5.0</bootstrap.version>
 
-        <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
-        <jquery.version>3.5.1</jquery.version>
+        <!-- https://mvnrepository.com/artifact/org.webjars.npm/popper.js -->
+        <popper.js.version>1.16.0</popper.js.version>
     </properties>
 
     <dependencies>
@@ -169,6 +172,12 @@
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>${bootstrap.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>popper.js</artifactId>
+            <version>${popper.js.version}</version>
         </dependency>
 
     </dependencies>
