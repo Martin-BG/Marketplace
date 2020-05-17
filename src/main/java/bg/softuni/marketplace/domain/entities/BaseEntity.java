@@ -3,6 +3,7 @@ package bg.softuni.marketplace.domain.entities;
 import bg.softuni.marketplace.domain.api.Identifiable;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Base Entity class
@@ -26,15 +27,18 @@ abstract class BaseEntity<I> implements Identifiable<I>, Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()) {
+        if (getId() == null || other == null || getClass() != other.getClass()) {
             return false;
         }
 
-        return getId() != null && getId().equals(((Identifiable) o).getId());
+        @SuppressWarnings("unchecked")
+        I otherId = ((Identifiable<I>) other).getId();
+
+        return Objects.equals(getId(), otherId);
     }
 }
