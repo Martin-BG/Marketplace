@@ -157,14 +157,11 @@ public class OnErrorViewChangerAspect {
     }
 
     private static String buildView(OnError.Action action, String url) {
-        switch (action) {
-        case FORWARD:
-            return ViewActionPrefix.FORWARD + url;
-        case REDIRECT:
-            return ViewActionPrefix.REDIRECT + url;
-        default:
-            return url;
-        }
+        return switch (action) {
+            case FORWARD -> ViewActionPrefix.FORWARD + url;
+            case REDIRECT -> ViewActionPrefix.REDIRECT + url;
+            default -> url;
+        };
     }
 
     private void addErrorsToAlerts(List<? extends Errors> errorsList, OnError.ErrorToAlert errorToAlert) {
