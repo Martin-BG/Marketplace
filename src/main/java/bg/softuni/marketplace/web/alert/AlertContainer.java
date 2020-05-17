@@ -8,13 +8,13 @@ public interface AlertContainer {
 
     boolean isEmpty();
 
-    void addInfo(String text);
+    void info(String text);
 
-    void addSuccess(String text);
+    void success(String text);
 
-    void addError(String text);
+    void error(String text);
 
-    void add(AlertType type, String text);
+    void add(Alert.Type type, String text);
 
     List<Alert> get();
 }

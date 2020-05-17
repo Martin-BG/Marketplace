@@ -3,7 +3,6 @@ package bg.softuni.marketplace.aspects.onerror;
 import bg.softuni.marketplace.aspects.Helper;
 import bg.softuni.marketplace.web.alert.Alert;
 import bg.softuni.marketplace.web.alert.AlertContainer;
-import bg.softuni.marketplace.web.alert.AlertType;
 import bg.softuni.marketplace.web.common.MessageHelper;
 import bg.softuni.marketplace.web.common.ViewActionPrefix;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +35,9 @@ import java.util.stream.Collectors;
  * thrown on method invocation when {@link OnError#catchException} is set.
  * <p>
  * Non-empty message set in {@link OnError#message message} with {@link OnError#args args}
- * is added as {@link AlertType#ERROR ERROR} to the {@link AlertContainer} on exception.
+ * is added as {@link Alert.Type#ERROR ERROR} to the {@link AlertContainer} on exception.
  * <p>
- * Add all errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}
+ * Add all errors as {@link Alert} of type {@link Alert.Type#ERROR ERROR} to the {@link AlertContainer}
  * <p>
  * <ul>Annotated method is required to have:
  * <li>{@link String} return type</li>
@@ -115,7 +114,7 @@ public class OnErrorViewChangerAspect {
 
             String message = messageHelper.getLocalizedMessage(annotation.message(), arguments);
 
-            alertContainer.add(AlertType.ERROR, message);
+            alertContainer.error(message);
         }
 
         List<Errors> errorsList = getNonNullErrorsParameters(pjp);
@@ -178,7 +177,7 @@ public class OnErrorViewChangerAspect {
                                     String message = objectError
                                             .unwrap(ConstraintViolation.class)
                                             .getMessage();
-                                    alertContainer.addError(message);
+                                    alertContainer.error(message);
                                 });
                     });
         }
@@ -192,7 +191,7 @@ public class OnErrorViewChangerAspect {
                                     String message = fieldError
                                             .unwrap(ConstraintViolation.class)
                                             .getMessage();
-                                    alertContainer.addError("* " + message);
+                                    alertContainer.error("* " + message);
                                 });
                     });
         }

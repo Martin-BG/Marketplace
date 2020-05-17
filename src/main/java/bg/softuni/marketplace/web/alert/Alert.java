@@ -4,43 +4,56 @@ import lombok.Getter;
 
 import java.io.Serializable;
 
+import static bg.softuni.marketplace.web.alert.Alert.Type.*;
+
 /**
- * Immutable alert class with static constructors
+ * Immutable alert class.
+ *
+ * @see Alert.Type
+ * @see Alert.Type#with(String)
  */
 @Getter
 public final class Alert implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final AlertType type;
+    private final Type type;
     private final String text;
 
-    private Alert(AlertType type, String text) {
+    private Alert(Type type, String text) {
         this.type = type;
         this.text = text;
     }
 
-    public static Alert info(String text) {
-        return new Alert(AlertType.INFO, text);
-    }
-
-    public static Alert success(String text) {
-        return new Alert(AlertType.SUCCESS, text);
-    }
-
-    public static Alert error(String text) {
-        return new Alert(AlertType.ERROR, text);
-    }
-
     public boolean isInfo() {
-        return type == AlertType.INFO;
+        return type == INFO;
     }
 
     public boolean isSuccess() {
-        return type == AlertType.SUCCESS;
+        return type == SUCCESS;
     }
 
     public boolean isError() {
-        return type == AlertType.ERROR;
+        return type == ERROR;
+    }
+
+    /**
+     * Alert types.
+     *
+     * @see Type#with(String)
+     */
+    public enum Type {
+        INFO, SUCCESS, ERROR;
+
+        /**
+         * Creates a new {@link Alert} instance of this {@link Type}
+         * from the {@code text}
+         *
+         * @param text text of the {@link Alert}
+         * @return a new {@link Alert} instance
+         */
+        public Alert with(String text) {
+            return new Alert(this, text);
+        }
     }
 }

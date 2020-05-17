@@ -2,7 +2,6 @@ package bg.softuni.marketplace.aspects.onsuccess;
 
 import bg.softuni.marketplace.web.alert.Alert;
 import bg.softuni.marketplace.web.alert.AlertContainer;
-import bg.softuni.marketplace.web.alert.AlertType;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
@@ -44,7 +43,7 @@ public @interface OnSuccess {
     /**
      * Message code to add as {@link Alert} to {@link AlertContainer} on success.
      *
-     * @see AlertType
+     * @see Alert.Type
      */
-    AlertType type() default AlertType.SUCCESS;
+    Alert.Type type() default Alert.Type.SUCCESS;
 }

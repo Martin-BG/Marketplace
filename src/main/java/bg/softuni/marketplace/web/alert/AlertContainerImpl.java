@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static bg.softuni.marketplace.web.alert.Alert.Type.*;
+
 /**
  * Session scoped {@link AlertContainer} implementation.
  */
@@ -35,37 +37,23 @@ public class AlertContainerImpl implements AlertContainer, Serializable {
     }
 
     @Override
-    public void addInfo(String text) {
-        add(AlertType.INFO, text);
+    public void info(String text) {
+        add(INFO, text);
     }
 
     @Override
-    public void addSuccess(String text) {
-        add(AlertType.SUCCESS, text);
+    public void success(String text) {
+        add(SUCCESS, text);
     }
 
     @Override
-    public void addError(String text) {
-        add(AlertType.ERROR, text);
+    public void error(String text) {
+        add(ERROR, text);
     }
 
     @Override
-    public void add(AlertType type, String text) {
-        Alert alert;
-
-        switch (type) {
-        case INFO:
-            alert = Alert.info(text);
-            break;
-        case SUCCESS:
-            alert = Alert.success(text);
-            break;
-        case ERROR:
-            alert = Alert.error(text);
-            break;
-        default:
-            throw new IllegalArgumentException("Unsupported or invalid AlertType: " + type);
-        }
+    public void add(Alert.Type alertType, String text) {
+        Alert alert = alertType.with(text);
 
         synchronized (alerts) {
             alerts.addFirst(alert);

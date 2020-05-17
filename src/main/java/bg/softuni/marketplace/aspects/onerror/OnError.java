@@ -2,7 +2,6 @@ package bg.softuni.marketplace.aspects.onerror;
 
 import bg.softuni.marketplace.web.alert.Alert;
 import bg.softuni.marketplace.web.alert.AlertContainer;
-import bg.softuni.marketplace.web.alert.AlertType;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.validation.Errors;
 
@@ -99,7 +98,7 @@ public @interface OnError {
     String[] args() default {};
 
     /**
-     * Add errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}:
+     * Add errors as {@link Alert} of type {@link Alert.Type#ERROR ERROR} to the {@link AlertContainer}:
      * <ul>
      * <li>{@link ErrorToAlert#NONE NONE} - no errors</li>
      * <li>{@link ErrorToAlert#GLOBAL GLOBAL} - add Global errors only (default)</li>
@@ -129,7 +128,7 @@ public @interface OnError {
     enum Action {VIEW, REDIRECT, FORWARD}
 
     /**
-     * Add errors as {@link Alert} of type {@link AlertType#ERROR ERROR} to the {@link AlertContainer}:
+     * Add errors as {@link Alert} of type {@link Alert.Type#ERROR ERROR} to the {@link AlertContainer}:
      * <ul>
      * <li>{@link #NONE} - no errors</li>
      * <li>{@link #GLOBAL} - add Global errors only (default)</li>
