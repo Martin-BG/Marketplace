@@ -35,6 +35,10 @@ public final class AlertInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (handler instanceof HandlerMethod) {
+            if (modelAndView == null || !modelAndView.hasView()) {
+                return;
+            }
+
             String originalViewName = modelAndView.getViewName();
 
             if (originalViewName == null || Helper.isRedirectOrForward(originalViewName)) {
