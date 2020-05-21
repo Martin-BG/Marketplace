@@ -2,6 +2,7 @@ package bg.softuni.marketplace.web.interceptors;
 
 import bg.softuni.marketplace.web.annotations.Layout;
 import org.springframework.util.Assert;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -45,31 +46,33 @@ public final class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter 
                            HttpServletResponse response,
                            Object handler,
                            ModelAndView modelAndView) {
-        if (modelAndView == null || !modelAndView.hasView()) {
-            return;
-        }
+        if (handler instanceof HandlerMethod) {
+            if (modelAndView == null || !modelAndView.hasView()) {
+                return;
+            }
 
-        String originalViewName = modelAndView.getViewName();
-        if (originalViewName == null || Helper.isRedirectOrForward(originalViewName)) {
-            return;
-        }
+            String originalViewName = modelAndView.getViewName();
+            if (originalViewName == null || Helper.isRedirectOrForward(originalViewName)) {
+                return;
+            }
 
-        Layout layout = Helper.getMethodOrTypeAnnotation(handler, Layout.class);
-        if (layout == null) {
-            return;
-        }
+            Layout layout = Helper.getMethodOrTypeAnnotation(handler, Layout.class);
+            if (layout == null) {
+                return;
+            }
 
-        String layoutName = getLayoutName(layout);
-        if (Layout.NONE.equals(layoutName)) {
-            return;
-        }
+            String layoutName = getLayoutName(layout);
+            if (Layout.NONE.equals(layoutName)) {
+                return;
+            }
 
-        if (layoutName.isBlank()) {
-            layoutName = defaultLayout;
-        }
+            if (layoutName.isBlank()) {
+                layoutName = defaultLayout;
+            }
 
-        modelAndView.setViewName(layoutName);
-        modelAndView.addObject(viewAttribute, getView(originalViewName));
+            modelAndView.setViewName(layoutName);
+            modelAndView.addObject(viewAttribute, getView(originalViewName));
+        }
     }
 
     private String getLayoutName(Layout layout) {
