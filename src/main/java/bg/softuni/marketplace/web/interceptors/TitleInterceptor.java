@@ -52,6 +52,10 @@ public final class TitleInterceptor extends HandlerInterceptorAdapter {
                            Object handler,
                            ModelAndView modelAndView) {
         if (handler instanceof HandlerMethod) {
+            if (modelAndView == null || !modelAndView.hasView()) {
+                return;
+            }
+
             String originalViewName = modelAndView.getViewName();
             if (originalViewName == null || Helper.isRedirectOrForward(originalViewName)) {
                 return;
