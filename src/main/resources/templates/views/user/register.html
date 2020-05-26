@@ -10,35 +10,27 @@
 
         <div class="form-group">
             <label th:for="${#ids.next('username')}" th:text="#{user.register-form.username}"/>
-            <input class="form-control" th:classappend="${#fields.hasErrors('username')}? app-border-error"
-                   th:field="*{username}"
-                   type="text"/>
+            <input class="form-control" th:errorclass="app-border-error" th:field="*{username}" type="text"/>
             <small class="app-color-error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"/>
         </div>
 
         <div class="form-group">
             <label th:for="${#ids.next('email')}" th:text="#{user.register-form.email}"/>
-            <input class="form-control" th:classappend="${#fields.hasErrors('email')}? app-border-error"
-                   th:field="*{email}"
-                   type="email"/>
+            <input class="form-control" th:errorclass="app-border-error" th:field="*{email}" type="email"/>
             <small class="app-color-error" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"/>
         </div>
 
         <div class="form-group">
             <label th:for="${#ids.next('password')}" th:text="#{user.register-form.password}"/>
-            <input class="form-control" th:classappend="${#fields.hasErrors('password')}? app-border-error"
-                   name="password"
-                   th:value="*{password}"
+            <input class="form-control" name="password" th:errorclass="app-border-error" th:value="*{password}"
                    type="password"/>
             <small class="app-color-error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"/>
         </div>
 
         <div class="form-group">
             <label th:for="${#ids.next('confirmPassword')}" th:text="#{user.register-form.confirmPassword}"/>
-            <input class="form-control" th:classappend="${#fields.hasErrors('confirmPassword')}? app-border-error"
-                   name="confirmPassword"
-                   th:value="*{confirmPassword}"
-                   type="password"/>
+            <input class="form-control" name="confirmPassword" th:errorclass="app-border-error"
+                   th:value="*{confirmPassword}" type="password"/>
             <small class="app-color-error" th:errors="*{confirmPassword}"
                    th:if="${#fields.hasErrors('confirmPassword')}"/>
         </div>
