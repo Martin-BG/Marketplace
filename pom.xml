@@ -34,13 +34,13 @@
         <junit.version>4.13</junit.version>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <mockito.version>3.4.6</mockito.version>
+        <mockito.version>3.5.10</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-data -->
         <spring-security.version>5.3.4.RELEASE</spring-security.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <hibernate.version>5.4.20.Final</hibernate.version>
+        <hibernate.version>5.4.21.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
         <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
@@ -52,7 +52,7 @@
         <jquery.version>3.5.1</jquery.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
-        <bootstrap.version>4.5.0</bootstrap.version>
+        <bootstrap.version>4.5.2</bootstrap.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/popper.js -->
         <popper.js.version>2.0.2</popper.js.version>
