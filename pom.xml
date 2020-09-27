@@ -5,6 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent-->
         <version>2.3.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
@@ -34,7 +35,7 @@
         <junit.version>4.13</junit.version>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <mockito.version>3.5.11</mockito.version>
+        <mockito.version>3.5.13</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-data -->
         <spring-security.version>5.4.0</spring-security.version>
