@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
         <version>2.3.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
@@ -41,10 +41,10 @@
         <spring-security.version>5.4.0</spring-security.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <hibernate.version>5.4.21.Final</hibernate.version>
+        <hibernate.version>5.4.22.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
-        <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
+        <hibernate-validator.version>6.1.6.Final</hibernate-validator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator -->
         <webjars-locator.version>0.40</webjars-locator.version>
@@ -56,7 +56,7 @@
         <bootstrap.version>4.5.2</bootstrap.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/popper.js -->
-        <popper.js.version>2.0.2</popper.js.version>
+        <popper.js.version>2.5.2</popper.js.version>
     </properties>
 
     <dependencyManagement>
