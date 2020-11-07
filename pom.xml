@@ -41,7 +41,7 @@
         <spring-security.version>5.4.1</spring-security.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <hibernate.version>5.4.22.Final</hibernate.version>
+        <hibernate.version>5.4.23.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
         <hibernate-validator.version>6.1.6.Final</hibernate-validator.version>
