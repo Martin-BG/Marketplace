@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
-        <version>2.4.0</version>
+        <version>2.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>bg.softuni</groupId>
@@ -26,25 +26,25 @@
         <thymeleaf-extras-springsecurity5.version>3.0.4.RELEASE</thymeleaf-extras-springsecurity5.version>
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-        <lombok.version>1.18.16</lombok.version>
+        <lombok.version>1.18.18</lombok.version>
 
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-        <junit-jupiter.version>5.7.0</junit-jupiter.version>
+        <junit-jupiter.version>5.7.1</junit-jupiter.version>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->
-        <junit.version>4.13.1</junit.version>
+        <junit.version>4.13.2</junit.version>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <mockito.version>3.6.28</mockito.version>
+        <mockito.version>3.7.7</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-data -->
-        <spring-security.version>5.4.2</spring-security.version>
+        <spring-security.version>5.4.4</spring-security.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <hibernate.version>5.4.25.Final</hibernate.version>
+        <hibernate.version>5.4.28.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
-        <hibernate-validator.version>6.1.6.Final</hibernate-validator.version>
+        <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator -->
         <webjars-locator.version>0.40</webjars-locator.version>
@@ -53,10 +53,14 @@
         <jquery.version>3.5.1</jquery.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
-        <bootstrap.version>4.5.3</bootstrap.version>
+        <bootstrap.version>4.6.0</bootstrap.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/popper.js -->
-        <popper.js.version>2.5.2</popper.js.version>
+        <popper.js.version>2.5.4</popper.js.version>
+
+        <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
+        <!-- issue in 3.0.12.RELEASE:  https://github.com/thymeleaf/thymeleaf/issues/816 -->
+        <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
     </properties>
 
     <dependencyManagement>
@@ -152,13 +156,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
-            <version>${spring-security.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-            <version>${thymeleaf-extras-springsecurity5.version}</version>
         </dependency>
 
         <dependency>
@@ -198,6 +200,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
