@@ -107,3 +107,11 @@ a.app-color:hover {
     border-width: 2px;
     background-color: #1e3b90;
 }
+
+.nav-item-ml {
+    margin-left: 1rem;
+}
+
+.nav-item-mr {
+    margin-right: 1rem;
+}
