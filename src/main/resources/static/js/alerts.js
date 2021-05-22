@@ -31,6 +31,7 @@ function TriggerAlertClose() {
                 $(this).remove();
             });
     }, successTimeout);
+
     setTimeout(function () {
         $('.alert-danger')
             .fadeOut(fadeOutTime, function () {
