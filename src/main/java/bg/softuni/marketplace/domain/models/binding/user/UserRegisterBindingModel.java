@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Getter
@@ -19,6 +20,7 @@ import java.io.Serializable;
 @MatchPasswords(groups = GroupOne.class)
 public class UserRegisterBindingModel implements Bindable<User>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @ValidUserUsername

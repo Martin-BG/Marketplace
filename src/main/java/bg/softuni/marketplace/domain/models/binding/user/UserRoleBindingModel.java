@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserRoleBindingModel implements Bindable<User>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @ValidId

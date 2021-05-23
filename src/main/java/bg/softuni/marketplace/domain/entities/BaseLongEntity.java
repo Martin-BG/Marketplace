@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Access;
 import javax.persistence.*;
+import java.io.Serial;
 
 /**
  * {@link Long} implementation of {@link BaseEntity} abstract class
@@ -19,6 +21,7 @@ import javax.persistence.*;
 @MappedSuperclass
 abstract class BaseLongEntity extends BaseEntity<Long> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

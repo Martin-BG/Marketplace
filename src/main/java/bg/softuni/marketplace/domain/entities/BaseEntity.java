@@ -2,6 +2,7 @@ package bg.softuni.marketplace.domain.entities;
 
 import bg.softuni.marketplace.domain.api.Identifiable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,6 +20,7 @@ import java.util.Objects;
  */
 abstract class BaseEntity<I> implements Identifiable<I>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ import static bg.softuni.marketplace.domain.validation.annotations.composite.Spe
         groups = GroupOne.class, value = EXPR_PROFILE_EMAIL_UNIQUE_OR_SAME)
 public class ProfileUpdateBindingModel implements Bindable<Profile>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @ValidId

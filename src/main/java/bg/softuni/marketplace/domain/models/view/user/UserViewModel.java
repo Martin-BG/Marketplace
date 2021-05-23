@@ -5,6 +5,7 @@ import bg.softuni.marketplace.domain.entities.User;
 import bg.softuni.marketplace.domain.enums.Authority;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class UserViewModel implements Viewable<User>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private UUID id;

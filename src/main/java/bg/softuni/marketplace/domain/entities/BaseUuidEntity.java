@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Access;
 import javax.persistence.*;
+import java.io.Serial;
 import java.util.UUID;
 
 /**
@@ -32,6 +34,7 @@ import java.util.UUID;
 @MappedSuperclass
 abstract class BaseUuidEntity extends BaseEntity<UUID> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
