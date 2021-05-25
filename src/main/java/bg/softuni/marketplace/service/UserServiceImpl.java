@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(cacheNames = ALL_USERS_CACHE, allEntries = true)
     public void registerUser(@NotNull UserRegisterBindingModel bindingModel,
                              @NotNull Errors errors) {
-        boolean isRoot = userRepository.count() == 0;
+        boolean isRoot = userRepository.count() == 0L;
         User user = serviceHelper.getUserFromModel(bindingModel, isRoot);
         userRepository.save(user);
 
