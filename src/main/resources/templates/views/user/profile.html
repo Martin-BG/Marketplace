@@ -14,9 +14,9 @@
             <small class="app-color-error" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"/>
         </div>
 
-        <th:block th:if="${#fields.hasErrors('global')}">
+        <th:block th:if="${#fields.hasGlobalErrors()}">
             <ul>
-                <li class="app-color-error" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
+                <li class="app-color-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"/>
             </ul>
         </th:block>
 
