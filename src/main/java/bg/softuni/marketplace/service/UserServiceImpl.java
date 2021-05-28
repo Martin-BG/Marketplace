@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = USER_DETAILS_CACHE, key = "#username")
-    public UserDetails loadUserByUsername(String username) {
+    public UserDetails loadUserByUsername(@NotNull String username) {
         return userRepository
                 .findUserByUsername(username)
                 .map(UserDetailsModel::new) //Map entity to DTO
