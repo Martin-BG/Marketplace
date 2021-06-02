@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -63,9 +64,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = USER_DETAILS_CACHE, key = "#username")
-    public UserDetails loadUserByUsername(@NotNull String username) {
-        return userRepository
-                .findUserByUsername(username)
+    public UserDetails loadUserByUsername(String username) {
+        return Optional.ofNullable(username)
+                .filter(Predicate.not(String::isEmpty))
+                .flatMap(userRepository::findUserByUsername)
                 .map(UserDetailsModel::new) //Map entity to DTO
                 .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND + username));
     }
