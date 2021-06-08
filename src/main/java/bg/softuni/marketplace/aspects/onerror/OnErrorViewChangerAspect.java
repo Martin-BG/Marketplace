@@ -152,7 +152,7 @@ public class OnErrorViewChangerAspect {
                 .stream(pjp.getArgs())
                 .filter(Objects::nonNull)
                 .filter(object -> Errors.class.isAssignableFrom(object.getClass()))
-                .map(object -> (Errors) object)
+                .map(Errors.class::cast)
                 .collect(Collectors.toList());
     }
 

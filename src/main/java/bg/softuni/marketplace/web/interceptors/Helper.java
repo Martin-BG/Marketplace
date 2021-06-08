@@ -14,8 +14,7 @@ final class Helper {
     }
 
     static <A extends Annotation> A getMethodOrTypeAnnotation(Object handler, Class<A> annotationClass) {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
+        if (handler instanceof HandlerMethod handlerMethod) {
             A annotation = AnnotationUtils.getAnnotation(handlerMethod.getMethod(), annotationClass);
             if (annotation == null) {
                 annotation = AnnotationUtils.getAnnotation(handlerMethod.getBeanType(), annotationClass);

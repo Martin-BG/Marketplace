@@ -10,13 +10,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
+import java.time.Duration;
+
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String CSRF_ATTRIBUTE_NAME = "_csrf";
 
-    private static final int REMEMBER_ME_TOKEN_VALIDITY_SECONDS = 60 * 60 * 24 * 30; // 30 Days
+    private static final int REMEMBER_ME_TOKEN_VALIDITY_SECONDS = (int) Duration.ofDays(30L).toSeconds();
     private static final String REMEMBER_ME_KEY = "remember-me-key";
     private static final String REMEMBER_ME_COOKIE = "remember-me";
     private static final String SESSION_COOKIE = "JSESSIONID";

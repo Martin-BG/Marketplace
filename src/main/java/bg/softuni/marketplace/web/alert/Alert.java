@@ -2,6 +2,7 @@ package bg.softuni.marketplace.web.alert;
 
 import lombok.Getter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import static bg.softuni.marketplace.web.alert.Alert.Type.*;
@@ -15,6 +16,7 @@ import static bg.softuni.marketplace.web.alert.Alert.Type.*;
 @Getter
 public final class Alert implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Type type;

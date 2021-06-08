@@ -2,6 +2,7 @@ package bg.softuni.marketplace.web.converters;
 
 import bg.softuni.marketplace.domain.enums.Authority;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -10,7 +11,7 @@ import java.util.Objects;
 public class StringToAuthorityConverter implements Converter<String, Authority> {
 
     @Override
-    public Authority convert(String authority) {
+    public Authority convert(@NonNull String authority) {
         return Authority.valueOf(Objects.requireNonNull(authority));
     }
 }

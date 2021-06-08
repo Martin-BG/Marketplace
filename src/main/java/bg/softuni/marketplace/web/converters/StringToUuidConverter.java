@@ -1,6 +1,7 @@
 package bg.softuni.marketplace.web.converters;
 
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -10,7 +11,7 @@ import java.util.UUID;
 public class StringToUuidConverter implements Converter<String, UUID> {
 
     @Override
-    public UUID convert(String id) {
+    public UUID convert(@NonNull String id) {
         return UUID.fromString(Objects.requireNonNull(id));
     }
 }

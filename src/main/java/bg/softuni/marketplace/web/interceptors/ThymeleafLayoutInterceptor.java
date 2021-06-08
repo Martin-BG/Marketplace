@@ -1,10 +1,12 @@
 package bg.softuni.marketplace.web.interceptors;
 
 import bg.softuni.marketplace.web.annotations.Layout;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * Inspired by kolorobot's <a href="https://github.com/kolorobot/thymeleaf-custom-layout">Thymeleaf Custom Layout</a>
  */
 
-public final class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter {
+public final class ThymeleafLayoutInterceptor implements HandlerInterceptor {
 
     private static final String DEFAULT_LAYOUT = "/layouts/default";
     private static final String DEFAULT_VIEW_ATTRIBUTE_NAME = "view";
@@ -42,10 +44,10 @@ public final class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter 
     }
 
     @Override
-    public void postHandle(HttpServletRequest request,
-                           HttpServletResponse response,
-                           Object handler,
-                           ModelAndView modelAndView) {
+    public void postHandle(@NonNull HttpServletRequest request,
+                           @NonNull HttpServletResponse response,
+                           @NonNull Object handler,
+                           @Nullable ModelAndView modelAndView) {
         if (handler instanceof HandlerMethod) {
             if (modelAndView == null || !modelAndView.hasView()) {
                 return;

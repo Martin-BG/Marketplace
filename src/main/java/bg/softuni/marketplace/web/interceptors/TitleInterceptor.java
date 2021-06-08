@@ -3,10 +3,12 @@ package bg.softuni.marketplace.web.interceptors;
 import bg.softuni.marketplace.web.annotations.Title;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +29,7 @@ import java.util.Locale;
  * </head>}</pre>
  */
 
-public final class TitleInterceptor extends HandlerInterceptorAdapter {
+public final class TitleInterceptor implements HandlerInterceptor {
 
     private static final String DEFAULT_TITLE_CODE = "application.title";
     private static final String DEFAULT_TITLE_ATTRIBUTE_NAME = "title";
@@ -47,10 +49,10 @@ public final class TitleInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request,
-                           HttpServletResponse response,
-                           Object handler,
-                           ModelAndView modelAndView) {
+    public void postHandle(@NonNull HttpServletRequest request,
+                           @NonNull HttpServletResponse response,
+                           @NonNull Object handler,
+                           @Nullable ModelAndView modelAndView) {
         if (handler instanceof HandlerMethod) {
             if (modelAndView == null || !modelAndView.hasView()) {
                 return;

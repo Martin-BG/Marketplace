@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ import static bg.softuni.marketplace.web.alert.Alert.Type.*;
 @SessionScope(proxyMode = ScopedProxyMode.INTERFACES)
 public class AlertContainerImpl implements AlertContainer, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final LinkedList<Alert> alerts = new LinkedList<>();
