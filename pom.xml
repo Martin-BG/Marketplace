@@ -48,10 +48,6 @@
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
         <bootstrap.version>5.0.1</bootstrap.version>
-
-        <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
-        <!-- issue in 3.0.12.RELEASE:  https://github.com/thymeleaf/thymeleaf/issues/816 -->
-        <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
     </properties>
 
     <dependencies>

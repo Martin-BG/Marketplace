@@ -1,6 +1,6 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
     <form class="app-form"
-          th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_LOGIN}__}"
+          th:action="@{__${@thymeleafParamsAdapter.getUrlUserLogin()}__}"
           th:method="post">
 
         <h1 class="app-form-header" th:text="#{user.login-form.title}"/>

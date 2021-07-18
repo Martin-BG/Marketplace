@@ -12,13 +12,13 @@
         </thead>
         <tbody>
         <th:block
-                th:each="user, iStat : ${__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_ATTRIBUTE_NAME}__}"
+                th:each="user, iStat : ${__${@thymeleafParamsAdapter.getUsersAttributeName()}__}"
                 th:object="${user}"
                 th:with="canChangeRoles=*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).ROOT} and ${#authentication.getName()} != *{username}">
             <tr>
                 <td class="font-weight-bold" th:text="${iStat.index + 1}"/>
                 <td>
-                    <a th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__*{id}__}"
+                    <a th:href="@{__${@thymeleafParamsAdapter.getUrlUserProfile()}__/__*{id}__}"
                        th:text="*{username}"/>
                 </td>
                 <td th:text="*{authority.name()}"/>
@@ -29,7 +29,7 @@
                     <td>
                         <form class="d-inline"
                               th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).USER}"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_UPDATE}__)}"
+                              th:action="@{__${@thymeleafParamsAdapter.getUrlAdminUsers()}__(__${@thymeleafParamsAdapter.getUsersParamUpdate()}__)}"
                               th:method="patch">
                             <input hidden name="id" th:value="*{id}">
                             <input hidden name="authority"
@@ -41,7 +41,7 @@
                         </form>
                         <form class="d-inline"
                               th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).TRADER}"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_UPDATE}__)}"
+                              th:action="@{__${@thymeleafParamsAdapter.getUrlAdminUsers()}__(__${@thymeleafParamsAdapter.getUsersParamUpdate()}__)}"
                               th:method="patch">
                             <input hidden name="id" th:value="*{id}">
                             <input hidden name="authority"
@@ -53,7 +53,7 @@
                         </form>
                         <form class="d-inline"
                               th:if="*{authority} != ${T(bg.softuni.marketplace.domain.enums.Authority).ADMIN}"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_UPDATE}__)}"
+                              th:action="@{__${@thymeleafParamsAdapter.getUrlAdminUsers()}__(__${@thymeleafParamsAdapter.getUsersParamUpdate()}__)}"
                               th:method="patch">
                             <input hidden name="id" th:value="*{id}">
                             <input hidden name="authority"
@@ -64,7 +64,7 @@
                                     type="submit"/>
                         </form>
                         <form class="d-inline"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_ACTIVATE}__)}"
+                              th:action="@{__${@thymeleafParamsAdapter.getUrlAdminUsers()}__(__${@thymeleafParamsAdapter.getUsersParamActivate()}__)}"
                               th:method="patch"
                               th:unless="*{active}">
                             <input hidden name="id" th:value="*{id}">
@@ -73,7 +73,7 @@
                                     type="submit"/>
                         </form>
                         <form class="d-inline"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__(__${T(bg.softuni.marketplace.web.controllers.admin.UsersController).USERS_PARAM_DISABLE}__)}"
+                              th:action="@{__${@thymeleafParamsAdapter.getUrlAdminUsers()}__(__${@thymeleafParamsAdapter.getUsersParamDisable()}__)}"
                               th:if="*{active}"
                               th:method="patch">
                             <input hidden name="id" th:value="*{id}">
@@ -82,7 +82,7 @@
                                     type="submit"/>
                         </form>
                         <form class="d-inline"
-                              th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_ADMIN_USERS}__}"
+                              th:action="@{__${@thymeleafParamsAdapter.getUrlAdminUsers()}__}"
                               th:method="delete">
                             <input hidden name="id" th:value="*{id}">
                             <button class="btn btn-danger btn-sm border-dark table-button-large"

@@ -1,8 +1,8 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
     <form class="app-form"
-          th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_PROFILE}__/__*{id}__}"
+          th:action="@{__${@thymeleafParamsAdapter.getUrlUserProfile()}__/__*{id}__}"
           th:method="patch"
-          th:object="${__${T(bg.softuni.marketplace.web.controllers.user.ProfileUserController).USER_PROFILE_ATTRIBUTE_NAME}__}">
+          th:object="${__${@thymeleafParamsAdapter.getUsersProfileAttributeName()}__}">
 
         <h1 class="app-form-header" th:text="#{user.profile-form.title(*{username})}"/>
 

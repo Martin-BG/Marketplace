@@ -6,7 +6,7 @@
     <header th:insert="~{fragments/header :: header}"></header>
     <main class="app-main-mt">
         <th:block th:replace="~{fragments/alerts :: alerts}"/>
-        <th:block th:replace="${__${T(bg.softuni.marketplace.config.InterceptorsConfig).VIEW_ATTRIBUTE_NAME}__}"/>
+        <th:block th:replace="${__${@thymeleafParamsAdapter.getViewAttributeName()}__}"/>
     </main>
     <footer th:insert="~{fragments/footer :: footer}"></footer>
 </div>

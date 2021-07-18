@@ -1,8 +1,8 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
     <form class="app-form"
-          th:action="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_REGISTER}__}"
+          th:action="@{__${@thymeleafParamsAdapter.getUrlUserRegister()}__}"
           th:method="post"
-          th:object="${__${T(bg.softuni.marketplace.web.controllers.user.RegisterUserController).USER_ATTRIBUTE_NAME}__}">
+          th:object="${__${@thymeleafParamsAdapter.getRegisterUserAttributeName()}__}">
 
         <h1 class="app-form-header" th:text="#{user.register-form.title}"/>
 

@@ -5,10 +5,10 @@
         <h5 class="mb-4" th:text="#{index.subtitle}"/>
         <p>
             <a class="app-color"
-               th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_LOGIN}__}" th:text="#{nav.login}"/>
+               th:href="@{__${@thymeleafParamsAdapter.getUrlUserLogin()}__}" th:text="#{nav.login}"/>
             <span th:text="#{index.text}"/>
             <a class="app-color"
-               th:href="@{__${T(bg.softuni.marketplace.config.WebConfig).URL_USER_REGISTER}__}"
+               th:href="@{__${@thymeleafParamsAdapter.getUrlUserRegister()}__}"
                th:text="#{nav.register}"/>
         </p>
     </div>
