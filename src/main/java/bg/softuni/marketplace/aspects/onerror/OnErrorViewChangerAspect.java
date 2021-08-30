@@ -19,6 +19,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
 import javax.validation.ConstraintViolation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +56,7 @@ import java.util.stream.Collectors;
  * and {@link OnError#ignoreMissingErrors} is {@code false}
  * <hr>
  * In the following example in case of any exception or validation errors returned value will be set to "/register".
- * "user" data is preserved and returned back to the view.
+ * "user" data is preserved and returned to the view.
  * <pre>
  * {@code @}PostMapping
  * {@code @}OnError(view = "/register", catchException = true)
@@ -63,7 +64,7 @@ import java.util.stream.Collectors;
  *                      Errors errors) {
  *      //... any exception thrown here will be handled automatically
  *      return "redirect:/login";
- * }}</pre>
+ * }</pre>
  * <hr>
  *
  * @see OnError
@@ -76,7 +77,7 @@ import java.util.stream.Collectors;
 @Component
 public class OnErrorViewChangerAspect {
 
-    private static final Pattern SPEL_PATTERN = Pattern.compile("^#\\{(.+)}$"); // "#{SpEL expression}"
+    private static final Pattern SPEL_PATTERN = Pattern.compile("^#\\{(?<expression>.+)}$"); // "#{SpEL expression}"
 
     private final MessageHelper messageHelper;
     private final AlertContainer alertContainer;
@@ -131,7 +132,7 @@ public class OnErrorViewChangerAspect {
             Matcher matcher = SPEL_PATTERN.matcher(url);
             if (matcher.matches()) {
                 url = Helper.getValueFromExpression(
-                        pjp.getArgs(), methodSignature.getParameterNames(), matcher.group(1), String.class);
+                        pjp.getArgs(), methodSignature.getParameterNames(), matcher.group("expression"), String.class);
             }
             result = buildView(annotation.action(), url);
 
@@ -153,7 +154,7 @@ public class OnErrorViewChangerAspect {
                 .filter(Objects::nonNull)
                 .filter(object -> Errors.class.isAssignableFrom(object.getClass()))
                 .map(Errors.class::cast)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private static String buildView(OnError.Action action, String url) {

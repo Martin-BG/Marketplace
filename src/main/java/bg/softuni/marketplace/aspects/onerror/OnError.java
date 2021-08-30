@@ -111,7 +111,7 @@ public @interface OnError {
     ErrorToAlert alert() default ErrorToAlert.GLOBAL;
 
     /**
-     * Do do not throw {@link OnErrorViewChangerException} if no param of type
+     * Do not throw {@link OnErrorViewChangerException} if no param of type
      * {@link Errors} is present at annotated method.
      *
      * @see OnErrorViewChangerAspect

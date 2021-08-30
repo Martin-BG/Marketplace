@@ -128,21 +128,6 @@ public class ValidateMethodArgumentsAspect {
         }
     }
 
-    private static List<MethodParameter> getMethodParameters(MethodSignature methodSignature) {
-        return IntStream
-                .range(0, methodSignature.getParameterNames().length)
-                .mapToObj(i -> new MethodParameter(methodSignature.getMethod(), i))
-                .collect(Collectors.toList());
-    }
-
-    private static Object getDefaultReturnObject(MethodSignature methodSignature) {
-        if (methodSignature.getReturnType().equals(Optional.class)) {
-            return Optional.empty();
-        }
-
-        return null;
-    }
-
     @Around("@annotation(Validate)")
     public Object validate(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
@@ -165,7 +150,7 @@ public class ValidateMethodArgumentsAspect {
 
             MethodParameter nextParameter = methodParameters.get(i + 1);
             if (!Errors.class.isAssignableFrom(nextParameter.getParameterType())) {
-                // the Errors argument has to be right after the argument to form a pair
+                // the Errors' argument has to be right after the argument to form a pair
                 continue;
             }
 
@@ -203,5 +188,20 @@ public class ValidateMethodArgumentsAspect {
 
             throw throwable;
         }
+    }
+
+    private static List<MethodParameter> getMethodParameters(MethodSignature methodSignature) {
+        return IntStream
+                .range(0, methodSignature.getParameterNames().length)
+                .mapToObj(i -> new MethodParameter(methodSignature.getMethod(), i))
+                .toList();
+    }
+
+    private static Object getDefaultReturnObject(MethodSignature methodSignature) {
+        if (methodSignature.getReturnType().equals(Optional.class)) {
+            return Optional.empty();
+        }
+
+        return null;
     }
 }

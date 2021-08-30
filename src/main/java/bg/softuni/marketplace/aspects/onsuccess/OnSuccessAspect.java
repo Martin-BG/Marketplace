@@ -62,7 +62,7 @@ public class OnSuccessAspect {
                 .stream(args)
                 .filter(Objects::nonNull)
                 .filter(object -> Errors.class.isAssignableFrom(object.getClass()))
-                .map(object -> (Errors) object)
+                .map(Errors.class::cast)
                 .filter(Errors::hasErrors)
                 .findAny()
                 .isEmpty();

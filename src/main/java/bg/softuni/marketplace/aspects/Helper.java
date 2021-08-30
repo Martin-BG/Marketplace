@@ -1,5 +1,7 @@
 package bg.softuni.marketplace.aspects;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -8,10 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Helper {
-
-    private Helper() {
-    }
 
     /**
      * Get argument values, using supplied SpEL expressions (ex. "#user.username")
@@ -22,13 +22,9 @@ public final class Helper {
      * @return {@link Object}[] with argument values
      */
     public static Object[] getArguments(Object[] args, String[] parameterNames, String[] expressions) {
-        Object[] arguments = new Object[expressions.length];
-
-        for (int i = 0; i < expressions.length; i++) {
-            arguments[i] = getArgumentValue(args, parameterNames, expressions[i]);
-        }
-
-        return arguments;
+        return IntStream.range(0, expressions.length).boxed()
+                .map(i -> getArgumentValue(args, parameterNames, expressions[i]))
+                .toArray();
     }
 
     /**
@@ -37,20 +33,25 @@ public final class Helper {
      * Getting Dynamic Values From method Parameters in Custom Annotations using Spring AOP</a>
      */
     private static Object getArgumentValue(Object[] args, String[] parameterNames, String expression) {
-        ExpressionParser parser = new SpelExpressionParser();
-        StandardEvaluationContext context = new StandardEvaluationContext();
+        Map<String, Object> variables = getParamNameValueMap(parameterNames, args);
 
-        for (int i = 0; i < parameterNames.length; i++) {
-            context.setVariable(parameterNames[i], args[i]);
-        }
+        StandardEvaluationContext context = new StandardEvaluationContext();
+        context.setVariables(variables);
+
+        ExpressionParser parser = new SpelExpressionParser();
 
         return parser
                 .parseExpression(expression)
                 .getValue(context, Object.class);
     }
 
+    private static Map<String, Object> getParamNameValueMap(String[] parameterNames, Object[] args) {
+        return IntStream.range(0, args.length).boxed()
+                .collect(Collectors.toMap(i -> parameterNames[i], i -> args[i]));
+    }
+
     /**
-     * Parse a SPeL expression from method arguments to a single value which is retuned.
+     * Parse a SpEL expression from method arguments to a single value which is returned.
      *
      * @param args           method arguments
      * @param parameterNames method parameter names
@@ -61,15 +62,15 @@ public final class Helper {
      */
     public static <T> T getValueFromExpression(Object[] args, String[] parameterNames,
                                                String expression, Class<T> valueClass) {
-        Map<String, Object> variables = IntStream.range(0, args.length).boxed()
-                .collect(Collectors.toMap(i -> parameterNames[i], i -> args[i]));
+        Map<String, Object> variables = getParamNameValueMap(parameterNames, args);
+
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setVariables(variables);
 
-        T value = new SpelExpressionParser()
+        ExpressionParser parser = new SpelExpressionParser();
+
+        return parser
                 .parseExpression(expression)
                 .getValue(context, valueClass);
-
-        return value;
     }
 }

@@ -23,7 +23,7 @@ public class MarketplaceApplication extends SpringBootServletInitializer impleme
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         log.log(Level.INFO, "Application deployed and ready to use");
     }
 }

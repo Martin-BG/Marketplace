@@ -6,11 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Validation logic for {@link EqualFields} class-type annotation.
@@ -35,74 +31,48 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
     @Override
     public void initialize(EqualFields constraintAnnotation) {
         fieldsToValidate = Arrays
-                .stream(constraintAnnotation.value().length > 0 ?
-                        constraintAnnotation.value() :
-                        constraintAnnotation.fields())
-                .collect(Collectors.toUnmodifiableList());
+                .stream(constraintAnnotation.value().length > 0
+                        ? constraintAnnotation.value()
+                        : constraintAnnotation.fields())
+                .toList();
         message = constraintAnnotation.message();
         inverse = constraintAnnotation.inverse();
         forField = constraintAnnotation.forField();
     }
 
     @Override
-    public boolean isValid(Object obj, ConstraintValidatorContext context) {
-        if (fieldsToValidate.size() <= 1) {
-            String errorMessage = MessageFormat
-                    .format("[{0}] At least two fields for validation must be specified: {1}",
-                            obj.getClass().getName(),
-                            String.join(", ", fieldsToValidate));
-            throw new EqualFieldsValidatorException(errorMessage);
-        }
-
-        if (!forField.isEmpty() && !fieldsToValidate.contains(forField)) {
-            String errorMessage = MessageFormat
-                    .format("Target error field [{0}] is not present in validated fields list: {1}",
-                            forField,
-                            String.join(", ", fieldsToValidate));
-            throw new EqualFieldsValidatorException(errorMessage);
-        }
-
-        List<String> fieldsNotFound = new ArrayList<>(fieldsToValidate);
+    public boolean isValid(Object target, ConstraintValidatorContext context) {
+        validateFieldsParam(target);
 
         List<Object> fieldValues = Arrays
-                .stream(obj.getClass().getDeclaredFields())
+                .stream(target.getClass().getDeclaredFields())
                 .filter(field -> fieldsToValidate.contains(field.getName()))
-                .peek(field -> fieldsNotFound.remove(field.getName()))
-                .map(field -> getFieldValue(field, obj))
+                .map(field -> getFieldValue(field, target))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .toList();
 
-        // Not all required for validation fields found in class
-        if (!fieldsNotFound.isEmpty()) {
-            String errorMessage = MessageFormat
-                    .format("[{0}] Field(s) to validate not found: {1}",
-                            obj.getClass().getName(),
-                            String.join(", ", fieldsNotFound));
-            throw new EqualFieldsValidatorException(errorMessage);
-        }
-
-        boolean result;
+        boolean isValid;
 
         if (fieldValues.isEmpty()) {
             // All fields have null values -> equal by contract
-            result = true;
+            isValid = true;
         } else if (fieldValues.size() != fieldsToValidate.size()) {
             // Mix of null (filtered-out) and non-null values for fields -> not equal by contract
-            result = false;
+            isValid = false;
         } else {
             // Check equality of field values
-            result = fieldValues
+            isValid = fieldValues
                     .stream()
                     .distinct()
                     .count() == 1L;
         }
 
         if (inverse) {
-            result = !result;
+            isValid = !isValid;
         }
 
-        if (!result) {
+        if (!isValid) {
             context.disableDefaultConstraintViolation();
             if (!forField.isEmpty()) {
                 // Report error to a specified field
@@ -119,17 +89,58 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
             }
         }
 
-        return result;
+        return isValid;
     }
 
-    private static Optional<Object> getFieldValue(Field field, Object obj) {
+    private void validateFieldsParam(Object target) {
+        if (fieldsToValidate.size() <= 1) {
+            String errorMessage = MessageFormat
+                    .format("[{0}] At least two fields for validation must be specified: {1}",
+                            target.getClass().getName(),
+                            String.join(", ", fieldsToValidate));
+            throw new EqualFieldsValidatorException(errorMessage);
+        }
+
+        if (!forField.isEmpty() && !fieldsToValidate.contains(forField)) {
+            String errorMessage = MessageFormat
+                    .format("Target error field [{0}] is not present in validated fields list: {1}",
+                            forField,
+                            String.join(", ", fieldsToValidate));
+            throw new EqualFieldsValidatorException(errorMessage);
+        }
+
+        if (fieldsToValidate.size() != Set.copyOf(fieldsToValidate).size()) {
+            String errorMessage = MessageFormat
+                    .format("[{0}] There are duplicate(s) in validated fields list: {1}",
+                            target.getClass().getName(),
+                            String.join(", ", fieldsToValidate));
+            throw new EqualFieldsValidatorException(errorMessage);
+        }
+
+        List<String> fieldsNotFound = new ArrayList<>(fieldsToValidate);
+
+        Arrays.stream(target.getClass().getDeclaredFields())
+                .filter(field -> fieldsToValidate.contains(field.getName()))
+                .forEach(field -> fieldsNotFound.remove(field.getName()));
+
+        // Not all required for validation fields found in class
+        if (!fieldsNotFound.isEmpty()) {
+            String errorMessage = MessageFormat
+                    .format("[{0}] Field(s) to validate not found: {1}",
+                            target.getClass().getName(),
+                            String.join(", ", fieldsNotFound));
+            throw new EqualFieldsValidatorException(errorMessage);
+        }
+    }
+
+    private static Optional<Object> getFieldValue(Field field, Object target) {
         try {
             field.setAccessible(true);
-            return Optional.ofNullable(field.get(obj));
+            return Optional.ofNullable(field.get(target));
         } catch (IllegalAccessException e) {
             String message = MessageFormat
                     .format("[{0}] Failed to get value of: {1}",
-                            obj.getClass().getName(),
+                            target.getClass().getName(),
                             field.getName());
             throw new EqualFieldsValidatorException(message, e);
         }

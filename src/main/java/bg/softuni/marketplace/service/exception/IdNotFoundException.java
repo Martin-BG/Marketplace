@@ -1,6 +1,11 @@
 package bg.softuni.marketplace.service.exception;
 
+import java.io.Serial;
+
 public class IdNotFoundException extends RuntimeException {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     public IdNotFoundException() {
     }

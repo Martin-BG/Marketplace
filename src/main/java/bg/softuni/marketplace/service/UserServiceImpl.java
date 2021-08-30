@@ -39,7 +39,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Log
 @RequiredArgsConstructor
@@ -156,7 +155,7 @@ public class UserServiceImpl implements UserService {
                 .findAll(Sort.by(Sort.Order.asc("username")))
                 .stream()
                 .map(serviceHelper::mapUserToViewModel)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -168,14 +167,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ProfileViewModel getUserProfile(@NotNull UUID id) {
-        return profileRepository
-                .findById(id)
-                .map(profile -> {
+        return getProfileByIdAndProcess(
+                id,
+                profile -> {
                     ProfileViewModel profileViewModel = mapper.map(profile, ProfileViewModel.class);
                     profileViewModel.setUsername(profile.getUser().getUsername());
                     return profileViewModel;
-                })
-                .orElseThrow(idNotFoundException(id));
+                });
     }
 
     @Override
@@ -185,17 +183,24 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(cacheNames = USER_DETAILS_CACHE, key = "#result")})
     public String updateProfile(@NotNull ProfileUpdateBindingModel bindingModel,
                                 @NotNull Errors errors) {
-        return profileRepository
-                .findById(bindingModel.getId())
-                .map(profile -> {
+        return getProfileByIdAndProcess(
+                bindingModel.getId(),
+                profile -> {
                     profile.setEmail(bindingModel.getEmail());
                     return profile.getUser().getUsername();
-                })
-                .orElseThrow(idNotFoundException(bindingModel.getId()));
+                });
     }
 
-    private String getUserByIdAndProcess(@NotNull UUID id,
-                                         Function<? super User, String> function) {
+    private <T> T getProfileByIdAndProcess(@NotNull UUID id,
+                                           Function<? super Profile, T> function) {
+        return profileRepository
+                .findById(id)
+                .map(function)
+                .orElseThrow(idNotFoundException(id));
+    }
+
+    private <T> T getUserByIdAndProcess(@NotNull UUID id,
+                                        Function<? super User, T> function) {
         return userRepository
                 .findById(id)
                 .map(function)

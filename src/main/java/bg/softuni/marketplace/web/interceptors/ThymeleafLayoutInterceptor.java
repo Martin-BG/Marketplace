@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.function.Predicate;
 
 /**
  * Modifies view according to {@link Layout} annotation by rendering it into a layout template.
@@ -58,30 +59,21 @@ public final class ThymeleafLayoutInterceptor implements HandlerInterceptor {
                 return;
             }
 
-            Layout layout = Helper.getMethodOrTypeAnnotation(handler, Layout.class);
-            if (layout == null) {
-                return;
-            }
-
-            String layoutName = getLayoutName(layout);
-            if (Layout.NONE.equals(layoutName)) {
-                return;
-            }
-
-            if (layoutName.isBlank()) {
-                layoutName = defaultLayout;
-            }
-
-            modelAndView.setViewName(layoutName);
-            modelAndView.addObject(viewAttribute, getView(originalViewName));
+            Helper.getMethodOrTypeAnnotation(handler, Layout.class)
+                    .map(this::getLayoutName)
+                    .filter(Predicate.not(Layout.NONE::equals))
+                    .ifPresent(layoutName -> {
+                        modelAndView.setViewName(layoutName);
+                        modelAndView.addObject(viewAttribute, getView(originalViewName));
+                    });
         }
     }
 
     private String getLayoutName(Layout layout) {
-        if (layout != null) {
-            return layout.value();
+        if (layout == null || layout.value().isBlank()) {
+            return defaultLayout;
         }
-        return defaultLayout;
+        return layout.value();
     }
 
     private String getView(String viewName) {

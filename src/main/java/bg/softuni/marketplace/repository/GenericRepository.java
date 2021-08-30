@@ -16,7 +16,7 @@ import java.util.Optional;
  * <p>
  * Projections are proxy objects that cannot be serialized
  * (ex. cannot be stored in HTTP session or in Redis based cache).
- * Proxies should be manually mapped to objects of {@link Serializable} class when serialization is required.
+ * Proxies should be manually mapped to object of {@link Serializable} class when serialization is required.
  *
  * @param <E> Entity type
  * @param <I> ID type used by the Entity

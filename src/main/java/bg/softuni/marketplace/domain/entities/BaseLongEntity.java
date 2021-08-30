@@ -11,7 +11,7 @@ import java.io.Serial;
 /**
  * {@link Long} implementation of {@link BaseEntity} abstract class
  * <p>
- * Use {@link AccessType#PROPERTY} for id as best practice to avoid LazyInitializationException
+ * Use {@link AccessType#PROPERTY} for id to avoid LazyInitializationException
  * <p>
  * Use private setter to prevent mutability
  */

@@ -58,24 +58,23 @@ public final class TitleInterceptor implements HandlerInterceptor {
                 return;
             }
 
-            String originalViewName = modelAndView.getViewName();
+            final String originalViewName = modelAndView.getViewName();
             if (originalViewName == null || Helper.isRedirectOrForward(originalViewName)) {
                 return;
             }
 
-            Locale locale = LocaleContextHolder.getLocale();
-            String title = messageSource.getMessage(titleCode, null, locale);
+            final Locale locale = LocaleContextHolder.getLocale();
 
-            Title titleAnnotation = Helper.getMethodOrTypeAnnotation(handler, Title.class);
+            final String defaultTitle = messageSource.getMessage(titleCode, null, locale);
 
-            if (titleAnnotation != null) {
-                String newTitle = messageSource.getMessage(titleAnnotation.title(), null, locale);
-                if (titleAnnotation.append()) {
-                    title = title + " - " + newTitle;
-                } else {
-                    title = newTitle;
-                }
-            }
+            final String title = Helper.getMethodOrTypeAnnotation(handler, Title.class)
+                    .map(titleAnnotation -> {
+                        final String newTitle = messageSource.getMessage(titleAnnotation.title(), null, locale);
+                        return titleAnnotation.append()
+                                ? (defaultTitle + " - " + newTitle)
+                                : newTitle;
+                    })
+                    .orElse(defaultTitle);
 
             modelAndView.addObject(titleAttribute, title);
         }

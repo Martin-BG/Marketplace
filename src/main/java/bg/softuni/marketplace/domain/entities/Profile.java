@@ -37,11 +37,11 @@ public class Profile extends BaseEntity<UUID> implements Viewable<Profile> {
     /**
      * Mapped by {@link User#getId() User.id}
      * <p>
-     * Use space optimized BINARY(16) instead of CHAR/VARCHAR(36) database format
+     * Space optimized BINARY(16) instead of CHAR/VARCHAR(36) database format
      * <p>
-     * Use AccessType.PROPERTY for id as best practice to avoid LazyInitializationException
+     * {@link AccessType#PROPERTY} to avoid LazyInitializationException
      * <p>
-     * Use a private setter to prevent mutability
+     * Private setter to prevent mutability
      */
     @Id
     @Column(unique = true, nullable = false, insertable = false, updatable = false, columnDefinition = "BINARY(16)")
