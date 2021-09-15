@@ -29,7 +29,7 @@
         <lombok.version>1.18.20</lombok.version>
 
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-        <junit-jupiter.version>5.7.2</junit-jupiter.version>
+        <junit-jupiter.version>5.8.0</junit-jupiter.version>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <mockito.version>3.12.4</mockito.version>
@@ -41,7 +41,7 @@
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator -->
-        <webjars-locator.version>0.41</webjars-locator.version>
+        <webjars-locator.version>0.42</webjars-locator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
         <jquery.version>3.6.0</jquery.version>
