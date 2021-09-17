@@ -17,7 +17,7 @@
     <description>Final Project for course Java MVC Frameworks - Spring @ SoftUni - Feb. 2019</description>
 
     <properties>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
 
         <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
         <modelmapper.version>2.4.4</modelmapper.version>
@@ -181,6 +181,14 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>
