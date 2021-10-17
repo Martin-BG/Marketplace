@@ -35,7 +35,7 @@
         <mockito.version>4.0.0</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <hibernate.version>5.5.7.Final</hibernate.version>
+        <hibernate.version>5.6.0.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
@@ -47,7 +47,7 @@
         <jquery.version>3.6.0</jquery.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
-        <bootstrap.version>5.1.1</bootstrap.version>
+        <bootstrap.version>5.1.2</bootstrap.version>
     </properties>
 
     <dependencies>
