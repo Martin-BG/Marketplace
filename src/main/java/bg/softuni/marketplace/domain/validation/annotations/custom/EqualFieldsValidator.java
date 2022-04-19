@@ -57,15 +57,15 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
         if (fieldValues.isEmpty()) {
             // All fields have null values -> equal by contract
             isValid = true;
-        } else if (fieldValues.size() != fieldsToValidate.size()) {
-            // Mix of null (filtered-out) and non-null values for fields -> not equal by contract
-            isValid = false;
-        } else {
+        } else if (fieldValues.size() == fieldsToValidate.size()) {
             // Check equality of field values
             isValid = fieldValues
                     .stream()
                     .distinct()
                     .count() == 1L;
+        } else {
+            // Mix of null (filtered-out) and non-null values for fields -> not equal by contract
+            isValid = false;
         }
 
         if (inverse) {
@@ -74,18 +74,18 @@ public class EqualFieldsValidator implements ConstraintValidator<EqualFields, Ob
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            if (!forField.isEmpty()) {
-                // Report error to a specified field
-                context.buildConstraintViolationWithTemplate(message)
-                        .addPropertyNode(forField)
-                        .addConstraintViolation();
-            } else {
+            if (forField.isEmpty()) {
                 // Report error to all validated fields
                 fieldsToValidate.forEach(field -> context
                         .buildConstraintViolationWithTemplate(message)
                         .addPropertyNode(field)
                         .addConstraintViolation()
                 );
+            } else {
+                // Report error to a specified field
+                context.buildConstraintViolationWithTemplate(message)
+                        .addPropertyNode(forField)
+                        .addConstraintViolation();
             }
         }
 

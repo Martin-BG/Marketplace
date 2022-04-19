@@ -40,6 +40,7 @@ public class UsersController extends BaseController {
     public static final String USERS_PARAM_DISABLE = "disable";
 
     private static final String VIEW_USERS_ALL = "admin/users";
+    private static final String NOT_SELF = "#user.id ne #bindingModel.id";
 
     private final UserService userService;
 
@@ -52,7 +53,7 @@ public class UsersController extends BaseController {
     }
 
     @PatchMapping(params = {USERS_PARAM_UPDATE})
-    @PreAuthorize("#user.id ne #bindingModel.id")
+    @PreAuthorize(NOT_SELF)
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
     @OnSuccess(message = "users.update-role.success", args = {"#username", "#bindingModel.authority"})
     public String updateRole(@ModelAttribute UserRoleBindingModel bindingModel,
@@ -66,7 +67,7 @@ public class UsersController extends BaseController {
     }
 
     @PatchMapping(params = {USERS_PARAM_ACTIVATE})
-    @PreAuthorize("#user.id ne #bindingModel.id")
+    @PreAuthorize(NOT_SELF)
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
     @OnSuccess(message = "users.activate.success", args = "#username")
     public String activateUser(@ModelAttribute UserStatusBindingModel bindingModel,
@@ -80,7 +81,7 @@ public class UsersController extends BaseController {
     }
 
     @PatchMapping(params = {USERS_PARAM_DISABLE})
-    @PreAuthorize("#user.id ne #bindingModel.id")
+    @PreAuthorize(NOT_SELF)
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
     @OnSuccess(message = "users.disable.success", args = "#username")
     public String disableUser(@ModelAttribute UserStatusBindingModel bindingModel,
@@ -94,7 +95,7 @@ public class UsersController extends BaseController {
     }
 
     @DeleteMapping
-    @PreAuthorize("#user.id ne #bindingModel.id")
+    @PreAuthorize(NOT_SELF)
     @OnError(view = URL_ADMIN_USERS, action = REDIRECT, catchException = true, alert = ALL)
     @OnSuccess(message = "users.delete-user.success", args = "#username")
     public String deleteUser(@ModelAttribute UserDeleteBindingModel bindingModel,

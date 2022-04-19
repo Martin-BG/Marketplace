@@ -2,10 +2,10 @@ package bg.softuni.marketplace.domain.entities;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Access;
 import javax.persistence.*;
 import java.io.Serial;
 import java.util.UUID;
@@ -31,8 +31,9 @@ import java.util.UUID;
  */
 @Setter(AccessLevel.PRIVATE)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @MappedSuperclass
-abstract class BaseUuidEntity extends BaseEntity<UUID> {
+class BaseUuidEntity extends BaseEntity<UUID> {
 
     @Serial
     private static final long serialVersionUID = 1L;
