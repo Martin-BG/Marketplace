@@ -10,7 +10,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
 
-import javax.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidator;
 
 @Configuration
 public class ValidationConfig {

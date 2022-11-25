@@ -2,9 +2,10 @@ package bg.softuni.marketplace.domain.validation.annotations.custom;
 
 import org.springframework.core.annotation.AliasFor;
 
-import javax.validation.Constraint;
-import javax.validation.OverridesAttribute;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.OverridesAttribute;
+import jakarta.validation.Payload;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;

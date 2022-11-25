@@ -18,7 +18,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import javax.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolation;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

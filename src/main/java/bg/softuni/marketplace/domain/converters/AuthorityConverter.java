@@ -2,8 +2,8 @@ package bg.softuni.marketplace.domain.converters;
 
 import bg.softuni.marketplace.domain.enums.Authority;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 @Converter
 public class AuthorityConverter implements AttributeConverter<Authority, String> {

@@ -3,12 +3,14 @@ package bg.softuni.marketplace.aspects.validate;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.validation.Errors;
 
-import javax.validation.groups.Default;
+import jakarta.validation.groups.Default;
+
 import java.lang.annotation.*;
 import java.util.Optional;
 
 /**
  * See {@link ValidateMethodArgumentsAspect} for usage.
+ *
  * @see #validateParameters()
  * @see #returnOnError()
  * @see #catchException()
@@ -27,7 +29,7 @@ public @interface Validate {
     boolean value() default false;
 
     /**
-     * Validate method parameters first and throw {@link javax.validation.ConstraintViolationException} on errors.
+     * Validate method parameters first and throw {@link jakarta.validation.ConstraintViolationException} on errors.
      * <hr>
      * Exception will be thrown on null value for either user or errors in the following example:
      * <pre>
@@ -112,7 +114,7 @@ public @interface Validate {
      * }
      * </pre>
      *
-     * @see javax.validation.GroupSequence
+     * @see jakarta.validation.GroupSequence
      */
     Class<?>[] groups() default {Default.class};
 }

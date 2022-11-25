@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
-        <version>2.7.5</version>
+        <version>3.0.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>bg.softuni</groupId>
@@ -17,13 +17,13 @@
     <description>Final Project for course Java MVC Frameworks - Spring @ SoftUni - Feb. 2019</description>
 
     <properties>
-        <java.version>18</java.version>
+        <java.version>19</java.version>
 
         <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
         <modelmapper.version>3.1.0</modelmapper.version>
 
-        <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
-        <thymeleaf-extras-springsecurity5.version>3.1.0.RC2</thymeleaf-extras-springsecurity5.version>
+        <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6 -->
+        <thymeleaf-extras-springsecurity6.version>3.1.0.RELEASE</thymeleaf-extras-springsecurity6.version>
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <lombok.version>1.18.24</lombok.version>
@@ -35,10 +35,10 @@
         <mockito.version>4.9.0</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <hibernate.version>5.6.14.Final</hibernate.version>
+        <hibernate.version>6.1.5.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
-        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+        <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator -->
         <webjars-locator.version>0.46</webjars-locator.version>
@@ -133,7 +133,7 @@
 
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
 
         <dependency>

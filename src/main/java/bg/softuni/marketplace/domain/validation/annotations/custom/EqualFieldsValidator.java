@@ -2,8 +2,9 @@ package bg.softuni.marketplace.domain.validation.annotations.custom;
 
 import lombok.extern.java.Log;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.*;

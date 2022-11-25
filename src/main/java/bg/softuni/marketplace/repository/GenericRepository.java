@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;

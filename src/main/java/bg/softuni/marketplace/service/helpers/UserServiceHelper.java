@@ -8,7 +8,7 @@ import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import bg.softuni.marketplace.domain.validation.annotations.composite.user.ValidUserEmail;
 import bg.softuni.marketplace.service.UserService;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * {@link UserService} helper methods interface.

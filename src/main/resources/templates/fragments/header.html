@@ -10,6 +10,7 @@
                 type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <!--/*@thymesVar id="servletPath" type="java.lang.String"*/-->
         <th:block sec:authorize="isAnonymous()">
             <a class="navbar-brand nav-item-ml" th:href="@{__${@thymeleafParamsAdapter.getUrlIndex()}__}"
                th:text="#{nav.title}"/>
@@ -18,19 +19,19 @@
                 <ul class="navbar-nav">
                     <li class="nav-item nav-item-ml">
                         <a class="nav-link"
-                           th:classappend="${#request.getServletPath() == @thymeleafParamsAdapter.getUrlIndex() ? 'active' : ''}"
+                           th:classappend="${servletPath.equals(@thymeleafParamsAdapter.getUrlIndex()) ? 'active' : ''}"
                            th:href="@{__${@thymeleafParamsAdapter.getUrlIndex()}__}"
                            th:text="#{nav.index}"/>
                     </li>
                     <li class="nav-item nav-item-ml">
                         <a class="nav-link"
-                           th:classappend="${#request.getServletPath() == @thymeleafParamsAdapter.getUrlUserRegister() ? 'active' : ''}"
+                           th:classappend="${servletPath.equals(@thymeleafParamsAdapter.getUrlUserRegister()) ? 'active' : ''}"
                            th:href="@{__${@thymeleafParamsAdapter.getUrlUserRegister()}__}"
                            th:text="#{nav.register}"/>
                     </li>
                     <li class="nav-item nav-item-ml">
                         <a class="nav-link"
-                           th:classappend="${#request.getServletPath() == @thymeleafParamsAdapter.getUrlUserLogin() ? 'active' : ''}"
+                           th:classappend="${servletPath.equals(@thymeleafParamsAdapter.getUrlUserLogin()) ? 'active' : ''}"
                            th:href="@{__${@thymeleafParamsAdapter.getUrlUserLogin()}__}"
                            th:text="#{nav.login}"/>
                     </li>
@@ -46,7 +47,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item nav-item-ml">
                         <a class="nav-link"
-                           th:classappend="${#request.getServletPath() == @thymeleafParamsAdapter.getUrlUserHome() ? 'active' : ''}"
+                           th:classappend="${servletPath.equals(@thymeleafParamsAdapter.getUrlUserHome()) ? 'active' : ''}"
                            th:href="@{__${@thymeleafParamsAdapter.getUrlUserHome()}__}"
                            th:text="#{nav.home}"/>
                     </li>
@@ -59,18 +60,18 @@
                            href="#"
                            id="navbarDropdown"
                            role="button"
-                           th:classappend="${#request.getServletPath().startsWith(@thymeleafParamsAdapter.getUrlAdminBase()) ? 'active' : ''}"
+                           th:classappend="${servletPath.startsWith(@thymeleafParamsAdapter.getUrlAdminBase()) ? 'active' : ''}"
                            th:text="#{nav.admin}"/>
                         <ul aria-labelledby="navbarDropdown" class="dropdown-menu">
                             <li><a class="dropdown-item"
-                                   th:classappend="${#request.getServletPath() == @thymeleafParamsAdapter.getUrlAdminUsers() ? 'active' : ''}"
+                                   th:classappend="${servletPath.equals(@thymeleafParamsAdapter.getUrlAdminUsers()) ? 'active' : ''}"
                                    th:href="@{__${@thymeleafParamsAdapter.getUrlAdminUsers()}__}"
                                    th:text="#{nav.users}"/></li>
                         </ul>
                     </li>
                     <li class="nav-item nav-item-ml">
                         <a class="nav-link"
-                           th:classappend="${#request.getServletPath().contains(@thymeleafParamsAdapter.getUrlUserProfile()) ? 'active' : ''}"
+                           th:classappend="${servletPath.contains(@thymeleafParamsAdapter.getUrlUserProfile()) ? 'active' : ''}"
                            th:href="@{__${@thymeleafParamsAdapter.getUrlUserProfile()}__/__${#authentication.principal.id}__}"
                            th:text="#{nav.profile}"/>
                     </li>

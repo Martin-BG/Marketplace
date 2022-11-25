@@ -2,7 +2,8 @@ package bg.softuni.marketplace.service.helpers;
 
 import bg.softuni.marketplace.domain.api.Viewable;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Collection;
 
 /**

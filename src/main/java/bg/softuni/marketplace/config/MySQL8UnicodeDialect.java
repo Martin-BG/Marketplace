@@ -1,6 +1,6 @@
 package bg.softuni.marketplace.config;
 
-import org.hibernate.dialect.MySQL8Dialect;
+import org.hibernate.dialect.MySQLDialect;
 
 /**
  * Custom MySQL dialect settings:
@@ -14,7 +14,7 @@ import org.hibernate.dialect.MySQL8Dialect;
  * <p>
  * spring.jpa.properties.hibernate.dialect=my.package.MySQL8UnicodeDialect
  */
-public class MySQL8UnicodeDialect extends MySQL8Dialect {
+public class MySQL8UnicodeDialect extends MySQLDialect {
 
     @Override
     public String getTableTypeString() {

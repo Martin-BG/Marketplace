@@ -17,10 +17,11 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
 import org.springframework.validation.beanvalidation.MethodValidationInterceptor;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
-import javax.validation.executable.ExecutableValidator;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
+import jakarta.validation.executable.ExecutableValidator;
+
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;

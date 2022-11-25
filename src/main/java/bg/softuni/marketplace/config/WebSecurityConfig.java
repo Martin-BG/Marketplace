@@ -3,10 +3,11 @@ package bg.softuni.marketplace.config;
 import bg.softuni.marketplace.domain.enums.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
@@ -14,7 +15,7 @@ import java.time.Duration;
 
 @RequiredArgsConstructor
 @Configuration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
 
     public static final String CSRF_ATTRIBUTE_NAME = "_csrf";
 
@@ -27,8 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandler accessDeniedHandler;
     private final CsrfTokenRepository csrfTokenRepository;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
             .cors()
@@ -36,18 +37,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf()
                 .csrfTokenRepository(csrfTokenRepository)
                 .and()
-            .authorizeRequests()
+            .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                     .permitAll()
-                .antMatchers(WebConfig.URL_INDEX, WebConfig.URL_USER_LOGIN)
+                .requestMatchers(WebConfig.URL_INDEX, WebConfig.URL_USER_LOGIN)
                     .permitAll()
-                .antMatchers(WebConfig.URL_USER_REGISTER)
+                .requestMatchers(WebConfig.URL_USER_REGISTER)
                     .anonymous()
-                .antMatchers(WebConfig.URL_ADMIN_BASE + "/**")
+                .requestMatchers(WebConfig.URL_ADMIN_BASE + "/**")
                     .hasRole(Authority.ADMIN.name())
                 .anyRequest()
-                    .authenticated()
-                .and()
+                    .authenticated())
             .formLogin()
                 .loginPage(WebConfig.URL_USER_LOGIN)
                 .defaultSuccessUrl(WebConfig.URL_USER_HOME)
@@ -76,5 +76,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .changeSessionId()
                 .invalidSessionUrl(WebConfig.URL_USER_LOGIN + "?invalid");
         // @formatter:on
+        return http.build();
     }
 }

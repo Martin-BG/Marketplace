@@ -10,7 +10,8 @@ import bg.softuni.marketplace.domain.models.view.user.UserViewModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.Errors;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

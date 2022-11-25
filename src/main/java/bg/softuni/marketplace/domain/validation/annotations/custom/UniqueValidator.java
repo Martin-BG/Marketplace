@@ -3,8 +3,9 @@ package bg.softuni.marketplace.domain.validation.annotations.custom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
