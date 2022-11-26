@@ -62,6 +62,7 @@ div.form-group label {
 
 .app-button:hover {
     color: white;
+    --bs-btn-hover-bg: #1e3b90;
 }
 
 .app-form {
