@@ -47,7 +47,7 @@
         <jquery.version>3.6.1</jquery.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
-        <bootstrap.version>5.2.2</bootstrap.version>
+        <bootstrap.version>5.2.3</bootstrap.version>
     </properties>
 
     <dependencies>
