@@ -1,4 +1,4 @@
-$(document).ready(TriggerAlertClose());
+$(TriggerAlertClose());
 
 function TriggerAlertClose() {
     const fadeOutTime = 500;
