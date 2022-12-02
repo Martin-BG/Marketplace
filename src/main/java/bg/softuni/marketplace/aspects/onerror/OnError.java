@@ -55,7 +55,7 @@ public @interface OnError {
     Action action() default Action.VIEW;
 
     /**
-     * Catch {@link #exceptionType} or its sub-class exceptions on method invocation,
+     * Catch {@link #exceptionType} or its subclass exceptions on method invocation,
      * add {@link #message} to {@link Errors} argument and change view to {@link #view}.
      *
      * @see OnErrorViewChangerAspect
@@ -63,7 +63,7 @@ public @interface OnError {
     boolean catchException() default false;
 
     /**
-     * Exception type and its sub-classes to catch on method invocation.
+     * Exception type and its subclasses to catch on method invocation.
      *
      * @see OnErrorViewChangerAspect
      * @see #catchException()
@@ -71,7 +71,7 @@ public @interface OnError {
     Class<? extends Throwable> exceptionType() default Throwable.class;
 
     /**
-     * Exception type and its sub-classes to NOT catch on method invocation.
+     * Exception type and its subclasses to NOT catch on method invocation.
      * This setting is with higher precedence than {@link #exceptionType()}.
      *
      * @see OnErrorViewChangerAspect

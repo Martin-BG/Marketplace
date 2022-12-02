@@ -1,9 +1,8 @@
 package bg.softuni.marketplace.aspects.validate;
 
+import jakarta.validation.groups.Default;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.validation.Errors;
-
-import jakarta.validation.groups.Default;
 
 import java.lang.annotation.*;
 import java.util.Optional;
@@ -52,7 +51,7 @@ public @interface Validate {
     boolean returnOnError() default false;
 
     /**
-     * Catch {@link #exceptionType} or its sub-class exceptions on method invocation,
+     * Catch {@link #exceptionType} or its subclass exceptions on method invocation,
      * add {@link #message} to {@link Errors} argument and return {@link Optional#empty()} or null.
      *
      * @see ValidateMethodArgumentsAspect
@@ -60,7 +59,7 @@ public @interface Validate {
     boolean catchException() default false;
 
     /**
-     * Exception type and its sub-classes to catch on method invocation.
+     * Exception type and its subclasses to catch on method invocation.
      *
      * @see ValidateMethodArgumentsAspect
      * @see #catchException()

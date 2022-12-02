@@ -1,6 +1,10 @@
 package bg.softuni.marketplace.aspects.validate;
 
 import bg.softuni.marketplace.aspects.Helper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
+import jakarta.validation.executable.ExecutableValidator;
 import lombok.extern.java.Log;
 import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,11 +21,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
 import org.springframework.validation.beanvalidation.MethodValidationInterceptor;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validator;
-import jakarta.validation.executable.ExecutableValidator;
-
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +34,7 @@ import java.util.stream.IntStream;
  * Execute validation on arguments followed by {@link Errors}
  * on methods annotated with {@link Validate}.<br>
  * Optionally can validate method parameters and throw {@link ConstraintViolationException} on errors.<br>
- * Optionally can catch specified exception type (and its sub-types) thrown by
+ * Optionally can catch specified exception type (and its subtypes) thrown by
  * method invocation and add message with arguments to a provided {@link Errors} object.<br>
  * Optionally can skip method invocation if validation fails.<br>
  * In case of exception or validation errors it returns {@link Optional#empty} if this is the

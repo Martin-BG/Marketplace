@@ -10,7 +10,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
- * Method argument resolver supporting sub-types of {@link AbstractParameter}.
+ * Method argument resolver supporting subtypes of {@link AbstractParameter}.
  * <hr>
  * Resolver should be registered by adding to
  * {@link org.springframework.web.servlet.config.annotation.WebMvcConfigurer WebMvcConfigurer}'s

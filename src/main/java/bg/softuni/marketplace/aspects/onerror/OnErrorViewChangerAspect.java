@@ -5,6 +5,7 @@ import bg.softuni.marketplace.web.alert.Alert;
 import bg.softuni.marketplace.web.alert.AlertContainer;
 import bg.softuni.marketplace.web.common.MessageHelper;
 import bg.softuni.marketplace.web.common.ViewActionPrefix;
+import jakarta.validation.ConstraintViolation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,8 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-
-import jakarta.validation.ConstraintViolation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
  * Wrap calls to {@link OnError} annotated Controller
  * methods and change returned view to {@link OnError#view} on errors.
  * <p>
- * Catch specified by {@link OnError#exceptionType} exception type (and sub-types)
+ * Catch specified by {@link OnError#exceptionType} exception type (and subtypes)
  * thrown on method invocation when {@link OnError#catchException} is set.
  * <p>
  * Non-empty message set in {@link OnError#message message} with {@link OnError#args args}
