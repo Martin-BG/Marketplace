@@ -20,7 +20,7 @@
         <java.version>19</java.version>
 
         <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
-        <modelmapper.version>3.1.0</modelmapper.version>
+        <modelmapper.version>3.1.1</modelmapper.version>
 
         <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6 -->
         <thymeleaf-extras-springsecurity6.version>3.1.0.RELEASE</thymeleaf-extras-springsecurity6.version>
@@ -35,7 +35,7 @@
         <mockito.version>4.9.0</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <hibernate.version>6.1.5.Final</hibernate.version>
+        <hibernate.version>6.1.6.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
         <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
