@@ -34,7 +34,7 @@
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <mockito.version>4.10.0</mockito.version>
 
-        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
         <hibernate.version>6.1.6.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
