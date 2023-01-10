@@ -32,7 +32,7 @@
         <junit-jupiter.version>5.9.1</junit-jupiter.version>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <mockito.version>4.10.0</mockito.version>
+        <mockito.version>4.11.0</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
         <hibernate.version>6.1.6.Final</hibernate.version>
@@ -44,7 +44,7 @@
         <webjars-locator.version>0.46</webjars-locator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
-        <jquery.version>3.6.1</jquery.version>
+        <jquery.version>3.6.3</jquery.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
         <bootstrap.version>5.2.3</bootstrap.version>
