@@ -1,5 +1,6 @@
 package bg.softuni.marketplace.config;
 
+import org.hibernate.dialect.DatabaseVersion;
 import org.hibernate.dialect.MySQLDialect;
 
 /**
@@ -15,6 +16,12 @@ import org.hibernate.dialect.MySQLDialect;
  * spring.jpa.properties.hibernate.dialect=my.package.MySQL8UnicodeDialect
  */
 public class MySQL8UnicodeDialect extends MySQLDialect {
+
+    private static final int MY_SQL_DIALECT_VERSION_MAJOR = 8;
+
+    public MySQL8UnicodeDialect() {
+        super(DatabaseVersion.make(MY_SQL_DIALECT_VERSION_MAJOR));
+    }
 
     @Override
     public String getTableTypeString() {
