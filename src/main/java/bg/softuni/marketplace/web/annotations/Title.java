@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  * }}</pre>
  * Sample messages.properties:
  * <pre>{@code application.title=My App
- * title.login=Login}</pre>
+ * nav.login=Login}</pre>
  * Result title: <em>My App - Login</em>
  *
  * <pre>{@code @Title(title="nav.login", append=false)}</pre>
