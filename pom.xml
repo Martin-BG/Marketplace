@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
-        <version>3.0.3</version>
+        <version>3.0.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>bg.softuni</groupId>
@@ -32,7 +32,7 @@
         <junit-jupiter.version>5.9.2</junit-jupiter.version>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <mockito.version>5.1.1</mockito.version>
+        <mockito.version>5.2.0</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
         <hibernate.version>6.1.7.Final</hibernate.version>
@@ -44,7 +44,7 @@
         <webjars-locator.version>0.46</webjars-locator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
-        <jquery.version>3.6.3</jquery.version>
+        <jquery.version>3.6.4</jquery.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
         <bootstrap.version>5.2.3</bootstrap.version>
