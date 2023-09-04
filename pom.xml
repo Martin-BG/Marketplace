@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
-        <version>3.1.2</version>
+        <version>3.1.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>bg.softuni</groupId>
@@ -23,7 +23,7 @@
         <modelmapper.version>3.1.1</modelmapper.version>
 
         <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6 -->
-        <thymeleaf-extras-springsecurity6.version>3.1.1.RELEASE</thymeleaf-extras-springsecurity6.version>
+        <thymeleaf-extras-springsecurity6.version>3.1.2.RELEASE</thymeleaf-extras-springsecurity6.version>
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <lombok.version>1.18.28</lombok.version>
@@ -32,10 +32,10 @@
         <junit-jupiter.version>5.10.0</junit-jupiter.version>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <mockito.version>5.4.0</mockito.version>
+        <mockito.version>5.5.0</mockito.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
-        <hibernate.version>6.2.7.Final</hibernate.version>
+        <hibernate.version>6.2.8.Final</hibernate.version>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
@@ -44,10 +44,10 @@
         <webjars-locator.version>0.47</webjars-locator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
-        <jquery.version>3.7.0</jquery.version>
+        <jquery.version>3.7.1</jquery.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
-        <bootstrap.version>5.3.0</bootstrap.version>
+        <bootstrap.version>5.3.1</bootstrap.version>
     </properties>
 
     <dependencies>
