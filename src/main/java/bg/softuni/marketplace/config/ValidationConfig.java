@@ -7,36 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
 
 import jakarta.validation.ConstraintValidator;
 
 @Configuration
 public class ValidationConfig {
-
-    /**
-     * Configuration of runtime method arguments validation and return values validation.
-     * {@link org.springframework.validation.annotation.Validated} annotation should be present on the class for validation to work.
-     * <p>
-     * Could be useful in repository methods to prevent request with invalid parameters
-     * (ex. empty or not properly formatted username in findUserByUsername)
-     * <p><a href="https://www.baeldung.com/javax-validation-method-constraints">More information</a></p>
-     * <hr>
-     * <pre>
-     * {@code @}Validated
-     * {@code @}Repository
-     *  public interface UserRepository extends JpaRepository< User, UUID> {
-     *
-     *      Optional< User> findUserByUsername(@ValidUserUsername String username);
-     *  }</pre>
-     *
-     * @see ValidationAutoConfiguration#methodValidationPostProcessor methodValidationPostProcessor
-     */
-    @Bean
-    public MethodValidationPostProcessor methodValidationPostProcessor() {
-        return new MethodValidationPostProcessor();
-    }
 
     /**
      * Override default Spring validator configuration.
