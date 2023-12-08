@@ -28,8 +28,10 @@ class UserRepositoryTest {
 
         private final String TOO_LONG_USER_NAME = "Too long user name is used here...";
         private final String VALID_USER_NAME = "John Smith";
-        private final String blankMessage = messageSource.getMessage("user.username.blank", null, LocaleContextHolder.getLocale());
-        private final String lengthMessage = messageSource.getMessage("user.username.length", null, LocaleContextHolder.getLocale())
+        private final String blankMessage = messageSource
+                .getMessage("user.username.blank", null, LocaleContextHolder.getLocale());
+        private final String lengthMessage = messageSource
+                .getMessage("user.username.length", null, LocaleContextHolder.getLocale())
                 .replaceAll("\\{min}", Integer.toString(ValidUserUsername.MIN_LENGTH))
                 .replaceAll("\\{max}", Integer.toString(ValidUserUsername.MAX_LENGTH));
 
