@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -32,12 +33,9 @@ public class WebSecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
-            .cors()
-                .disable()
-            .csrf()
-                .csrfTokenRepository(csrfTokenRepository)
-                .and()
-            .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+            .cors(AbstractHttpConfigurer::disable)
+            .csrf(configurer -> configurer.csrfTokenRepository(csrfTokenRepository))
+            .authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                     .permitAll()
                 .requestMatchers(WebConfig.URL_INDEX, WebConfig.URL_USER_LOGIN)
@@ -48,33 +46,28 @@ public class WebSecurityConfig {
                     .hasRole(Authority.ADMIN.name())
                 .anyRequest()
                     .authenticated())
-            .formLogin()
-                .loginPage(WebConfig.URL_USER_LOGIN)
-                .defaultSuccessUrl(WebConfig.URL_USER_HOME)
-                .permitAll()
-                .and()
-            .rememberMe()
+            .formLogin(configurer ->  configurer
+                    .loginPage(WebConfig.URL_USER_LOGIN)
+                    .defaultSuccessUrl(WebConfig.URL_USER_HOME)
+                    .permitAll())
+            .rememberMe(configurer -> configurer
                 .userDetailsService(userService)
                 .tokenValiditySeconds(REMEMBER_ME_TOKEN_VALIDITY_SECONDS)
                 .key(REMEMBER_ME_KEY)
-                .rememberMeCookieName(REMEMBER_ME_COOKIE)
-                .and()
-            .logout()
+                .rememberMeCookieName(REMEMBER_ME_COOKIE))
+            .logout(configurer -> configurer
                 .logoutUrl(WebConfig.URL_USER_LOGOUT)
                 .deleteCookies(SESSION_COOKIE, REMEMBER_ME_COOKIE)
-                .logoutSuccessUrl(WebConfig.URL_USER_LOGIN + "?logout")
-                .and()
-            .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .and()
-            .sessionManagement()
-                .maximumSessions(1)
-                    .maxSessionsPreventsLogin(false)
-                    .expiredUrl(WebConfig.URL_USER_LOGIN + "?expired")
-                    .and()
+                .logoutSuccessUrl(WebConfig.URL_USER_LOGIN + "?logout"))
+            .exceptionHandling(configurer -> configurer
+                .accessDeniedHandler(accessDeniedHandler))
+            .sessionManagement(configurer -> configurer
                 .sessionFixation()
                     .changeSessionId()
-                .invalidSessionUrl(WebConfig.URL_USER_LOGIN + "?invalid");
+                .invalidSessionUrl(WebConfig.URL_USER_LOGIN + "?invalid")
+                .maximumSessions(1)
+                    .maxSessionsPreventsLogin(false)
+                    .expiredUrl(WebConfig.URL_USER_LOGIN + "?expired"));
         // @formatter:on
         return http.build();
     }
