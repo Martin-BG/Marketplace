@@ -41,7 +41,7 @@
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator -->
-        <webjars-locator.version>0.50</webjars-locator.version>
+        <webjars-locator.version>0.52</webjars-locator.version>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
         <jquery.version>3.7.1</jquery.version>
