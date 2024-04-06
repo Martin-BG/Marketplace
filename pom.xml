@@ -17,7 +17,7 @@
     <description>Final Project for course Java MVC Frameworks - Spring @ SoftUni - Feb. 2019</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>22</java.version>
 
         <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
         <modelmapper.version>3.2.0</modelmapper.version>
